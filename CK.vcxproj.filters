@@ -1,0 +1,182 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{D9D6E242-F8AF-46E4-B9FD-80ECBC20BA3E}</UniqueIdentifier>
+      <Extensions>qrc;*</Extensions>
+      <ParseFiles>false</ParseFiles>
+    </Filter>
+    <Filter Include="model">
+      <UniqueIdentifier>{48397cce-5af0-4f7e-a822-f4e5c3a1d704}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="io">
+      <UniqueIdentifier>{bc340257-1ef1-4208-bdf3-0c3a0036da7c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="editors">
+      <UniqueIdentifier>{3a660d6f-c3cb-478d-aab3-0e0c8365712d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="util">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+      <ParseFiles>true</ParseFiles>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{6c2bb2f8-6c7f-4fbe-acdd-4b8eece9e103}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\render">
+      <UniqueIdentifier>{cbedd4ab-80b4-49ea-b151-36947d75bf77}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="esm">
+      <UniqueIdentifier>{149122e8-ecdf-475d-ab5b-82e95501cbea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="esm\records">
+      <UniqueIdentifier>{6dfd446d-ba8a-4de2-92af-021d56389337}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shaders">
+      <UniqueIdentifier>{f8c2bfb0-dbb4-4a77-87a4-a662ea062e7a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <QtRcc Include="CK.qrc">
+      <Filter>Resource Files</Filter>
+    </QtRcc>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="model\NiTypes.cpp">
+      <Filter>model</Filter>
+    </ClCompile>
+    <ClCompile Include="src\CK.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\render\ModelViewer.cpp">
+      <Filter>src\render</Filter>
+    </ClCompile>
+    <ClCompile Include="src\render\Mesh.cpp">
+      <Filter>src\render</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="model\Header.h">
+      <Filter>model</Filter>
+    </ClInclude>
+    <ClInclude Include="model\NiTypes.h">
+      <Filter>model</Filter>
+    </ClInclude>
+    <ClInclude Include="model\BSTriShape.h">
+      <Filter>model</Filter>
+    </ClInclude>
+    <ClInclude Include="model\NiObject.h">
+      <Filter>model</Filter>
+    </ClInclude>
+    <ClInclude Include="model\NiBound.h">
+      <Filter>model</Filter>
+    </ClInclude>
+    <ClInclude Include="model\BSVertexDataSSE.h">
+      <Filter>model</Filter>
+    </ClInclude>
+    <ClInclude Include="model\Triangle.h">
+      <Filter>model</Filter>
+    </ClInclude>
+    <ClInclude Include="model\NiFile.h">
+      <Filter>model</Filter>
+    </ClInclude>
+    <ClInclude Include="io\BinaryIO.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util.h">
+      <Filter>util</Filter>
+    </ClInclude>
+    <ClInclude Include="src\render\ModelViewer.h">
+      <Filter>src\render</Filter>
+    </ClInclude>
+    <ClInclude Include="src\render\Texture.h">
+      <Filter>src\render</Filter>
+    </ClInclude>
+    <ClInclude Include="model\BSFadeNode.h">
+      <Filter>model</Filter>
+    </ClInclude>
+    <ClInclude Include="model\BSShaderTextureSet.h">
+      <Filter>model</Filter>
+    </ClInclude>
+    <ClInclude Include="src\render\Mesh.h">
+      <Filter>src\render</Filter>
+    </ClInclude>
+    <ClInclude Include="model\BSLightingShaderProperty.h">
+      <Filter>model</Filter>
+    </ClInclude>
+    <ClInclude Include="esm\File.h">
+      <Filter>esm</Filter>
+    </ClInclude>
+    <ClInclude Include="esm\Group.h">
+      <Filter>esm</Filter>
+    </ClInclude>
+    <ClInclude Include="esm\Record.h">
+      <Filter>esm</Filter>
+    </ClInclude>
+    <ClInclude Include="esm\records\CELL.h">
+      <Filter>esm\records</Filter>
+    </ClInclude>
+    <ClInclude Include="esm\records\MISC.h">
+      <Filter>esm\records</Filter>
+    </ClInclude>
+    <ClInclude Include="esm\records\REFR.h">
+      <Filter>esm\records</Filter>
+    </ClInclude>
+    <ClInclude Include="esm\records\STAT.h">
+      <Filter>esm\records</Filter>
+    </ClInclude>
+    <ClInclude Include="esm\records\ALCH.h">
+      <Filter>esm\records</Filter>
+    </ClInclude>
+    <ClInclude Include="esm\records\FURN.h">
+      <Filter>esm\records</Filter>
+    </ClInclude>
+    <ClInclude Include="esm\records\CONT.h">
+      <Filter>esm\records</Filter>
+    </ClInclude>
+    <ClInclude Include="esm\records\FLOR.h">
+      <Filter>esm\records</Filter>
+    </ClInclude>
+    <ClInclude Include="esm\records\TREE.h">
+      <Filter>esm\records</Filter>
+    </ClInclude>
+    <ClInclude Include="esm\records\LAND.h">
+      <Filter>esm\records</Filter>
+    </ClInclude>
+    <ClInclude Include="src\render\Camera.h">
+      <Filter>src\render</Filter>
+    </ClInclude>
+    <ClInclude Include="src\render\util.h">
+      <Filter>src\render</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Config.h">
+      <Filter>src</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="src\CK.h">
+      <Filter>src</Filter>
+    </QtMoc>
+    <QtMoc Include="src\editor\CELLeditor.h">
+      <Filter>editors</Filter>
+    </QtMoc>
+    <QtMoc Include="src\editor\STATeditor.h">
+      <Filter>editors</Filter>
+    </QtMoc>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="fshader.fs">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="vshader.vs">
+      <Filter>shaders</Filter>
+    </None>
+  </ItemGroup>
+</Project>
