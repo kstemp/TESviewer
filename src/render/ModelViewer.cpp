@@ -3,13 +3,15 @@
 #include "ModelViewer.h"
 
 #include <QWheelEvent>
+#include <qstatusbar.h>
+#include <qtoolbar.h>
 
 ModelViewer::ModelViewer(QWidget* parent)
  : QOpenGLWidget(parent) {
 
     setFocusPolicy(Qt::StrongFocus);
     setAttribute(Qt::WA_DeleteOnClose);
-
+    
 }
 
 ModelViewer::~ModelViewer() {
@@ -45,6 +47,9 @@ void ModelViewer::initializeGL() {
     program.addShaderFromSourceFile(QOpenGLShader::Vertex, VERTEX_SHADER_PATH);
     program.addShaderFromSourceFile(QOpenGLShader::Fragment, FRAGMENT_SHADER_PATH);
     program.link();
+
+    if (afterInitializedGL)
+        afterInitializedGL();
 
 }
 

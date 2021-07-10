@@ -3,7 +3,6 @@
 #include "..\Record.h"
 
 namespace ESM {
-
 	namespace RecordType {
 		constexpr RecordTypeVal CELL = 18;
 	}
@@ -13,32 +12,24 @@ namespace ESM {
 	};
 
 	struct CELL : Record {
-
 		uint16_t DATA;
 
 		CELL() : Record(RecordType::CELL) {}
 
-		void parse(BinaryStreamReader& bsr) override {
-
-			while (Record::hasMoreFields(bsr)) {
-				std::string fieldName = bsr.readString(4);
-				uint16_t fieldSize = bsr.readVar<uint16_t>();
-
-				if (fieldName == "EDID")
-					EDID = bsr.readString(fieldSize);
-				else if (fieldName == "DATA") {
-					if (fieldSize == 2)
-						bsr >> DATA;
-					else if (fieldSize == 1) {
-						char temp;
-						bsr >> temp;
-						DATA = *(uint16_t*)(&temp);
-					}
-				} else
-					bsr.skip(fieldSize);
-
+		virtual void parseField(BinaryStreamReader& bsr, const std::string& fieldName, const uint16_t fieldSize) override {
+			if (fieldName == "EDID")
+				EDID = bsr.readString(fieldSize);
+			else if (fieldName == "DATA") {
+				if (fieldSize == 2)
+					bsr >> DATA;
+				else if (fieldSize == 1) {
+					char temp;
+					bsr >> temp;
+					DATA = *(uint16_t*)(&temp);
+				}
 			}
-
+			else
+				bsr.skip(fieldSize);
 		}
 
 		int getBlock() {
@@ -51,5 +42,4 @@ namespace ESM {
 			return ((formID / 10) % 10);
 		}
 	};
-
 }

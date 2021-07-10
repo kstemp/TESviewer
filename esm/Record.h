@@ -45,7 +45,17 @@ namespace ESM {
 
 		}
 
-		virtual void parse(BinaryStreamReader& bsr) = 0;
+		void parse(BinaryStreamReader& bsr) {
+
+			while (Record::hasMoreFields(bsr)) {
+				std::string fieldName = bsr.readString(4);
+				uint16_t fieldSize = bsr.readVar<uint16_t>();
+
+				parseField(bsr, fieldName, fieldSize);
+			}
+		}
+
+		virtual void parseField(BinaryStreamReader& bsr, const std::string& fieldName, const uint16_t fieldSize) = 0;
 
 		virtual std::optional<std::string> model() const {
 			return {};

@@ -5,6 +5,7 @@
 #include <QKeyEvent>
 #include <QtOpenGLWidgets/qopenglwidget.h>
 #include <QOpenGLShaderProgram>
+#include <functional>
 
 #include "..\..\esm\Record.h"
 
@@ -48,6 +49,8 @@ protected:
     void keyPressEvent(QKeyEvent* e);
 
 public:
+
+    std::function<void()> afterInitializedGL = NULL;
 
     ModelViewer(QWidget* parent = Q_NULLPTR);
     ~ModelViewer();
