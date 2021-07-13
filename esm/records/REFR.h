@@ -30,5 +30,9 @@ namespace ESM {
 			else
 				bsr.skip(fieldSize);
 		}
+
+		std::string type_pretty() override {
+			return "Reference";
+		}
 	};
 }

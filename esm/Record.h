@@ -4,7 +4,6 @@
 #include <io\BinaryIO.h>
 
 namespace ESM {
-
 	typedef uint32_t RecordTypeVal;
 
 	enum RecordFlags {
@@ -12,14 +11,13 @@ namespace ESM {
 	};
 
 	struct Record {
-
-		RecordTypeVal type	= 0;
-		uint32_t dataSize	= 0;
-		uint32_t flags		= 0;
-		uint32_t formID		= 0;
+		RecordTypeVal type = 0;
+		uint32_t dataSize = 0;
+		uint32_t flags = 0;
+		uint32_t formID = 0;
 		unsigned char vc[4] = { 0, 0, 0, 0 };
-		uint16_t version	= 0;
-		uint16_t unknown	= 0;
+		uint16_t version = 0;
+		uint16_t unknown = 0;
 
 		std::string EDID = "";
 
@@ -30,7 +28,6 @@ namespace ESM {
 		}
 
 		virtual void parseHeader(BinaryStreamReader& bsr) {
-
 			bsr >> dataSize;
 			bsr >> flags;
 			bsr >> formID;
@@ -42,11 +39,9 @@ namespace ESM {
 				_dataPos = 0;
 			else
 				_dataPos = bsr.tellg();
-
 		}
 
 		void parse(BinaryStreamReader& bsr) {
-
 			while (Record::hasMoreFields(bsr)) {
 				std::string fieldName = bsr.readString(4);
 				uint16_t fieldSize = bsr.readVar<uint16_t>();
@@ -61,8 +56,8 @@ namespace ESM {
 			return {};
 		}
 
+		virtual std::string type_pretty() = 0;
+
 		std::streampos _dataPos;
-
 	};
-
 }

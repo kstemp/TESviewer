@@ -9,26 +9,25 @@
 #include <esm\File.h>
 
 class CK : public QMainWindow {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
-    CK(QWidget *parent = Q_NULLPTR);
+	CK(QWidget* parent = Q_NULLPTR);
 
 private:
 
-    void populateRecordList();
+	void populateRecordList();
 
-    ESM::File dataFile;
+	ESM::File dataFile;
 
-    QMenu* fileMenu;
-    QAction* fileOpenAction;
+	QMenu* fileMenu;
+	QAction* fileOpenAction;
 
-    QTreeWidget* treeRecords;
+	QTreeWidget* treeRecords;
 
 private slots:
 
-    void fileOpen();
+	void fileOpen();
 
-    void onTreeViewItemClicked(QTreeWidgetItem* item, int column);
-
+	void onTreeViewItemClicked(QTreeWidgetItem* item, int column);
 };

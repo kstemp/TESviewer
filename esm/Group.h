@@ -15,9 +15,9 @@
 #include "records\FLOR.h"
 #include "records\TREE.h"
 #include "records\LAND.h"
+#include "records\MATO.h"
 
 namespace ESM {
-
 	enum GroupType {
 		Top = 0,
 		CellChildren = 6,
@@ -25,7 +25,6 @@ namespace ESM {
 	};
 
 	inline Record* createRecordByName(const std::string& name) {
-
 		if (name == "STAT")
 			return new STAT();
 		else if (name == "REFR")
@@ -46,12 +45,13 @@ namespace ESM {
 			return new TREE();
 		else if (name == "LAND")
 			return new LAND();
+		else if (name == "MATO")
+			return new MATO();
 		else
 			return nullptr;
 	}
 
 	struct Group {
-
 		uint32_t size;
 		char label[4];
 		uint32_t type;
@@ -62,9 +62,8 @@ namespace ESM {
 		std::vector<Group> subgroups;
 
 		void parse(BinaryStreamReader& bsr, std::unordered_map<uint32_t, Record*>& recordMap) {
-
 			bsr >> size;
-			bsr >> label[0] >> label[1] >> label[2] >> label[3]; 
+			bsr >> label[0] >> label[1] >> label[2] >> label[3];
 			bsr >> type;
 			bsr.skip(4);
 			bsr >> unknown;
@@ -77,35 +76,29 @@ namespace ESM {
 				if (hdr == "GRUP") {
 					subgroups.push_back(Group());
 					subgroups.back().parse(bsr, recordMap);
-				} else {
-
+				}
+				else {
 					Record* newRecord = createRecordByName(hdr);
 
 					if (newRecord) {
-
 						_parseRecord(newRecord, bsr);
 
 						records.push_back(newRecord);
 						recordMap[newRecord->formID] = newRecord;
-
-					} else {
+					}
+					else {
 						bsr.skip(bsr.readVar<uint32_t>() + 16);;
 					}
-
 				}
-
 			}
-
 		}
 
 	private:
 
 		void _parseRecord(Record* newRecord, BinaryStreamReader& bsr) {
-
 			newRecord->parseHeader(bsr);
 
 			if (newRecord->flags & RecordFlags::Compressed) {
-
 				uint32_t decompSize = bsr.readVar<uint32_t>();
 
 				std::vector<char> compressedData;
@@ -120,12 +113,10 @@ namespace ESM {
 
 				newRecord->dataSize = decompSize;
 				newRecord->parse(newbsr);
-			} else {
+			}
+			else {
 				newRecord->parse(bsr);
 			}
-
 		}
-
 	};
-
 }

@@ -24,5 +24,9 @@ namespace ESM {
 		std::optional<std::string> model() const override {
 			return MODL;
 		}
+
+		std::string type_pretty() override {
+			return "Miscellanous Object";
+		}
 	};
 }

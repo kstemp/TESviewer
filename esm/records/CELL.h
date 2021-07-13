@@ -41,5 +41,9 @@ namespace ESM {
 			// penultimate digit of formID in decimal
 			return ((formID / 10) % 10);
 		}
+
+		std::string type_pretty() override {
+			return "Cell";
+		}
 	};
 }

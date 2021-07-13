@@ -26,6 +26,10 @@ namespace ESM {
 				bsr.skip(fieldSize);
 		}
 
+		std::string type_pretty() override {
+			return "Landscape";
+		}
+
 	private:
 
 		// adapted from: https://en.uesp.net/wiki/Tes5Mod:Mod_File_Format/LAND

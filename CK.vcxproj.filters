@@ -159,6 +159,9 @@
     <ClInclude Include="src\Config.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="esm\records\MATO.h">
+      <Filter>esm\records</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="src\CK.h">
@@ -170,6 +173,9 @@
     <QtMoc Include="src\editor\STATeditor.h">
       <Filter>editors</Filter>
     </QtMoc>
+    <QtMoc Include="src\editor\REFReditor.h">
+      <Filter>editors</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <None Include="fshader.fs">
@@ -178,5 +184,9 @@
     <None Include="vshader.vs">
       <Filter>shaders</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <QtUic Include="ui\STATeditor.ui" />
+    <QtUic Include="ui\REFReditor.ui" />
   </ItemGroup>
 </Project>

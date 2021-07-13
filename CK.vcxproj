@@ -131,6 +131,7 @@
     <ClInclude Include="esm\records\FLOR.h" />
     <ClInclude Include="esm\records\FURN.h" />
     <ClInclude Include="esm\records\LAND.h" />
+    <ClInclude Include="esm\records\MATO.h" />
     <ClInclude Include="esm\records\MISC.h" />
     <ClInclude Include="esm\records\REFR.h" />
     <ClInclude Include="esm\records\STAT.h" />
@@ -141,6 +142,7 @@
     <ClInclude Include="model\BSFadeNode.h" />
     <ClInclude Include="model\BSLightingShaderProperty.h" />
     <ClInclude Include="model\BSShaderTextureSet.h" />
+    <QtMoc Include="src\editor\REFReditor.h" />
     <ClInclude Include="src\render\Camera.h" />
     <ClInclude Include="src\render\Mesh.h" />
     <ClInclude Include="src\render\ModelViewer.h" />
@@ -161,6 +163,10 @@
   <ItemGroup>
     <None Include="fshader.fs" />
     <None Include="vshader.vs" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtUic Include="ui\REFReditor.ui" />
+    <QtUic Include="ui\STATeditor.ui" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
