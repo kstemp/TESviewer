@@ -16,7 +16,7 @@ ModelViewer::~ModelViewer() {
 	deleteMeshes();
 }
 
-void ModelViewer::addModel(const std::string& modelFileName, const Vector3& globalTranslation, const Vector3& globalRotation) {
+void ModelViewer::addModel(const std::string& modelFileName, const Vector3& globalTranslation, const Vector3& globalRotation, ESM::OBND obnd) {
 	// TODO temporary
 	if (modelFileName.length() <= 4)
 		return;
@@ -25,6 +25,8 @@ void ModelViewer::addModel(const std::string& modelFileName, const Vector3& glob
 	model.parse();
 
 	addMesh(model, globalTranslation, globalRotation);
+
+	addBox(obnd, globalTranslation, globalRotation);
 
 	camera.position() = fullBoundingSphere.center.toQVector3D();
 	camera.position() += QVector3D(1, 1, 1) * fullBoundingSphere.radius / 300.0f;
@@ -67,6 +69,7 @@ void ModelViewer::paintGL() {
 	program.setUniformValue("viewPos", camera.position());
 
 	drawMeshes();
+	drawBoxes();
 }
 
 void ModelViewer::resizeGL(int w, int h) {

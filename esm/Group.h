@@ -16,11 +16,20 @@
 #include "records\TREE.h"
 #include "records\LAND.h"
 #include "records\MATO.h"
+#include "records\LIGH.h"
+#include "records\NAVM.h"
 
 namespace ESM {
 	enum GroupType {
 		Top = 0,
+		WorldChildren = 1,
+		InteriorCellBlock = 2,
+		InteriorCellSubBlock = 3,
+		ExteriorCellBlock = 4,
+		ExteriorCellSubBlock = 5,
 		CellChildren = 6,
+		TopicChildren = 7,
+		CellPersistentChildren = 8,
 		CellTemporaryChildren = 9
 	};
 
@@ -47,6 +56,10 @@ namespace ESM {
 			return new LAND();
 		else if (name == "MATO")
 			return new MATO();
+		else if (name == "LIGH")
+			return new LIGH();
+		else if (name == "NAVM")
+			return new NAVM();
 		else
 			return nullptr;
 	}
@@ -93,8 +106,58 @@ namespace ESM {
 			}
 		}
 
+		std::string caption() const {
+			switch (type) {
+			case ESM::GroupType::Top: {
+				const std::string t(label);
+
+				if (t == "CELL")
+					return "Cell";
+				else if (t == "WRLD")
+					return "Worldspace";
+				else if (t == "STAT")
+					return "Static";
+				else if (t == "FURN")
+					return "Furniture";
+
+				return t;
+			}
+
+									break;
+			case  ESM::GroupType::WorldChildren:
+				return "World Children";
+				break;
+			case ESM::GroupType::InteriorCellBlock:
+
+				return "Block " + std::to_string(*(int32_t*)(&label[0]));
+				break;
+			case ESM::GroupType::InteriorCellSubBlock:
+				return "Sub-Block " + std::to_string(*(int32_t*)(&label[0]));
+				break;
+			case ESM::GroupType::ExteriorCellBlock:
+				return "Block";
+				break;
+			case ESM::GroupType::ExteriorCellSubBlock:
+				return "Sub-Block";
+				break;
+			case ESM::GroupType::CellChildren:
+				return "Cell children";
+				break;
+			case ESM::GroupType::TopicChildren:
+				return "Topic children";
+				break;
+			case ESM::GroupType::CellPersistentChildren:
+				return "Persistent";
+				break;
+			case ESM::GroupType::CellTemporaryChildren:
+				return "Temporary";
+				break;
+			}
+		}
+
 	private:
 
+		// TODO record itself should do that? MOVE!
 		void _parseRecord(Record* newRecord, BinaryStreamReader& bsr) {
 			newRecord->parseHeader(bsr);
 

@@ -2,7 +2,9 @@
 
 #include <qfiledialog.h>
 #include <qboxlayout.h>
-#include <chrono>
+#include <qprogressdialog.h>
+#include <QTabWidget>
+#include <qprogressdialog.h>
 
 #include "Config.h"
 
@@ -10,64 +12,79 @@
 
 #include <esm\records\CELL.h>
 #include "editor\CELLeditor.h"
-#include "editor\STATeditor.h"
+#include "editor\EditorResolver.h"
+#include "FileDialog.h"
 
 CK::CK(QWidget* parent)
 	: QMainWindow(parent) {
-	setWindowTitle(tr("ESMedit"));
-	setMinimumSize(600, 800);
+	ui.setupUi(this);
 
 	// create actions
-	fileOpenAction = new QAction(tr("Open master file..."), this);
-	fileOpenAction->setShortcuts(QKeySequence::Open);
-	QWidget::connect(fileOpenAction, &QAction::triggered, this, &CK::fileOpen);
+	QWidget::connect(ui.actionLoadData, &QAction::triggered, this, &CK::fileOpen);
 
-	// create menus
-	fileMenu = menuBar()->addMenu(tr("&File"));
-	fileMenu->addAction(fileOpenAction);
+	auto wrapper = new QWidget();
+	wrapper->setLayout(ui.layoutRecords);
+	ui.dockRecords->setWidget(wrapper);
 
-	treeRecords = new QTreeWidget();
-	treeRecords->setColumnCount(2);
-	treeRecords->setHeaderLabels({ "Form ID", "Editor ID" });
-	treeRecords->setEditTriggers(QAbstractItemView::NoEditTriggers);
-	treeRecords->setExpandsOnDoubleClick(true);
-	treeRecords->setAlternatingRowColors(true);
+	ui.dockRecords->setLayout(ui.layoutRecords);
 
-	connect(treeRecords, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)), this, SLOT(onTreeViewItemClicked(QTreeWidgetItem*, int)));
-
-	setCentralWidget(treeRecords);
+	connect(ui.treeRecords, &QTreeWidget::itemDoubleClicked, this, &CK::onTreeViewItemClicked);
 }
 
 void CK::fileOpen() {
-	QString fileName = QFileDialog::getOpenFileName(
-		this,
-		tr("Load Master File"),
-		QString::fromStdString(SKYRIM_DATA_DIR),
-		tr("Bethesda Master File (*.esm)")
-	);
+	auto fileDialog = new FileDialog();
 
-	auto a = std::chrono::steady_clock::now();
-	dataFile.parse(fileName.toStdString());
-	auto b = std::chrono::steady_clock::now();
+	fileDialog->exec();
 
-	setWindowTitle(QString::number((std::chrono::duration_cast<std::chrono::microseconds>(b - a).count()) / 1000000.0));
+	QProgressDialog progress("Loading skyrim.esm", "Abort", 0, ESM::GROUP_COUNT, this);
+	progress.setWindowModality(Qt::WindowModal);
+
+	dataFile.parse(SKYRIM_DATA_DIR + "Skyrim.esm", false, [&](const int groupIndex, const std::string groupName) {
+		progress.setValue(groupIndex);
+		progress.setLabelText(QString::fromStdString("Loading skyrim.esm [" + groupName + "]"));
+		});
+
+	//for (int i = 0; i < numFiles; i++) {
+	//if (progress.wasCanceled())
+	//	break;
+	//... copy one file
+//}
+	//connect(pd, &QProgressDialog::canceled, this, &Operation::cancel);
+	progress.setValue(ESM::GROUP_COUNT);
 
 	populateRecordList();
 }
 
-QTreeWidgetItem* getItemFromRecord(const ESM::Record* record) {
+QTreeWidgetItem* CK::getItemFromRecord(const ESM::Record* record) {
 	auto item = new QTreeWidgetItem((QTreeWidget*)nullptr/*, {  }*/);
 
+	std::string EDID = "";
+	if (record->type == ESM::RecordType::REFR) {
+		const ESM::REFR* refr = static_cast<const ESM::REFR*>(record);
+
+		const auto it = dataFile.recordMap.find(refr->NAME);
+		if (it != dataFile.recordMap.end()) {
+			ESM::Record* base = it->second;
+
+			EDID = "[" + base->EDID + "]";
+		}
+	}
+	else {
+		EDID = record->EDID;
+	}
+
 	item->setText(0, QString::fromStdString(NumToHexStr(record->formID)));
-	item->setText(1, QString::fromStdString(record->EDID));
+	item->setText(1, QString::fromStdString(EDID));
+	item->setText(2, QString::fromStdString(record->type_pretty()));
 	item->setData(0, Qt::UserRole, record->formID);
 	item->setData(1, Qt::UserRole, record->formID);
+	item->setData(2, Qt::UserRole, record->formID);
 
 	return item;
 };
 
-QTreeWidgetItem* loopChildGroups(const ESM::Group& group, const QString& title = "") {
-	QString itemTitle = title.isEmpty() ? "sub " + QString::number(group.type) : title;
+QTreeWidgetItem* CK::loopChildGroups(const ESM::Group& group, const QString& title) {
+	QString itemTitle = title.isEmpty() ? QString::fromStdString(group.caption()) : title;
 	auto item = new QTreeWidgetItem((QTreeWidget*)nullptr, { itemTitle });
 
 	// all top-level records
@@ -81,35 +98,35 @@ QTreeWidgetItem* loopChildGroups(const ESM::Group& group, const QString& title =
 };
 
 void CK::populateRecordList() {
-	treeRecords->clear();
+	ui.treeRecords->clear();
 
 	for (const auto& group : dataFile.groups)
-		treeRecords->addTopLevelItem(loopChildGroups(group, group.label));
+		ui.treeRecords->addTopLevelItem(loopChildGroups(group, QString::fromStdString(group.caption())));
 }
 
 void CK::onTreeViewItemClicked(QTreeWidgetItem* item, int column) {
 	if (!item->data(0, Qt::UserRole).isValid())
 		return;
 
-	uint32_t formID = item->data(0, Qt::UserRole).toInt();
+	const uint32_t formID = item->data(0, Qt::UserRole).toInt();
 
-	auto record = dataFile.recordMap[formID]; // TODO replace with find() or sth, because the [] operator will create object for us
-	if (!record) // TODO should not happen
-		return;
+	auto it = dataFile.recordMap.find(formID);
+	if (it != dataFile.recordMap.end()) {
+		ESM::Record* record = it->second;
 
-	QWidget* editor = Q_NULLPTR;
+		QWidget* editor = nullptr;
+		if (record->type == ESM::RecordType::CELL) {
+			QProgressDialog progress(QString::fromStdString("Loading cell " + record->EDID), "Abort", 0, 100, this);
+			progress.setWindowModality(Qt::WindowModal);
 
-	switch (record->type) {
-	case ESM::RecordType::CELL:
-		editor = new CELLeditor(static_cast<ESM::CELL*>(record), dataFile);
-		break;
+			editor = new CELLeditor(static_cast<ESM::CELL*>(record), dataFile, nullptr);
 
-	case ESM::RecordType::STAT:
-		editor = new STATeditor(static_cast<ESM::STAT*>(record), dataFile.recordMap);
+			progress.setValue(100);
+		}
+		else
+			editor = createEditor(record, dataFile.recordMap);
 
-		break;
+		if (editor)
+			ui.tabEditors->addTab(editor, editor->windowTitle());
 	}
-
-	if (editor)
-		editor->show();
 }

@@ -1,12 +1,15 @@
 #pragma once
 
-#include <QDialog>
-#include <esm\records\REFR.h>
-#include "..\Config.h"
-#include "..\util.h"
-#include <ui_REFReditor.h>
 #include <unordered_map>
-#include <windows.h>
+
+#include <QDialog>
+#include <ui_REFReditor.h>
+
+#include "..\util.h"
+#include "..\Config.h"
+
+#include "EditorResolver.h"
+#include <esm\records\REFR.h>
 
 class REFReditor : public QDialog {
 	Q_OBJECT
@@ -15,22 +18,37 @@ class REFReditor : public QDialog {
 
 	Ui::REFReditor ui;
 
-	const std::unordered_map<uint32_t, ESM::Record*>& recordMap;
+	ESM::RecordMap& recordMap;
+
+public slots:
+
+	void editBase() {
+		// TODO avoid duplicates!
+		const auto it = recordMap.find(refr->NAME);
+		if (it != recordMap.end()) {
+			ESM::Record* base = it->second;
+
+			auto editor = createEditor(base, recordMap);
+
+			if (editor)
+				editor->show();
+		}
+	}
 
 public:
 
-	REFReditor(ESM::REFR* refr, const std::unordered_map<uint32_t, ESM::Record*>& recordMap, QWidget* parent = Q_NULLPTR)
+	REFReditor(ESM::REFR* refr, ESM::RecordMap& recordMap, QWidget* parent = Q_NULLPTR)
 		: QDialog(parent), refr(refr), recordMap(recordMap) {
 		ui.setupUi(this);
 
-		setWindowTitle(QString::fromStdString("Reference"));
-		setWindowFlags(Qt::Drawer);
-		setFixedSize(this->width(), this->height());
+		auto it = recordMap.find(refr->NAME);
+		if (it != recordMap.end()) {
+			ESM::Record* base = it->second;
 
-		const auto correspondingRecord = recordMap.find(refr->NAME);
+			QString title = QString::fromStdString(base->EDID + "[" + NumToHexStr(base->formID) + "]");
 
-		if (correspondingRecord != recordMap.end()) {
-			ui.le_base->setText(QString::fromStdString(correspondingRecord->second->EDID + "[" + NumToHexStr(correspondingRecord->second->formID) + "]"));
+			ui.le_base->setText(title);
+			setWindowTitle("Reference to: " + title);
 
 			ui.sb_posX->setValue(refr->DATA.position.x);
 			ui.sb_posY->setValue(refr->DATA.position.y);
@@ -76,6 +94,8 @@ public:
 				this->refr->DATA.rotation.z = val / 57.2957795;
 				emit changed();
 			});
+
+		QWidget::connect(ui.btnEditBase, &QToolButton::clicked, this, &REFReditor::editBase);
 	};
 
 signals:

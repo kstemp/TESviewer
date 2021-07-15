@@ -6,6 +6,8 @@
 #include <qpushbutton.h>
 #include <qtreewidget.h>
 
+#include <ui_MainWindow.h>
+
 #include <esm\File.h>
 
 class CK : public QMainWindow {
@@ -16,14 +18,13 @@ public:
 
 private:
 
+	Ui::MainWindow ui;
+
 	void populateRecordList();
+	QTreeWidgetItem* getItemFromRecord(const ESM::Record* record);
+	QTreeWidgetItem* loopChildGroups(const ESM::Group& group, const QString& title = "");
 
 	ESM::File dataFile;
-
-	QMenu* fileMenu;
-	QAction* fileOpenAction;
-
-	QTreeWidget* treeRecords;
 
 private slots:
 

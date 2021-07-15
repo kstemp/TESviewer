@@ -4,13 +4,13 @@
 
 namespace ESM {
 	namespace RecordType {
-		constexpr RecordTypeVal CONT = 24;
+		constexpr RecordTypeVal LIGH = 66;
 	}
 
-	struct CONT : Record {
+	struct LIGH : Record {
 		std::string MODL;
 
-		CONT() : Record(RecordType::CONT) {}
+		LIGH() : Record(RecordType::LIGH) {}
 
 		virtual void parseField(BinaryStreamReader& bsr, const std::string& fieldName, const uint16_t fieldSize) override {
 			if (fieldName == "MODL")
@@ -26,7 +26,7 @@ namespace ESM {
 		}
 
 		std::string type_pretty() const override {
-			return "Container";
+			return "Light";
 		}
 	};
 }

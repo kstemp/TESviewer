@@ -38,6 +38,10 @@ namespace ESM {
 				bsr >> maxAngle;
 				bsr >> MATOformID;
 			}
+			else if (fieldName == "OBND") {
+				bsr >> obnd.x1 >> obnd.y1 >> obnd.z1;
+				bsr >> obnd.x2 >> obnd.y2 >> obnd.z2;
+			}
 			else
 				bsr.skip(fieldSize);
 		}
@@ -46,7 +50,7 @@ namespace ESM {
 			return MODL;
 		}
 
-		std::string type_pretty() override {
+		std::string type_pretty() const override {
 			return "Static";
 		}
 	};

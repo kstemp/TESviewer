@@ -3,32 +3,40 @@
 #include <vector>
 
 #include "Group.h"
+#include "records\TES4.h"
 
 namespace ESM {
+	using RecordMap = std::unordered_map<uint32_t, Record*>;
+	using RecordList = std::vector<Record*>;
+
+	constexpr int GROUP_COUNT = 118;
 
 	struct File {
+		RecordMap recordMap;
 
-		std::unordered_map<uint32_t, Record*> recordMap;
+		ESM::TES4* header;
 
 		std::vector<Group> groups;
 
-		void parse(const std::string& fileName) {
-
+		void parse(const std::string& fileName, const bool headerOnly = false, std::function<void(int, std::string)> onGroupParsed = [](const int, const std::string) {}) {
 			auto bsr = BinaryStreamReader(fileName);
 
 			bsr.expect("TES4");
 
-			bsr.skip(3 * 16 + 14 + 12);
+			header = new ESM::TES4();
 
-			for (int i = 1; i <= 118; ++i) {
+			header->parseHeader(bsr);
+			header->parse(bsr);
 
-				bsr.expect("GRUP");
-				groups.push_back(Group());
-				groups.back().parse(bsr, recordMap);
+			if (!headerOnly) {
+				for (int i = 1; i <= GROUP_COUNT; ++i) {
+					bsr.expect("GRUP");
+					groups.push_back(Group());
+					groups.back().parse(bsr, recordMap);
 
+					onGroupParsed(i, groups.back().label);
+				}
 			}
-
 		}
 	};
-
 }

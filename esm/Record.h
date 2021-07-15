@@ -10,6 +10,15 @@ namespace ESM {
 		Compressed = 0x00040000
 	};
 
+	struct OBND {
+		int16_t x1 = 0;
+		int16_t y1 = 0;
+		int16_t z1 = 0;
+		int16_t x2 = 0;
+		int16_t y2 = 0;
+		int16_t z2 = 0;
+	};
+
 	struct Record {
 		RecordTypeVal type = 0;
 		uint32_t dataSize = 0;
@@ -20,6 +29,8 @@ namespace ESM {
 		uint16_t unknown = 0;
 
 		std::string EDID = "";
+
+		OBND obnd;
 
 		Record(RecordTypeVal type) : type(type) {}
 
@@ -56,7 +67,7 @@ namespace ESM {
 			return {};
 		}
 
-		virtual std::string type_pretty() = 0;
+		virtual std::string type_pretty() const = 0;
 
 		std::streampos _dataPos;
 	};

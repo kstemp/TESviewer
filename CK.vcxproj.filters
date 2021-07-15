@@ -61,6 +61,7 @@
     <ClCompile Include="src\render\Mesh.cpp">
       <Filter>src\render</Filter>
     </ClCompile>
+    <ClCompile Include="src\editor\EditorResolver.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="model\Header.h">
@@ -162,6 +163,18 @@
     <ClInclude Include="esm\records\MATO.h">
       <Filter>esm\records</Filter>
     </ClInclude>
+    <ClInclude Include="esm\records\LIGH.h">
+      <Filter>util</Filter>
+    </ClInclude>
+    <ClInclude Include="src\editor\EditorResolver.h">
+      <Filter>editors</Filter>
+    </ClInclude>
+    <ClInclude Include="esm\records\TES4.h">
+      <Filter>util</Filter>
+    </ClInclude>
+    <ClInclude Include="esm\records\NAVM.h">
+      <Filter>util</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="src\CK.h">
@@ -176,6 +189,12 @@
     <QtMoc Include="src\editor\REFReditor.h">
       <Filter>editors</Filter>
     </QtMoc>
+    <QtMoc Include="src\editor\LIGHeditor.h">
+      <Filter>util</Filter>
+    </QtMoc>
+    <QtMoc Include="src\FileDialog.h">
+      <Filter>util</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <None Include="fshader.fs">
@@ -188,5 +207,8 @@
   <ItemGroup>
     <QtUic Include="ui\STATeditor.ui" />
     <QtUic Include="ui\REFReditor.ui" />
+    <QtUic Include="ui\LIGHeditor.ui" />
+    <QtUic Include="ui\FileDialog.ui" />
+    <QtUic Include="ui\MainWindow.ui" />
   </ItemGroup>
 </Project>

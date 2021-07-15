@@ -11,14 +11,25 @@ namespace ESM {
 		Interior = 0x0001
 	};
 
+	struct XCLC {
+		int32_t X;
+		int32_t Y;
+		uint32_t flags;
+	};
+
 	struct CELL : Record {
 		uint16_t DATA;
+
+		XCLC xclc;
 
 		CELL() : Record(RecordType::CELL) {}
 
 		virtual void parseField(BinaryStreamReader& bsr, const std::string& fieldName, const uint16_t fieldSize) override {
 			if (fieldName == "EDID")
 				EDID = bsr.readString(fieldSize);
+			else if (fieldName == "XCLC") {
+				bsr >> xclc.X >> xclc.Y >> xclc.flags;
+			}
 			else if (fieldName == "DATA") {
 				if (fieldSize == 2)
 					bsr >> DATA;
@@ -33,16 +44,22 @@ namespace ESM {
 		}
 
 		int getBlock() {
-			// last digit of formID in decimal
-			return formID % 10;
+			if (DATA & ESM::CellFlags::Interior)
+				// last digit of formID in decimal
+				return formID % 10;
+			else
+				return 0;
 		}
 
 		int getSubBlock() {
-			// penultimate digit of formID in decimal
-			return ((formID / 10) % 10);
+			if (DATA & ESM::CellFlags::Interior)
+				// penultimate digit of formID in decimal
+				return ((formID / 10) % 10);
+			else
+				return 0;
 		}
 
-		std::string type_pretty() override {
+		std::string type_pretty() const override {
 			return "Cell";
 		}
 	};

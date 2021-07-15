@@ -13,25 +13,27 @@
 
 class MyMV2 : public ModelViewer {
 	std::vector<ESM::Record*>& records;
-	std::unordered_map<uint32_t, ESM::Record*>& recordMap;
+	ESM::RecordMap& recordMap;
+
 protected:
 	void initializeGL() override {
 		ModelViewer::initializeGL();
 
-		for (size_t i = 0; i < records.size(); ++i) {
-			const auto& r = records[i];
-
+		for (ESM::Record* r : records) {
 			switch (r->type) {
 			case ESM::RecordType::REFR:
 			{
-				const auto refr = static_cast<ESM::REFR*>(r);
+				auto refr = static_cast<ESM::REFR*>(r);
 
-				const auto correspondingRecord = recordMap[refr->NAME];
+				auto it = recordMap.find(refr->NAME);
+				if (it != recordMap.end()) {
+					auto base = it->second;
 
-				if (correspondingRecord)
-					if (correspondingRecord->model())
-						addModel(correspondingRecord->model().value(), refr->DATA.position, refr->DATA.rotation);
+					if (base->model())
+						addModel(base->model().value(), refr->DATA.position, refr->DATA.rotation, base->obnd);
+				}
 			}
+
 			break;
 			}
 		}
@@ -39,7 +41,13 @@ protected:
 
 public:
 
-	MyMV2(std::vector<ESM::Record*>& cellTemporaryChildren, std::unordered_map<uint32_t, ESM::Record*>& recordMap, QWidget* parent) :records(cellTemporaryChildren), recordMap(recordMap), ModelViewer(parent) {}
+	MyMV2(ESM::RecordList& cellTemporaryChildren,
+		ESM::RecordMap& recordMap,
+		QWidget* parent)
+		:records(cellTemporaryChildren),
+		recordMap(recordMap),
+		ModelViewer(parent)
+	{}
 };
 
 class CELLeditor : public QMainWindow {
@@ -74,8 +82,10 @@ class CELLeditor : public QMainWindow {
 
 public:
 
-	CELLeditor(ESM::CELL* cell, ESM::File& dataFile, QWidget* parent = Q_NULLPTR)
+	CELLeditor(ESM::CELL* cell, ESM::File& dataFile, QWidget* parent = Q_NULLPTR, std::function<void(int)> onProgress = [](const int) {})
 		: QMainWindow(parent), cell(cell), dataFile(dataFile) {
+		setWindowTitle(QString::fromStdString("Cell: " + cell->EDID));
+
 		dockREFReditor = new QDockWidget("Reference", this);
 		dockREFReditor->setAllowedAreas(Qt::RightDockWidgetArea);
 		addDockWidget(Qt::RightDockWidgetArea, dockREFReditor);
@@ -98,7 +108,7 @@ public:
 		std::vector<ESM::Group>* cellChildrenTop = nullptr;
 		cellChildrenTop = (cell->DATA & ESM::CellFlags::Interior) ?
 			&dataFile.groups[57].subgroups[cell->getBlock()].subgroups[cell->getSubBlock()].subgroups
-			: &dataFile.groups[58].subgroups[0].subgroups[1].subgroups[2].subgroups;
+			: &dataFile.groups[58].subgroups[0].subgroups[0].subgroups;//.subgroups[2].subgroups;
 
 		const auto cellChildren = std::find_if(
 			cellChildrenTop->begin(),
@@ -115,24 +125,23 @@ public:
 				return g.type == ESM::GroupType::CellTemporaryChildren;
 			});
 
-		for (size_t i = 0; i < cellTemporaryChildren->records.size(); ++i) {
-			const auto& r = cellTemporaryChildren->records[i];
-
+		for (ESM::Record* r : cellTemporaryChildren->records) {
 			switch (r->type) {
 			case ESM::RecordType::REFR:
 			{
-				const auto refr = static_cast<ESM::REFR*>(r);
+				auto refr = static_cast<ESM::REFR*>(r);
 
-				const auto correspondingRecord = dataFile.recordMap[refr->NAME];
+				auto it = dataFile.recordMap.find(refr->NAME);
+				if (it != dataFile.recordMap.end()) {
+					ESM::Record* base = it->second;
 
-				if (correspondingRecord) {
-					auto item1 = new QTableWidgetItem(QString::fromStdString(correspondingRecord->EDID));
+					auto item1 = new QTableWidgetItem(QString::fromStdString(base->EDID));
 					item1->setData(Qt::UserRole, refr->formID);
 
 					auto item2 = new QTableWidgetItem(QString::fromStdString(NumToHexStr(refr->formID)));
 					item2->setData(Qt::UserRole, refr->formID);
 
-					auto item3 = new QTableWidgetItem(QString::fromStdString(correspondingRecord->type_pretty()));
+					auto item3 = new QTableWidgetItem(QString::fromStdString(base->type_pretty()));
 					item3->setData(Qt::UserRole, refr->formID);
 
 					refTable->insertRow(refTable->rowCount());
@@ -146,6 +155,8 @@ public:
 		}
 
 		modelViewer = new MyMV2(cellTemporaryChildren->records, dataFile.recordMap, this);
+
+		//QWidget::connect(modelViewer, &MyMV2::onProgress, this, &CELLeditor::onProgress2);
 		setCentralWidget(modelViewer);
 
 		setMinimumSize(1000, 800);

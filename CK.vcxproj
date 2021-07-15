@@ -116,13 +116,16 @@
   <ItemGroup>
     <ClCompile Include="model\NiTypes.cpp" />
     <ClCompile Include="src\CK.cpp" />
+    <ClCompile Include="src\editor\EditorResolver.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\render\Mesh.cpp" />
     <ClCompile Include="src\render\ModelViewer.cpp" />
     <QtRcc Include="CK.qrc" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="esm\records\NAVM.h" />
     <ClInclude Include="esm\File.h" />
+    <ClInclude Include="esm\records\LIGH.h" />
     <ClInclude Include="esm\Group.h" />
     <ClInclude Include="esm\Record.h" />
     <ClInclude Include="esm\records\ALCH.h" />
@@ -135,6 +138,7 @@
     <ClInclude Include="esm\records\MISC.h" />
     <ClInclude Include="esm\records\REFR.h" />
     <ClInclude Include="esm\records\STAT.h" />
+    <ClInclude Include="esm\records\TES4.h" />
     <ClInclude Include="esm\records\TREE.h" />
     <ClInclude Include="src\Config.h" />
     <QtMoc Include="src\editor\STATeditor.h" />
@@ -143,6 +147,9 @@
     <ClInclude Include="model\BSLightingShaderProperty.h" />
     <ClInclude Include="model\BSShaderTextureSet.h" />
     <QtMoc Include="src\editor\REFReditor.h" />
+    <QtMoc Include="src\editor\LIGHeditor.h" />
+    <ClInclude Include="src\editor\EditorResolver.h" />
+    <QtMoc Include="src\FileDialog.h" />
     <ClInclude Include="src\render\Camera.h" />
     <ClInclude Include="src\render\Mesh.h" />
     <ClInclude Include="src\render\ModelViewer.h" />
@@ -165,6 +172,9 @@
     <None Include="vshader.vs" />
   </ItemGroup>
   <ItemGroup>
+    <QtUic Include="ui\FileDialog.ui" />
+    <QtUic Include="ui\LIGHeditor.ui" />
+    <QtUic Include="ui\MainWindow.ui" />
     <QtUic Include="ui\REFReditor.ui" />
     <QtUic Include="ui\STATeditor.ui" />
   </ItemGroup>
