@@ -1,3 +1,6 @@
 [submodule "lib/dds-ktx"]
 	path = lib/dds-ktx
 	url = https://github.com/septag/dds-ktx.git
+[submodule "lib/bsa"]
+	path = lib/bsa
+	url = https://github.com/Ryan-rsm-McKenzie/bsa
