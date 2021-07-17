@@ -10,7 +10,6 @@
 
 class LIGHeditor : public QDialog {
 	Q_OBJECT
-
 		ESM::LIGH* ligh;
 
 	Ui::LIGHeditor ui;
@@ -23,9 +22,11 @@ public:
 		: QDialog(parent), ligh(ligh), recordMap(recordMap) {
 		ui.setupUi(this);
 
-		setWindowTitle(QString::fromStdString("Light"));
+		setWindowTitle(QString::fromStdString("Light: " + ligh->EDID));
 		setWindowFlags(Qt::Drawer);
 		setFixedSize(this->width(), this->height());
+
+		ui.editEDID->setText(QString::fromStdString(ligh->EDID));
 	};
 
 signals:

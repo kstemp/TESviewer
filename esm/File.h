@@ -38,8 +38,6 @@ namespace ESM {
 					bsr.expect("GRUP");
 					groups.push_back(Group());
 					groups.back().parse(bsr, recordMap);
-
-					//onGroupParsed(i, groups.back().label);
 				}
 			}
 		}

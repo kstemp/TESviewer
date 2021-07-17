@@ -7,73 +7,66 @@
 #include <iostream>
 
 struct BinaryStreamReader {
+	BinaryStreamReader(const std::vector<char>& buffer) : buffer(buffer) {}
 
-    BinaryStreamReader(const std::vector<char>& buffer) : buffer(buffer) {}
+	BinaryStreamReader(std::string fileName) {
+		std::ifstream is;
+		is.open(fileName, std::ios::binary | std::ios::ate);
 
-    BinaryStreamReader(std::string fileName) {
+		fileSize = is.tellg();
+		is.seekg(0, std::ios::beg);
 
-        std::ifstream is;
-        is.open(fileName, std::ios::binary | std::ios::ate);
+		buffer.resize(fileSize / sizeof(char));
 
-        fileSize = is.tellg();
-        is.seekg(0, std::ios::beg);
+		is.read(reinterpret_cast<char*>(buffer.data()), fileSize);
+	}
 
-        buffer.resize(fileSize / sizeof(char));
+	template<typename T>
+	BinaryStreamReader& operator >> (T& t) {
+		readIntoVar(t);
+		return *this;
+	}
 
-        is.read(reinterpret_cast<char*>(buffer.data()), fileSize);
+	const std::streampos tellg() const {
+		return pos;
+	}
 
-    }
+	void skip(const std::streamsize count) {
+		pos += count;
+	}
 
-    template<typename T>
-    BinaryStreamReader& operator >> (T& t) {
-        readIntoVar(t);
-        return *this;
-    }
+	template<typename T>
+	T readVar() {
+		T out;
+		operator>>(out);
+		return out;
+	}
 
-    const std::streampos tellg() const {
-        return pos;
-    }
+	std::string readString(std::size_t len) {
+		std::string out(len, ' ');
+		readIntoVar(out[0], len);
+		return out;
+	}
 
-    void skip(const std::streamsize count) {
-        pos += count;
-    }
+	void expect(const std::string& expected) {
+		const std::string actual = readString(4);
+		if (actual != expected)
+			throw;
+	}
 
-    template<typename T>
-    T readVar() {
-        T out;
-        operator>>(out);
-        return out;
-    }
+	template<typename T>
+	inline void readIntoVar(T& t, size_t size = sizeof(T)) {
+		memcpy(&t, &buffer[pos], size);
+		pos += size;
+	}
 
-    std::string readString(std::size_t len) {
+	inline void readIntoVectorBuf(std::vector<char>& buf, size_t dataSize) {
+		buf.resize(dataSize);
+		readIntoVar(buf[0], dataSize);
+	}
 
-        std::string out(len, ' ');
-        readIntoVar(out[0], len);
-        return out;
+	std::streampos pos = 0;
+	std::streampos fileSize;
 
-    }
-
-    void expect(const std::string& expected) {
-
-        std::string actual = readString(4);
-        if (actual != expected)
-            throw;
-
-    }
-
-    template<typename T>
-    inline void readIntoVar(T& t, size_t size = sizeof(T)) {
-        memcpy(&t, &buffer[pos], size);
-        pos += size;
-    }
-
-    inline void readIntoVectorBuf(std::vector<char>& buf, size_t dataSize) {
-        buf.resize(dataSize);
-        readIntoVar(buf[0], dataSize);
-    }
-
-    std::streampos pos = 0;
-    std::streampos fileSize;
-
-    std::vector<char> buffer;
+	std::vector<char> buffer;
 };

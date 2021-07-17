@@ -189,9 +189,6 @@
     <QtMoc Include="src\editor\REFReditor.h">
       <Filter>editors</Filter>
     </QtMoc>
-    <QtMoc Include="src\editor\LIGHeditor.h">
-      <Filter>util</Filter>
-    </QtMoc>
     <QtMoc Include="src\FileDialog.h">
       <Filter>util</Filter>
     </QtMoc>
@@ -199,6 +196,9 @@
       <Filter>util</Filter>
     </QtMoc>
     <QtMoc Include="src\LoaderThread.h">
+      <Filter>util</Filter>
+    </QtMoc>
+    <QtMoc Include="src\editor\LIGHeditor.h">
       <Filter>util</Filter>
     </QtMoc>
   </ItemGroup>

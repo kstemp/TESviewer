@@ -87,7 +87,6 @@ QTreeWidgetItem* CK::getItemFromRecord(const ESM::Record* record, const int file
 	item->setData(2, Qt::UserRole, QVariant::fromValue(data));
 
 	return item;
-	return nullptr;
 };
 
 QTreeWidgetItem* CK::loopChildGroups(const ESM::Group& group, const int fileIndex, const QString& title) {
