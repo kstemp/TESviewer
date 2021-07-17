@@ -1,0 +1,15 @@
+{
+    "CELL": "Cell",
+    "WRLD": "Worldspace",
+    "STAT": "Static",
+    "FURN": "Furniture",
+    "CONT": "Container",
+    "DOOR": "Door",
+    "LIGH": "Light",
+    "MISC": "Miscellanous Object",
+    "ALCH": "Potion",
+    "FLOR": "Flora",
+    "MATO": "Material Object",
+    "TREE": "Tree"
+}
+			 

@@ -115,7 +115,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="model\NiTypes.cpp" />
-    <ClCompile Include="src\CK.cpp" />
+    <ClCompile Include="src\CK.cpp">
+      <DynamicSource Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">input</DynamicSource>
+      <QtMocFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(Filename).moc</QtMocFileName>
+      <DynamicSource Condition="'$(Configuration)|$(Platform)'=='Release|x64'">input</DynamicSource>
+      <QtMocFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(Filename).moc</QtMocFileName>
+    </ClCompile>
     <ClCompile Include="src\editor\EditorResolver.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\render\Mesh.cpp" />
@@ -150,6 +155,8 @@
     <QtMoc Include="src\editor\LIGHeditor.h" />
     <ClInclude Include="src\editor\EditorResolver.h" />
     <QtMoc Include="src\FileDialog.h" />
+    <QtMoc Include="src\FileProgressDialog.h" />
+    <QtMoc Include="src\LoaderThread.h" />
     <ClInclude Include="src\render\Camera.h" />
     <ClInclude Include="src\render\Mesh.h" />
     <ClInclude Include="src\render\ModelViewer.h" />
@@ -172,7 +179,9 @@
     <None Include="vshader.vs" />
   </ItemGroup>
   <ItemGroup>
+    <QtUic Include="ui\CELLeditor.ui" />
     <QtUic Include="ui\FileDialog.ui" />
+    <QtUic Include="ui\FileProgressDialog.ui" />
     <QtUic Include="ui\LIGHeditor.ui" />
     <QtUic Include="ui\MainWindow.ui" />
     <QtUic Include="ui\REFReditor.ui" />

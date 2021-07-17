@@ -5,6 +5,10 @@
 #include <qprogressdialog.h>
 #include <QTabWidget>
 #include <qprogressdialog.h>
+#include <QtConcurrent/QtConcurrent>
+#include "LoaderThread.h"
+
+#include "FileProgressDialog.h"
 
 #include "Config.h"
 
@@ -32,38 +36,38 @@ CK::CK(QWidget* parent)
 }
 
 void CK::fileOpen() {
-	auto fileDialog = new FileDialog();
+	FileDialog fileDialog;
 
-	fileDialog->exec();
+	const int result = fileDialog.exec();
 
-	QProgressDialog progress("Loading skyrim.esm", "Abort", 0, ESM::GROUP_COUNT, this);
-	progress.setWindowModality(Qt::WindowModal);
+	if (result == QDialog::Accepted) {
+		FileProgressDialog progressDialog;
 
-	dataFile.parse(SKYRIM_DATA_DIR + "Skyrim.esm", false, [&](const int groupIndex, const std::string groupName) {
-		progress.setValue(groupIndex);
-		progress.setLabelText(QString::fromStdString("Loading skyrim.esm [" + groupName + "]"));
-		});
+		//QFutureWatcher<void> futureWatcher;
+		//	QObject::connect(&futureWatcher, &QFutureWatcher<void>::finished, &progressDialog, &QDialog::close);
+			//QObject::connect(&dialog, &QProgressDialog::canceled, &futureWatcher, &QFutureWatcher<void>::cancel);
+			//QObject::connect(&futureWatcher, &QFutureWatcher<void>::progressValueChanged, &progressDialog, &FileProgressDialog::setValue);
 
-	//for (int i = 0; i < numFiles; i++) {
-	//if (progress.wasCanceled())
-	//	break;
-	//... copy one file
-//}
-	//connect(pd, &QProgressDialog::canceled, this, &Operation::cancel);
-	progress.setValue(ESM::GROUP_COUNT);
+		const QSet<QString>& filesToLoad = fileDialog.getFilesToLoad();
 
-	populateRecordList();
+		for (const QString& fileName : filesToLoad) {
+			dataFiles.push_back(ESM::File(fileName));
+
+			dataFiles.back().parse(SKYRIM_DATA_DIR + fileName.toStdString());
+		}
+		populateRecordList();
+	}
 }
 
-QTreeWidgetItem* CK::getItemFromRecord(const ESM::Record* record) {
+QTreeWidgetItem* CK::getItemFromRecord(const ESM::Record* record, const int fileIndex) {
 	auto item = new QTreeWidgetItem((QTreeWidget*)nullptr/*, {  }*/);
 
 	std::string EDID = "";
 	if (record->type == ESM::RecordType::REFR) {
 		const ESM::REFR* refr = static_cast<const ESM::REFR*>(record);
 
-		const auto it = dataFile.recordMap.find(refr->NAME);
-		if (it != dataFile.recordMap.end()) {
+		const auto it = dataFiles[fileIndex].recordMap.find(refr->NAME);
+		if (it != dataFiles[fileIndex].recordMap.end()) {
 			ESM::Record* base = it->second;
 
 			EDID = "[" + base->EDID + "]";
@@ -73,26 +77,38 @@ QTreeWidgetItem* CK::getItemFromRecord(const ESM::Record* record) {
 		EDID = record->EDID;
 	}
 
+	QList<uint32_t> data = { (unsigned int)fileIndex, record->formID };
+
 	item->setText(0, QString::fromStdString(NumToHexStr(record->formID)));
 	item->setText(1, QString::fromStdString(EDID));
 	item->setText(2, QString::fromStdString(record->type_pretty()));
-	item->setData(0, Qt::UserRole, record->formID);
-	item->setData(1, Qt::UserRole, record->formID);
-	item->setData(2, Qt::UserRole, record->formID);
+	item->setData(0, Qt::UserRole, QVariant::fromValue(data));
+	item->setData(1, Qt::UserRole, QVariant::fromValue(data));
+	item->setData(2, Qt::UserRole, QVariant::fromValue(data));
 
 	return item;
+	return nullptr;
 };
 
-QTreeWidgetItem* CK::loopChildGroups(const ESM::Group& group, const QString& title) {
+QTreeWidgetItem* CK::loopChildGroups(const ESM::Group& group, const int fileIndex, const QString& title) {
 	QString itemTitle = title.isEmpty() ? QString::fromStdString(group.caption()) : title;
 	auto item = new QTreeWidgetItem((QTreeWidget*)nullptr, { itemTitle });
 
+	if (group.type == ESM::GroupType::CellChildren) {
+		const auto it = dataFiles[fileIndex].recordMap.find(*(uint32_t*)(&group.label));
+		if (it != dataFiles[fileIndex].recordMap.end()) {
+			ESM::Record* parentCell = it->second;
+
+			item->setText(1, QString::fromStdString("[" + parentCell->EDID + "]"));
+		}
+	}
+
 	// all top-level records
 	for (const auto& record : group.records)
-		item->addChild(getItemFromRecord(record));
+		item->addChild(getItemFromRecord(record, fileIndex));
 
 	for (const auto& subgroup : group.subgroups)
-		item->addChild(loopChildGroups(subgroup));
+		item->addChild(loopChildGroups(subgroup, fileIndex));
 
 	return item;
 };
@@ -100,15 +116,28 @@ QTreeWidgetItem* CK::loopChildGroups(const ESM::Group& group, const QString& tit
 void CK::populateRecordList() {
 	ui.treeRecords->clear();
 
-	for (const auto& group : dataFile.groups)
-		ui.treeRecords->addTopLevelItem(loopChildGroups(group, QString::fromStdString(group.caption())));
+	for (int i = 0; i < dataFiles.size(); ++i) {
+		const ESM::File& dataFile = dataFiles[i];
+
+		auto item = new QTreeWidgetItem((QTreeWidget*)nullptr, { dataFile.fileName });
+
+		for (const auto& group : dataFile.groups)
+			item->addChild(loopChildGroups(group, i, QString::fromStdString(group.caption())));
+
+		ui.treeRecords->addTopLevelItem(item);
+	}
 }
 
 void CK::onTreeViewItemClicked(QTreeWidgetItem* item, int column) {
 	if (!item->data(0, Qt::UserRole).isValid())
 		return;
 
-	const uint32_t formID = item->data(0, Qt::UserRole).toInt();
+	QVariantList data = item->data(0, Qt::UserRole).toList();
+
+	const uint32_t fileIndex = data[0].toUInt();
+	const uint32_t formID = data[1].toUInt();
+
+	ESM::File& dataFile = dataFiles[fileIndex];
 
 	auto it = dataFile.recordMap.find(formID);
 	if (it != dataFile.recordMap.end()) {

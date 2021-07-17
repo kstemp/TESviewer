@@ -6,6 +6,8 @@
 
 #include <QtZlib\zlib.h>
 
+#include <esm\Record.h>
+
 template<typename T>
 std::string NumToHexStr(const T& num) {
 	std::stringstream sstream;
@@ -14,19 +16,17 @@ std::string NumToHexStr(const T& num) {
 }
 
 inline bool decompressVectorBuf(
-	std::vector<char>& decompressedBuf, 
-	const uint32_t decompressedSize, 
-	const std::vector<char>& compressedBuf, 
+	std::vector<char>& decompressedBuf,
+	const uint32_t decompressedSize,
+	const std::vector<char>& compressedBuf,
 	const uint32_t compressedSize) {
-
 	decompressedBuf.resize(decompressedSize);
 
 	int uncompressValue = uncompress(
-								(z_Bytef*)decompressedBuf.data(), 
-								(z_uLongf*)&decompressedSize, 
-								(z_Bytef*)compressedBuf.data(), 
-								(z_uLong)compressedSize);
+		(z_Bytef*)decompressedBuf.data(),
+		(z_uLongf*)&decompressedSize,
+		(z_Bytef*)compressedBuf.data(),
+		(z_uLong)compressedSize);
 
 	return (uncompressValue == Z_OK);
-
 }

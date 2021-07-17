@@ -5,11 +5,10 @@
 #include "..\editor\REFReditor.h"
 #include <esm\File.h>
 #include "..\render\ModelViewer.h"
-#include <qmainwindow.h>
-#include <QToolbar>
-#include <QDockWidget>
-#include <QTableWidget>
-#include <QHeaderView>
+
+#include <qtablewidget.h>
+
+#include "ui_CELLeditor.h"
 
 class MyMV2 : public ModelViewer {
 	std::vector<ESM::Record*>& records;
@@ -56,6 +55,8 @@ class CELLeditor : public QMainWindow {
 		ESM::CELL* cell;
 	ESM::File& dataFile;
 
+	Ui::CELLeditor ui;
+
 	ModelViewer* modelViewer = nullptr;
 
 	QDockWidget* dockREFReditor = nullptr;
@@ -84,26 +85,15 @@ public:
 
 	CELLeditor(ESM::CELL* cell, ESM::File& dataFile, QWidget* parent = Q_NULLPTR, std::function<void(int)> onProgress = [](const int) {})
 		: QMainWindow(parent), cell(cell), dataFile(dataFile) {
+		ui.setupUi(this);
+
 		setWindowTitle(QString::fromStdString("Cell: " + cell->EDID));
 
 		dockREFReditor = new QDockWidget("Reference", this);
 		dockREFReditor->setAllowedAreas(Qt::RightDockWidgetArea);
 		addDockWidget(Qt::RightDockWidgetArea, dockREFReditor);
-		//dock->setWidget(refTable);
 
-		auto refTable = new QTableWidget();
-		refTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
-		refTable->setColumnCount(3);
-		refTable->setHorizontalHeaderLabels({ "Editor ID", "Form ID", "Type" });
-		refTable->setSelectionBehavior(QAbstractItemView::SelectRows);
-		refTable->horizontalHeader()->setStretchLastSection(true);
-
-		connect(refTable, &QTableWidget::itemDoubleClicked, this, &CELLeditor::onTableWidgetItemDoubleClicked);
-
-		auto dock = new QDockWidget("References", this);
-		dock->setAllowedAreas(Qt::RightDockWidgetArea);
-		addDockWidget(Qt::RightDockWidgetArea, dock);
-		dock->setWidget(refTable);
+		connect(ui.refTable, &QTableWidget::itemDoubleClicked, this, &CELLeditor::onTableWidgetItemDoubleClicked);
 
 		std::vector<ESM::Group>* cellChildrenTop = nullptr;
 		cellChildrenTop = (cell->DATA & ESM::CellFlags::Interior) ?
@@ -144,10 +134,10 @@ public:
 					auto item3 = new QTableWidgetItem(QString::fromStdString(base->type_pretty()));
 					item3->setData(Qt::UserRole, refr->formID);
 
-					refTable->insertRow(refTable->rowCount());
-					refTable->setItem(refTable->rowCount() - 1, 0, item1);
-					refTable->setItem(refTable->rowCount() - 1, 1, item2);
-					refTable->setItem(refTable->rowCount() - 1, 2, item3);
+					ui.refTable->insertRow(ui.refTable->rowCount());
+					ui.refTable->setItem(ui.refTable->rowCount() - 1, 0, item1);
+					ui.refTable->setItem(ui.refTable->rowCount() - 1, 1, item2);
+					ui.refTable->setItem(ui.refTable->rowCount() - 1, 2, item3);
 				}
 			}
 			break;
@@ -156,16 +146,6 @@ public:
 
 		modelViewer = new MyMV2(cellTemporaryChildren->records, dataFile.recordMap, this);
 
-		//QWidget::connect(modelViewer, &MyMV2::onProgress, this, &CELLeditor::onProgress2);
 		setCentralWidget(modelViewer);
-
-		setMinimumSize(1000, 800);
-
-		auto toolbar = new QToolBar();
-		this->addToolBar(toolbar);
-		toolbar->addAction("Reference list");
-		toolbar->addAction("Lighting");
-		toolbar->addAction("Navmesh");
-		toolbar->setMovable(false);
 	}
 };

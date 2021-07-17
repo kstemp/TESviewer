@@ -49,9 +49,6 @@
     <ClCompile Include="model\NiTypes.cpp">
       <Filter>model</Filter>
     </ClCompile>
-    <ClCompile Include="src\CK.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\main.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -62,6 +59,9 @@
       <Filter>src\render</Filter>
     </ClCompile>
     <ClCompile Include="src\editor\EditorResolver.cpp" />
+    <ClCompile Include="src\CK.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="model\Header.h">
@@ -195,6 +195,12 @@
     <QtMoc Include="src\FileDialog.h">
       <Filter>util</Filter>
     </QtMoc>
+    <QtMoc Include="src\FileProgressDialog.h">
+      <Filter>util</Filter>
+    </QtMoc>
+    <QtMoc Include="src\LoaderThread.h">
+      <Filter>util</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <None Include="fshader.fs">
@@ -210,5 +216,7 @@
     <QtUic Include="ui\LIGHeditor.ui" />
     <QtUic Include="ui\FileDialog.ui" />
     <QtUic Include="ui\MainWindow.ui" />
+    <QtUic Include="ui\CELLeditor.ui" />
+    <QtUic Include="ui\FileProgressDialog.ui" />
   </ItemGroup>
 </Project>

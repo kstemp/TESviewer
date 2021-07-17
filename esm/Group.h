@@ -119,7 +119,22 @@ namespace ESM {
 					return "Static";
 				else if (t == "FURN")
 					return "Furniture";
-
+				else if (t == "CONT")
+					return "Container";
+				else if (t == "DOOR")
+					return "Door";
+				else if (t == "LIGH")
+					return "Light";
+				else if (t == "MISC")
+					return "Miscellanous Object";
+				else if (t == "ALCH")
+					return "Potion";
+				else if (t == "FLOR")
+					return "Flora";
+				else if (t == "MATO")
+					return "Material Object";
+				else if (t == "TREE")
+					return "Tree";
 				return t;
 			}
 

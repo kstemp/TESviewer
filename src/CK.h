@@ -21,10 +21,10 @@ private:
 	Ui::MainWindow ui;
 
 	void populateRecordList();
-	QTreeWidgetItem* getItemFromRecord(const ESM::Record* record);
-	QTreeWidgetItem* loopChildGroups(const ESM::Group& group, const QString& title = "");
+	QTreeWidgetItem* getItemFromRecord(const ESM::Record* record, const int fileIndex);
+	QTreeWidgetItem* loopChildGroups(const ESM::Group& group, const int fileIndex = 0, const QString& title = "");
 
-	ESM::File dataFile;
+	QList<ESM::File> dataFiles;
 
 private slots:
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <QString>
 
 #include "Group.h"
 #include "records\TES4.h"
@@ -16,9 +17,13 @@ namespace ESM {
 
 		ESM::TES4* header;
 
+		QString fileName;
+
 		std::vector<Group> groups;
 
-		void parse(const std::string& fileName, const bool headerOnly = false, std::function<void(int, std::string)> onGroupParsed = [](const int, const std::string) {}) {
+		File(const QString& fileName) : fileName(fileName) {}
+
+		void parse(const std::string& fileName, const bool headerOnly = false) {
 			auto bsr = BinaryStreamReader(fileName);
 
 			bsr.expect("TES4");
@@ -29,12 +34,12 @@ namespace ESM {
 			header->parse(bsr);
 
 			if (!headerOnly) {
-				for (int i = 1; i <= GROUP_COUNT; ++i) {
+				while (bsr.pos < bsr.fileSize) {
 					bsr.expect("GRUP");
 					groups.push_back(Group());
 					groups.back().parse(bsr, recordMap);
 
-					onGroupParsed(i, groups.back().label);
+					//onGroupParsed(i, groups.back().label);
 				}
 			}
 		}
