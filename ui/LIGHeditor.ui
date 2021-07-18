@@ -184,7 +184,7 @@
      <string>?</string>
     </property>
    </widget>
-   <widget class="QDoubleSpinBox" name="doubleSpinBox">
+   <widget class="QDoubleSpinBox" name="sbFOV">
     <property name="geometry">
      <rect>
       <x>80</x>
@@ -194,7 +194,7 @@
      </rect>
     </property>
    </widget>
-   <widget class="QDoubleSpinBox" name="doubleSpinBox_2">
+   <widget class="QDoubleSpinBox" name="sbFalloff">
     <property name="geometry">
      <rect>
       <x>80</x>
@@ -204,7 +204,7 @@
      </rect>
     </property>
    </widget>
-   <widget class="QDoubleSpinBox" name="doubleSpinBox_3">
+   <widget class="QDoubleSpinBox" name="sbRadius">
     <property name="geometry">
      <rect>
       <x>80</x>
@@ -214,7 +214,7 @@
      </rect>
     </property>
    </widget>
-   <widget class="QDoubleSpinBox" name="doubleSpinBox_4">
+   <widget class="QDoubleSpinBox" name="sbNearClip">
     <property name="geometry">
      <rect>
       <x>80</x>

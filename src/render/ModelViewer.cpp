@@ -29,6 +29,8 @@ void ModelViewer::addModel(const std::string& modelFileName, const Vector3& glob
 	camera.position() = fullBoundingSphere.center.toQVector3D();
 	camera.position() += QVector3D(1, 1, 1) * fullBoundingSphere.radius / 300.0f;
 	camera.front() = -(fullBoundingSphere.center.toQVector3D() - camera.position()).normalized();
+
+	lightPos = camera.position();
 }
 
 void ModelViewer::initializeGL() {
@@ -41,7 +43,6 @@ void ModelViewer::initializeGL() {
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	program.addShaderFromSourceFile(QOpenGLShader::Vertex, VERTEX_SHADER_PATH);
-
 	program.addShaderFromSourceFile(QOpenGLShader::Fragment, FRAGMENT_SHADER_PATH);
 	program.link();
 
@@ -67,11 +68,26 @@ void ModelViewer::paintGL() {
 
 	program.setUniformValue("view", camera.view());
 
+	program.setUniformValue("lightColor", lightColors[0]);
+	program.setUniformValue("lightColor2", lightColors[1]);
+	program.setUniformValue("lightColor3", lightColors[2]);
+	program.setUniformValue("lightColor4", lightColors[3]);
+	program.setUniformValue("lightColor5", lightColors[4]);
+	program.setUniformValue("lightColor6", lightColors[5]);
+	program.setUniformValue("lightColor7", lightColors[6]);
+
 	QMatrix4x4 model;
 	model.setToIdentity();
 	program.setUniformValue("model", model);
 
-	program.setUniformValue("lightPos", fullBoundingSphere.center.toQVector3D() + QVector3D(1, 0, 0) * phi + QVector3D(0, 1, 0) * phi1 + QVector3D(0, 0, 1) * phi2);
+	program.setUniformValue("lightPos", lightPos[0]);
+	program.setUniformValue("lightPos2", lightPos[1]);
+	program.setUniformValue("lightPos3", lightPos[2]);
+	program.setUniformValue("lightPos4", lightPos[3]);
+	program.setUniformValue("lightPos5", lightPos[4]);
+	program.setUniformValue("lightPos6", lightPos[5]);
+	program.setUniformValue("lightPos7", lightPos[6]);
+
 	program.setUniformValue("viewPos", camera.position());
 
 	drawMeshes(false);

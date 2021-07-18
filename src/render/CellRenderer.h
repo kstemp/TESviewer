@@ -56,13 +56,18 @@ public:
 
 					if (base->model())
 						addModel(base->model().value(), refr->DATA.position, refr->DATA.rotation, base->obnd);
+
+					if (base->type == ESM::RecordType::LIGH) {
+						ESM::LIGH* ligh = static_cast<ESM::LIGH*>(base);
+
+						addLight(QVector3D(ligh->data.r / 255.0f, ligh->data.g / 255.0f, ligh->data.b / 255.0f), refr->DATA.position.toQVector3D());
+					}
 				}
 			}
 			break;
 			case ESM::RecordType::NAVM:
 			{
 				auto navm = static_cast<ESM::NAVM*>(r);
-
 				addNavmesh(navm);
 			}
 

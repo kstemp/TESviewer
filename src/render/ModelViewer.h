@@ -26,15 +26,24 @@ protected:
 
 	QPoint lastPos;
 
+	QVector3D lightPos;
+
 	float zoom = 45.f;
 
 	QOpenGLShaderProgram program;
 	QOpenGLShaderProgram navMeshProgram;
 
+	QList<QVector3D> lightPositions;
+	QList<QVector3D> lightColors;
+
 	std::vector<Mesh> meshes;
 
 	void addMesh(const NiFile& model, const Vector3& globalTranslation, const Vector3& globalRotation);
-	void addBox(const ESM::OBND obnd, const Vector3& globalTranslation, const Vector3& globalRotation);
+	void addLight(QVector3D color, QVector3D pos) {
+		lightPositions.push_back(pos);
+		lightColors.push_back(color);
+	};
+
 	void drawMeshes(bool isNavmesh = false);
 	void deleteMeshes();
 

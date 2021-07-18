@@ -27,6 +27,11 @@ public:
 		setFixedSize(this->width(), this->height());
 
 		ui.editEDID->setText(QString::fromStdString(ligh->EDID));
+
+		ui.sbFOV->setValue(ligh->data.FOV);
+		ui.sbFalloff->setValue(ligh->data.falloff);
+		ui.sbRadius->setValue(ligh->data.radius);
+		ui.sbNearClip->setValue(ligh->data.nearClip);
 	};
 
 signals:

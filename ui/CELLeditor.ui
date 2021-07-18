@@ -94,8 +94,7 @@
     <bool>false</bool>
    </attribute>
    <addaction name="actionSetNavmeshMode"/>
-   <addaction name="actionLighting"/>
-   <addaction name="actionSounds"/>
+   <addaction name="actionEnableLights"/>
   </widget>
   <action name="actionSetNavmeshMode">
    <property name="checkable">
@@ -105,14 +104,12 @@
     <string>Navmesh mode</string>
    </property>
   </action>
-  <action name="actionLighting">
-   <property name="text">
-    <string>Lighting</string>
+  <action name="actionEnableLights">
+   <property name="checkable">
+    <bool>true</bool>
    </property>
-  </action>
-  <action name="actionSounds">
    <property name="text">
-    <string>Sounds</string>
+    <string>Enable lights</string>
    </property>
   </action>
  </widget>
