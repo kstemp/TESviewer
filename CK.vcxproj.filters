@@ -175,6 +175,9 @@
     <ClInclude Include="esm\records\NAVM.h">
       <Filter>util</Filter>
     </ClInclude>
+    <ClInclude Include="src\render\CellRenderer.h">
+      <Filter>util</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="src\CK.h">
@@ -209,6 +212,8 @@
     <None Include="vshader.vs">
       <Filter>shaders</Filter>
     </None>
+    <None Include="navmesh.fs" />
+    <None Include="navmesh.vs" />
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="ui\STATeditor.ui" />
@@ -218,5 +223,6 @@
     <QtUic Include="ui\MainWindow.ui" />
     <QtUic Include="ui\CELLeditor.ui" />
     <QtUic Include="ui\FileProgressDialog.ui" />
+    <QtUic Include="ui\Settings.ui" />
   </ItemGroup>
 </Project>

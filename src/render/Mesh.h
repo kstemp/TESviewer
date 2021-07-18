@@ -21,6 +21,8 @@ struct Mesh {
 	unsigned int VBO = 0;
 	unsigned int EBO = 0;
 
+	bool isNavmesh = false;
+
 	std::vector<SubMesh> submeshes;
 
 	NiBound boundingSphere;
@@ -28,7 +30,7 @@ struct Mesh {
 	const Vector3& globalTranslation;
 	const Vector3& globalRotation;
 
-	Mesh(const Vector3& globalTranslation, const Vector3& globalRotation) : globalTranslation(globalTranslation), globalRotation(globalRotation) {
+	Mesh(const Vector3& globalTranslation = Vector3(), const Vector3& globalRotation = Vector3()) : globalTranslation(globalTranslation), globalRotation(globalRotation) {
 	}
 
 	QMatrix4x4 getModelMatrixForSubmesh(const SubMesh& submesh) const {

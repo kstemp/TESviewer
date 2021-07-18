@@ -110,16 +110,6 @@ private slots:
 	}
 
 	void openFiles() {
-		if (activeFile.isEmpty()) {
-			QMessageBox msgBox;
-			msgBox.setText("Please select a file as active file.");
-			msgBox.setStandardButtons(QMessageBox::Ok);
-			msgBox.setIcon(QMessageBox::Icon::Information);
-			msgBox.exec();
-
-			return;
-		}
-
 		accept();
 	}
 

@@ -4,50 +4,11 @@
 #include <esm\records\CELL.h>
 #include "..\editor\REFReditor.h"
 #include <esm\File.h>
-#include "..\render\ModelViewer.h"
+#include "..\render\CellRenderer.h"
 
 #include <qtablewidget.h>
 
 #include "ui_CELLeditor.h"
-
-class MyMV2 : public ModelViewer {
-	std::vector<ESM::Record*>& records;
-	ESM::RecordMap& recordMap;
-
-protected:
-	void initializeGL() override {
-		ModelViewer::initializeGL();
-
-		for (ESM::Record* r : records) {
-			switch (r->type) {
-			case ESM::RecordType::REFR:
-			{
-				auto refr = static_cast<ESM::REFR*>(r);
-
-				auto it = recordMap.find(refr->NAME);
-				if (it != recordMap.end()) {
-					auto base = it->second;
-
-					if (base->model())
-						addModel(base->model().value(), refr->DATA.position, refr->DATA.rotation, base->obnd);
-				}
-			}
-
-			break;
-			}
-		}
-	}
-
-public:
-
-	MyMV2(ESM::RecordList& cellTemporaryChildren,
-		ESM::RecordMap& recordMap,
-		QWidget* parent)
-		:records(cellTemporaryChildren),
-		recordMap(recordMap),
-		ModelViewer(parent)
-	{}
-};
 
 class CELLeditor : public QMainWindow {
 	Q_OBJECT
@@ -57,28 +18,25 @@ class CELLeditor : public QMainWindow {
 
 	Ui::CELLeditor ui;
 
-	ModelViewer* modelViewer = nullptr;
+	CellRenderer* renderer = nullptr;
 
 	QDockWidget* dockREFReditor = nullptr;
 
 	void onTableWidgetItemDoubleClicked(QTableWidgetItem* item) {
 		uint32_t formID = item->data(Qt::UserRole).toUInt();
 
-		auto record = dataFile.recordMap[formID]; // TODO replace with find() or sth, because the [] operator will create object for us
-		if (!record) // TODO should not happen
-			return;
+		auto it = dataFile.recordMap.find(formID);
+		if (it != dataFile.recordMap.end()) {
+			ESM::Record* record = it->second;
 
-		if (record->type != ESM::RecordType::REFR) // TODO should not happen!
-			return;
+			auto editor = new REFReditor(static_cast<ESM::REFR*>(record), dataFile.recordMap);
 
-		auto editor = new REFReditor(static_cast<ESM::REFR*>(record), dataFile.recordMap);
+			QWidget::connect(editor, &REFReditor::changed, this, [this]() {
+				this->renderer->update();
+				});
 
-		QWidget::connect(editor, &REFReditor::changed, this, [this]() {
-			this->modelViewer->update();
-			});
-
-		//editor->show();
-		dockREFReditor->setWidget(editor);
+			dockREFReditor->setWidget(editor);
+		}
 	}
 
 public:
@@ -144,8 +102,8 @@ public:
 			}
 		}
 
-		modelViewer = new MyMV2(cellTemporaryChildren->records, dataFile.recordMap, this);
+		renderer = new CellRenderer(cellTemporaryChildren->records, dataFile.recordMap, this);
 
-		setCentralWidget(modelViewer);
+		setCentralWidget(renderer);
 	}
 };

@@ -23,7 +23,6 @@ CK::CK(QWidget* parent)
 	: QMainWindow(parent) {
 	ui.setupUi(this);
 
-	// create actions
 	QWidget::connect(ui.actionLoadData, &QAction::triggered, this, &CK::fileOpen);
 
 	auto wrapper = new QWidget();
@@ -43,18 +42,13 @@ void CK::fileOpen() {
 	if (result == QDialog::Accepted) {
 		FileProgressDialog progressDialog;
 
-		//QFutureWatcher<void> futureWatcher;
-		//	QObject::connect(&futureWatcher, &QFutureWatcher<void>::finished, &progressDialog, &QDialog::close);
-			//QObject::connect(&dialog, &QProgressDialog::canceled, &futureWatcher, &QFutureWatcher<void>::cancel);
-			//QObject::connect(&futureWatcher, &QFutureWatcher<void>::progressValueChanged, &progressDialog, &FileProgressDialog::setValue);
-
 		const QSet<QString>& filesToLoad = fileDialog.getFilesToLoad();
 
 		for (const QString& fileName : filesToLoad) {
 			dataFiles.push_back(ESM::File(fileName));
-
 			dataFiles.back().parse(SKYRIM_DATA_DIR + fileName.toStdString());
 		}
+
 		populateRecordList();
 	}
 }
@@ -68,7 +62,7 @@ QTreeWidgetItem* CK::getItemFromRecord(const ESM::Record* record, const int file
 
 		const auto it = dataFiles[fileIndex].recordMap.find(refr->NAME);
 		if (it != dataFiles[fileIndex].recordMap.end()) {
-			ESM::Record* base = it->second;
+			const ESM::Record* base = it->second;
 
 			EDID = "[" + base->EDID + "]";
 		}

@@ -5,90 +5,38 @@
 #include "Mesh.h"
 #include "Texture.h"
 
-void ModelViewer::drawMeshes() {
-	for (const auto& mesh : meshes) {
-		glBindVertexArray(mesh.VAO);
-		glActiveTexture(GL_TEXTURE0);
+void ModelViewer::drawMeshes(bool isNavmesh) {
+	if (isNavmesh)
+	{
+		for (const auto& mesh : meshes) {
+			if (mesh.isNavmesh) {
+				glBindVertexArray(mesh.VAO);
 
-		for (const auto& submesh : mesh.submeshes) {
-			glBindTexture(GL_TEXTURE_2D, submesh.texture);
+				for (const auto& submesh : mesh.submeshes)
+					glDrawElements(GL_TRIANGLES, submesh.indicesCount, GL_UNSIGNED_SHORT, 0);
 
-			program.setUniformValue("model", mesh.getModelMatrixForSubmesh(submesh));
-
-			glDrawElementsBaseVertex(GL_TRIANGLES, submesh.indicesCount, GL_UNSIGNED_SHORT, (void*)(submesh.indicesCountUpTo * sizeof(ushort)), submesh.vertexCountUpTo);
+				glBindVertexArray(0);
+			}
 		}
-
-		glBindVertexArray(0);
 	}
-}
+	else {
+		for (const auto& mesh : meshes) {
+			if (mesh.isNavmesh) continue;
 
-void ModelViewer::drawBoxes() {
-	/*for (const auto& box : boxes) {
-		glBindVertexArray(box.VAO);
-		glActiveTexture(0);
+			glBindVertexArray(mesh.VAO);
+			glActiveTexture(GL_TEXTURE0);
 
-		program.setUniformValue("model", box.getModelMatrix());
+			for (const auto& submesh : mesh.submeshes) {
+				glBindTexture(GL_TEXTURE_2D, submesh.texture);
 
-		glDrawElements(GL_TRIANGLES, 12 * 3, GL_UNSIGNED_SHORT, 0);
+				program.setUniformValue("model", mesh.getModelMatrixForSubmesh(submesh));
 
-		glBindVertexArray(0);
-	}*/
-}
+				glDrawElementsBaseVertex(GL_TRIANGLES, submesh.indicesCount, GL_UNSIGNED_SHORT, (void*)(submesh.indicesCountUpTo * sizeof(ushort)), submesh.vertexCountUpTo);
+			}
 
-void ModelViewer::addBox(const ESM::OBND obnd, const Vector3& globalTranslation, const Vector3& globalRotation) {
-	Box box(globalTranslation, globalRotation);
-
-	glGenVertexArrays(1, &box.VAO);
-	glGenBuffers(1, &box.EBO);
-	glGenBuffers(1, &box.VBO);
-
-	glBindVertexArray(box.VAO);
-
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, box.EBO);
-	std::vector<ushort> indices = {
-			0, 1, 2,
-		2, 3, 0,
-		// right
-		1, 5, 6,
-		6, 2, 1,
-		// back
-		7, 6, 5,
-		5, 4, 7,
-		// left
-		4, 0, 3,
-		3, 7, 4,
-		// bottom
-		4, 5, 1,
-		1, 0, 4,
-		// top
-		3, 2, 6,
-		6, 7, 3
-	};
-
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 12 * 3 * sizeof(ushort), indices.data(), GL_STATIC_DRAW);
-
-	glBindBuffer(GL_ARRAY_BUFFER, box.VBO);
-
-	std::vector<int16_t> vertices = {
-		/* A*/	obnd.x1, obnd.y2, obnd.z1,
-		/* B*/obnd.x1, obnd.y2, obnd.z2,
-		/* C*/obnd.x2, obnd.y2, obnd.z1,
-		/* D*/obnd.x2, obnd.y2, obnd.z2,
-		/*E*/obnd.x1, obnd.y1, obnd.z1,
-		/*F*/obnd.x1, obnd.y1, obnd.z2,
-		/*G*/obnd.x2, obnd.y1, obnd.z1,
-		/*H*/obnd.x2, obnd.y1, obnd.z2
-	};
-
-	glBufferData(GL_ARRAY_BUFFER, 8 * 3 * sizeof(int16_t), vertices.data(), GL_STATIC_DRAW);
-
-	// vertex x, y, z coordinates
-	glVertexAttribPointer(0, 3, GL_SHORT, GL_FALSE, sizeof(int16_t), (void*)0);
-	glEnableVertexAttribArray(0);
-
-	glBindVertexArray(0);
-
-	boxes.push_back(box);
+			glBindVertexArray(0);
+		}
+	}
 }
 
 void ModelViewer::addMesh(const NiFile& model, const Vector3& globalTranslation, const Vector3& globalRotation) {

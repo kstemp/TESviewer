@@ -42,8 +42,6 @@ public:
 		ui.setupUi(this);
 
 		setWindowTitle(QString::fromStdString("Static: " + stat->EDID));
-		setWindowFlags(Qt::Drawer);
-		setFixedSize(this->width(), this->height());
 
 		if (!stat->MODL.empty()) {
 			modelViewer = new MyMV(stat->MODL, stat->obnd, ui.gb_preview);

@@ -26,8 +26,6 @@ void ModelViewer::addModel(const std::string& modelFileName, const Vector3& glob
 
 	addMesh(model, globalTranslation, globalRotation);
 
-	addBox(obnd, globalTranslation, globalRotation);
-
 	camera.position() = fullBoundingSphere.center.toQVector3D();
 	camera.position() += QVector3D(1, 1, 1) * fullBoundingSphere.radius / 300.0f;
 	camera.front() = -(fullBoundingSphere.center.toQVector3D() - camera.position()).normalized();
@@ -40,8 +38,13 @@ void ModelViewer::initializeGL() {
 	glEnable(GL_CULL_FACE);
 
 	program.addShaderFromSourceFile(QOpenGLShader::Vertex, VERTEX_SHADER_PATH);
+
 	program.addShaderFromSourceFile(QOpenGLShader::Fragment, FRAGMENT_SHADER_PATH);
 	program.link();
+
+	navMeshProgram.addShaderFromSourceFile(QOpenGLShader::Vertex, "navmesh.vs");
+	navMeshProgram.addShaderFromSourceFile(QOpenGLShader::Fragment, "navmesh.fs");
+	navMeshProgram.link();
 }
 
 void ModelViewer::paintGL() {
@@ -68,8 +71,15 @@ void ModelViewer::paintGL() {
 	program.setUniformValue("lightPos", fullBoundingSphere.center.toQVector3D() + QVector3D(1, 0, 0) * phi + QVector3D(0, 1, 0) * phi1 + QVector3D(0, 0, 1) * phi2);
 	program.setUniformValue("viewPos", camera.position());
 
-	drawMeshes();
-	drawBoxes();
+	drawMeshes(false);
+
+	navMeshProgram.bind();
+	navMeshProgram.setUniformValue("model", model);
+	navMeshProgram.setUniformValue("projection", projection);
+	navMeshProgram.setUniformValue("view", camera.view());
+	navMeshProgram.setUniformValue("viewPos", camera.position());
+
+	drawMeshes(true);
 }
 
 void ModelViewer::resizeGL(int w, int h) {

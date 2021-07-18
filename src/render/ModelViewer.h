@@ -15,38 +15,9 @@
 #include "Camera.h"
 #include "Mesh.h"
 
-struct Box {
-	unsigned int VAO = 0;
-	unsigned int VBO = 0;
-	unsigned int EBO = 0;
+class ModelViewer : public QOpenGLWidget, public QOpenGLFunctions_3_3_Core {
+protected:
 
-	const Vector3& globalTranslation;
-	const Vector3& globalRotation;
-
-	ESM::OBND bounds;
-
-	Box(const Vector3& globalTranslation, const Vector3& globalRotation) : globalTranslation(globalTranslation), globalRotation(globalRotation) {
-	}
-
-	QMatrix4x4 getModelMatrix() const {
-		QMatrix4x4 model;
-
-		float angleX = 57.2957795 * globalRotation.x;
-		float angleY = 57.2957795 * globalRotation.y;
-		float angleZ = 57.2957795 * globalRotation.z;
-
-		model.setToIdentity();
-
-		model.translate(globalTranslation.toQVector3D());
-		model.rotate(angleX, QVector3D(1, 0, 0));
-		model.rotate(angleY, QVector3D(0, 1, 0));
-		model.rotate(angleZ, QVector3D(0, 0, 1));
-
-		return model;
-	}
-};
-
-class ModelViewer : public QOpenGLWidget, QOpenGLFunctions_3_3_Core {
 	Camera camera;
 
 	float phi = 0;
@@ -58,23 +29,17 @@ class ModelViewer : public QOpenGLWidget, QOpenGLFunctions_3_3_Core {
 	float zoom = 45.f;
 
 	QOpenGLShaderProgram program;
-	QOpenGLShaderProgram normalProgram;
+	QOpenGLShaderProgram navMeshProgram;
 
 	std::vector<Mesh> meshes;
-	std::vector<Box> boxes;
 
 	void addMesh(const NiFile& model, const Vector3& globalTranslation, const Vector3& globalRotation);
 	void addBox(const ESM::OBND obnd, const Vector3& globalTranslation, const Vector3& globalRotation);
-	void drawMeshes();
-	void drawBoxes();
+	void drawMeshes(bool isNavmesh = false);
 	void deleteMeshes();
-	void deleteBoxes() {
-		// TODO implement
-	}
 
 	NiBound fullBoundingSphere;
 
-protected:
 	void initializeGL();
 	void paintGL();
 	void resizeGL(int w, int h);

@@ -11,10 +11,10 @@ namespace ESM {
 
 	struct Triangle {
 		int16_t vertex0, vertex1, vertex2;
-		int16_t edge0;
-		uint16_t edge1, edge2;
-		uint16_t coverMarker;
-		uint16_t coverFlags;
+		//	int16_t edge0;
+	//		uint16_t edge1, edge2;
+		//	uint16_t coverMarker;
+			//uint16_t coverFlags;
 	};
 
 	struct NVNM {
@@ -49,8 +49,9 @@ namespace ESM {
 				nvnm.triangles.resize(nvnm.numTris);
 				for (int i = 0; i < nvnm.numTris; ++i) {
 					bsr >> nvnm.triangles[i].vertex0 >> nvnm.triangles[i].vertex1 >> nvnm.triangles[i].vertex2;
-					bsr >> nvnm.triangles[i].edge0 >> nvnm.triangles[i].edge1 >> nvnm.triangles[i].edge2;
-					bsr >> nvnm.triangles[i].coverMarker >> nvnm.triangles[i].coverFlags;
+					bsr.skip(sizeof(int16_t) + 4 * sizeof(uint16_t));
+					//bsr >> nvnm.triangles[i].edge0 >> nvnm.triangles[i].edge1 >> nvnm.triangles[i].edge2;
+				//	bsr >> nvnm.triangles[i].coverMarker >> nvnm.triangles[i].coverFlags;
 				}
 
 				bsr.skip(fieldSize - (bsr.pos - pos__));

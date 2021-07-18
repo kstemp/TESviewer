@@ -158,6 +158,7 @@
     <QtMoc Include="src\FileProgressDialog.h" />
     <QtMoc Include="src\LoaderThread.h" />
     <ClInclude Include="src\render\Camera.h" />
+    <ClInclude Include="src\render\CellRenderer.h" />
     <ClInclude Include="src\render\Mesh.h" />
     <ClInclude Include="src\render\ModelViewer.h" />
     <ClInclude Include="src\render\Texture.h" />
@@ -176,6 +177,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="fshader.fs" />
+    <None Include="navmesh.fs" />
+    <None Include="navmesh.vs" />
     <None Include="vshader.vs" />
   </ItemGroup>
   <ItemGroup>
@@ -185,6 +188,7 @@
     <QtUic Include="ui\LIGHeditor.ui" />
     <QtUic Include="ui\MainWindow.ui" />
     <QtUic Include="ui\REFReditor.ui" />
+    <QtUic Include="ui\Settings.ui" />
     <QtUic Include="ui\STATeditor.ui" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
