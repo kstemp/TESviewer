@@ -126,6 +126,7 @@
     <ClCompile Include="src\render\Mesh.cpp" />
     <ClCompile Include="src\render\ModelViewer.cpp" />
     <QtRcc Include="CK.qrc" />
+    <QtRcc Include="lib\QDarkStyleSheet\qdarkstyle\dark\style.qrc" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="esm\records\NAVM.h" />

@@ -1,5 +1,3 @@
 <RCC>
-    <qresource prefix="/CK">
-        <file>ui/STATeditor.ui</file>
-    </qresource>
+    <qresource prefix="/CK"/>
 </RCC>

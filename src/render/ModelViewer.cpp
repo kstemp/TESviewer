@@ -37,6 +37,9 @@ void ModelViewer::initializeGL() {
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
 
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 	program.addShaderFromSourceFile(QOpenGLShader::Vertex, VERTEX_SHADER_PATH);
 
 	program.addShaderFromSourceFile(QOpenGLShader::Fragment, FRAGMENT_SHADER_PATH);
@@ -73,13 +76,15 @@ void ModelViewer::paintGL() {
 
 	drawMeshes(false);
 
-	navMeshProgram.bind();
-	navMeshProgram.setUniformValue("model", model);
-	navMeshProgram.setUniformValue("projection", projection);
-	navMeshProgram.setUniformValue("view", camera.view());
-	navMeshProgram.setUniformValue("viewPos", camera.position());
+	if (drawNavmesh) {
+		navMeshProgram.bind();
+		navMeshProgram.setUniformValue("model", model);
+		navMeshProgram.setUniformValue("projection", projection);
+		navMeshProgram.setUniformValue("view", camera.view());
+		navMeshProgram.setUniformValue("viewPos", camera.position());
 
-	drawMeshes(true);
+		drawMeshes(true);
+	}
 }
 
 void ModelViewer::resizeGL(int w, int h) {

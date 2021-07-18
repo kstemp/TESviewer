@@ -93,16 +93,16 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
-   <addaction name="actionNavmesh"/>
+   <addaction name="actionSetNavmeshMode"/>
    <addaction name="actionLighting"/>
    <addaction name="actionSounds"/>
   </widget>
-  <action name="actionNavmesh">
+  <action name="actionSetNavmeshMode">
    <property name="checkable">
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Navmesh</string>
+    <string>Navmesh mode</string>
    </property>
   </action>
   <action name="actionLighting">

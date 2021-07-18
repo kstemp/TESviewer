@@ -51,6 +51,8 @@ protected:
 
 public:
 
+	bool drawNavmesh = false;
+
 	ModelViewer(QWidget* parent = Q_NULLPTR);
 	~ModelViewer();
 

@@ -53,6 +53,11 @@ public:
 
 		connect(ui.refTable, &QTableWidget::itemDoubleClicked, this, &CELLeditor::onTableWidgetItemDoubleClicked);
 
+		QWidget::connect(ui.actionSetNavmeshMode, &QAction::triggered, this, [=]() {
+			renderer->drawNavmesh = !renderer->drawNavmesh;
+			renderer->update();
+			});
+
 		std::vector<ESM::Group>* cellChildrenTop = nullptr;
 		cellChildrenTop = (cell->DATA & ESM::CellFlags::Interior) ?
 			&dataFile.groups[57].subgroups[cell->getBlock()].subgroups[cell->getSubBlock()].subgroups
