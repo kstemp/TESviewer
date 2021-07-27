@@ -10,7 +10,7 @@ namespace ESM {
 	struct FLOR : Record {
 		std::string MODL;
 
-		FLOR() : Record(RecordType::FLOR) {}
+		FLOR() : Record("FLOR", RecordType::FLOR) {}
 
 		virtual void parseField(BinaryStreamReader& bsr, const std::string& fieldName, const uint16_t fieldSize) override {
 			if (fieldName == "MODL")

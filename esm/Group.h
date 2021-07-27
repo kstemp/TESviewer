@@ -74,6 +74,10 @@ namespace ESM {
 		std::vector<Record*> records;
 		std::vector<Group> subgroups;
 
+		uint32_t labelAsFormID() const {
+			return *(uint32_t*)(&label[0]);
+		}
+
 		void parse(BinaryStreamReader& bsr, std::unordered_map<uint32_t, Record*>& recordMap) {
 			bsr >> size;
 			bsr >> label[0] >> label[1] >> label[2] >> label[3];

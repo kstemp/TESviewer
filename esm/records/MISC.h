@@ -10,7 +10,7 @@ namespace ESM {
 	struct MISC : Record {
 		std::string MODL;
 
-		MISC() : Record(RecordType::MISC) {}
+		MISC() : Record("MISC", RecordType::MISC) {}
 
 		virtual void parseField(BinaryStreamReader& bsr, const std::string& fieldName, const uint16_t fieldSize) override {
 			if (fieldName == "MODL")

@@ -63,6 +63,7 @@
     <ClCompile Include="src\CK.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="esm\Util.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="model\Header.h">
@@ -179,6 +180,12 @@
     <ClInclude Include="src\render\CellRenderer.h">
       <Filter>util</Filter>
     </ClInclude>
+    <ClInclude Include="esm\Util.h">
+      <Filter>util</Filter>
+    </ClInclude>
+    <ClInclude Include="src\editor\AbstractRecordEditor.h">
+      <Filter>util</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="src\CK.h">
@@ -203,6 +210,9 @@
       <Filter>util</Filter>
     </QtMoc>
     <QtMoc Include="src\editor\LIGHeditor.h">
+      <Filter>util</Filter>
+    </QtMoc>
+    <QtMoc Include="src\editor\AbstractRecordDialog.h">
       <Filter>util</Filter>
     </QtMoc>
   </ItemGroup>

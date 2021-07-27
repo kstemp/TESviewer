@@ -119,6 +119,10 @@ private slots:
 
 public:
 
+	const QString& getActiveFile() const {
+		return activeFile;
+	}
+
 	const QSet<QString>& getFilesToLoad() const {
 		return filesToLoad;
 	}

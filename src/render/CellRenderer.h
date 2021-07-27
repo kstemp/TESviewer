@@ -4,7 +4,7 @@
 
 class CellRenderer : public ModelViewer {
 	std::vector<ESM::Record*>& records;
-	ESM::RecordMap& recordMap;
+	ESM::File& dataFile;
 
 public:
 
@@ -20,17 +20,17 @@ public:
 
 		SubMesh submesh;
 
-		submesh.verticesCount = navm->nvnm.numVerts;
+		submesh.verticesCount = navm->NVNM.numVerts;
 
-		submesh.indicesCount = 3 * navm->nvnm.numTris;
+		submesh.indicesCount = 3 * navm->NVNM.numTris;
 
 		mesh.submeshes.push_back(submesh);
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.EBO);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, submesh.indicesCount * sizeof(ushort), navm->nvnm.triangles.data(), GL_STATIC_DRAW);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, submesh.indicesCount * sizeof(ushort), navm->NVNM.triangles.data(), GL_STATIC_DRAW);
 
 		glBindBuffer(GL_ARRAY_BUFFER, mesh.VBO);
-		glBufferData(GL_ARRAY_BUFFER, submesh.verticesCount * 3 * sizeof(float), navm->nvnm.vertices.data(), GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, submesh.verticesCount * 3 * sizeof(float), navm->NVNM.vertices.data(), GL_STATIC_DRAW);
 
 		// vertex x, y, z coordinates
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
@@ -48,17 +48,16 @@ public:
 			switch (r->type) {
 			case ESM::RecordType::REFR:
 			{
-				auto refr = static_cast<ESM::REFR*>(r);
+				auto refr = r->castTo<ESM::REFR>();
 
-				auto it = recordMap.find(refr->NAME);
-				if (it != recordMap.end()) {
-					auto base = it->second;
+				ESM::Record* base = ESM::getBaseFromREFR(refr, dataFile);
 
+				if (base) {
 					if (base->model())
 						addModel(base->model().value(), refr->DATA.position, refr->DATA.rotation, base->obnd);
 
 					if (base->type == ESM::RecordType::LIGH) {
-						ESM::LIGH* ligh = static_cast<ESM::LIGH*>(base);
+						ESM::LIGH* ligh = base->castTo<ESM::LIGH>();
 
 						addLight(QVector3D(ligh->data.r / 255.0f, ligh->data.g / 255.0f, ligh->data.b / 255.0f), refr->DATA.position.toQVector3D());
 					}
@@ -66,12 +65,10 @@ public:
 			}
 			break;
 			case ESM::RecordType::NAVM:
-			{
-				auto navm = static_cast<ESM::NAVM*>(r);
-				addNavmesh(navm);
-			}
 
-			break;
+				addNavmesh(r->castTo<ESM::NAVM>());
+
+				break;
 			}
 		}
 	}
@@ -79,10 +76,10 @@ public:
 public:
 
 	CellRenderer(ESM::RecordList& cellTemporaryChildren,
-		ESM::RecordMap& recordMap,
+		ESM::File& dataFile,
 		QWidget* parent)
 		:records(cellTemporaryChildren),
-		recordMap(recordMap),
+		dataFile(dataFile),
 		ModelViewer(parent)
 	{}
 };

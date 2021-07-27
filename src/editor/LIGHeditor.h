@@ -1,30 +1,22 @@
 #pragma once
 
-#include <QDialog>
+#include "AbstractRecordEditor.h"
+#include "AbstractRecordDialog.h"
 #include <esm\records\LIGH.h>
 #include "..\Config.h"
 #include "..\util.h"
 #include <ui_LIGHeditor.h>
-#include <unordered_map>
-#include <windows.h>
 
-class LIGHeditor : public QDialog {
+class LIGHeditor : public AbstractRecordDialog, public AbstractRecordEditor<ESM::LIGH> {
 	Q_OBJECT
-		ESM::LIGH* ligh;
 
-	Ui::LIGHeditor ui;
-
-	const std::unordered_map<uint32_t, ESM::Record*>& recordMap;
+		Ui::LIGHeditor ui;
 
 public:
 
-	LIGHeditor(ESM::LIGH* ligh, const std::unordered_map<uint32_t, ESM::Record*>& recordMap, QWidget* parent = Q_NULLPTR)
-		: QDialog(parent), ligh(ligh), recordMap(recordMap) {
+	LIGHeditor(ESM::LIGH* ligh, ESM::File& dataFile, QWidget* parent = Q_NULLPTR)
+		: AbstractRecordEditor(ligh, dataFile), AbstractRecordDialog(parent) {
 		ui.setupUi(this);
-
-		setWindowTitle(QString::fromStdString("Light: " + ligh->EDID));
-		setWindowFlags(Qt::Drawer);
-		setFixedSize(this->width(), this->height());
 
 		ui.editEDID->setText(QString::fromStdString(ligh->EDID));
 
@@ -33,7 +25,4 @@ public:
 		ui.sbRadius->setValue(ligh->data.radius);
 		ui.sbNearClip->setValue(ligh->data.nearClip);
 	};
-
-signals:
-	void changed();
 };

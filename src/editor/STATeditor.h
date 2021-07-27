@@ -1,14 +1,12 @@
 #pragma once
 
-#include <QDialog>
+#include "AbstractRecordEditor.h"
+#include "AbstractRecordDialog.h"
 #include <esm\records\MATO.h>
 #include <esm\records\STAT.h>
-#include <esm\Record.h>
-#include <esm\File.h>
 #include "..\render\ModelViewer.h"
 #include "..\Config.h"
 #include <ui_STATeditor.h>
-#include <unordered_map>
 
 class MyMV : public ModelViewer {
 	std::string m = "";
@@ -25,23 +23,18 @@ public:
 	MyMV(std::string model, ESM::OBND obnd, QWidget* parent) : m(model), ModelViewer(parent) {}
 };
 
-class STATeditor : public QDialog {
+class STATeditor : public AbstractRecordDialog, public AbstractRecordEditor<ESM::STAT> {
 	Q_OBJECT
-		ESM::STAT* stat;
 
-	MyMV* modelViewer = nullptr;
+		MyMV* modelViewer = nullptr;
 
 	Ui::STATeditor ui;
 
-	ESM::RecordMap& recordMap;
-
 public:
 
-	STATeditor(ESM::STAT* stat, ESM::RecordMap& recordMap, QWidget* parent = Q_NULLPTR)
-		: QDialog(parent), stat(stat), recordMap(recordMap) {
+	STATeditor(ESM::STAT* stat, ESM::File& dataFile, QWidget* parent = Q_NULLPTR)
+		: AbstractRecordEditor(stat, dataFile), AbstractRecordDialog(parent) {
 		ui.setupUi(this);
-
-		setWindowTitle(QString::fromStdString("Static: " + stat->EDID));
 
 		if (!stat->MODL.empty()) {
 			modelViewer = new MyMV(stat->MODL, stat->obnd, ui.gb_preview);
@@ -65,7 +58,7 @@ public:
 
 		ui.cb_materialEDID->addItem("NONE");
 
-		for (const auto& [formID, record] : recordMap)
+		for (const auto& [formID, record] : dataFile.recordMap)
 			if (record->type == ESM::RecordType::MATO)
 				ui.cb_materialEDID->addItem(QString::fromStdString(record->EDID), formID);
 

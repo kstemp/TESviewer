@@ -28,7 +28,7 @@ namespace ESM {
 	struct LIGH : Record {
 		std::string MODL;
 
-		LIGH() : Record(RecordType::LIGH) {}
+		LIGH() : Record("LIGH", RecordType::LIGH) {}
 
 		LightData data;
 

@@ -60,7 +60,9 @@ protected:
 
 public:
 
+	bool doLighting = true;
 	bool drawNavmesh = false;
+	bool doMeshes = true;
 
 	ModelViewer(QWidget* parent = Q_NULLPTR);
 	~ModelViewer();

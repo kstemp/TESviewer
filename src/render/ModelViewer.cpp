@@ -68,6 +68,8 @@ void ModelViewer::paintGL() {
 
 	program.setUniformValue("view", camera.view());
 
+	program.setUniformValue("doLighting", doLighting);
+
 	program.setUniformValue("lightColor", lightColors[0]);
 	program.setUniformValue("lightColor2", lightColors[1]);
 	program.setUniformValue("lightColor3", lightColors[2]);
@@ -90,7 +92,9 @@ void ModelViewer::paintGL() {
 
 	program.setUniformValue("viewPos", camera.position());
 
-	drawMeshes(false);
+	if (doMeshes) {
+		drawMeshes(false);
+	}
 
 	if (drawNavmesh) {
 		navMeshProgram.bind();
@@ -119,6 +123,16 @@ void ModelViewer::mouseMoveEvent(QMouseEvent* e) {
 		lastPos = e->pos();
 
 		update();
+	}
+	else {
+		const QPoint center = rect().center();
+		const QVector2D dir = QVector2D(e->pos() - center);
+
+		const auto ray = camera.front() + QVector3D(dir.x(), dir.y(), 0);
+
+		std::stringstream p;
+		p << "x: " << ray.x() << " y: " << ray.y() << " z: " << ray.z() << "\n";
+		OutputDebugStringA(p.str().c_str());
 	}
 }
 
@@ -150,23 +164,7 @@ void ModelViewer::keyPressEvent(QKeyEvent* e) {
 	case Qt::Key::Key_D:
 		camera.move(MoveDirection::StrafeRight);
 		break;
-	case Qt::Key::Key_R:
-		phi += 5.0f;
-		break;
-	case Qt::Key::Key_Y:
-		phi -= 5.0f;
-		break;
-	case Qt::Key::Key_F:
-		phi1 += 5.0f;
-		break;
-	case Qt::Key::Key_H:
-		phi1 -= 5.0f;
-		break;
-	case Qt::Key::Key_V:
-		phi2 += 5.0f;
-		break;
-	case Qt::Key::Key_N:
-		phi2 -= 5.0f;
+	default:
 		break;
 	}
 

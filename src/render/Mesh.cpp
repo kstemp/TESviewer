@@ -12,8 +12,24 @@ void ModelViewer::drawMeshes(bool isNavmesh) {
 			if (mesh.isNavmesh) {
 				glBindVertexArray(mesh.VAO);
 
-				for (const auto& submesh : mesh.submeshes)
-					glDrawElements(GL_TRIANGLES, submesh.indicesCount, GL_UNSIGNED_SHORT, 0);
+				glLineWidth(1.0);
+				navMeshProgram.setUniformValue("color", QVector3D(1.0, 0.0, 0.0));
+
+				//	glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_SHORT, 0);
+
+				for (const auto& submesh : mesh.submeshes) {
+					glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_SHORT, 0);
+
+					navMeshProgram.setUniformValue("color", QVector3D(0.0, 1.0, 0.0));
+
+					glDrawElements(GL_TRIANGLES, submesh.indicesCount - 3, GL_UNSIGNED_SHORT, (void*)(sizeof(ushort) * 3));
+				}
+
+				/*	glLineWidth(3.0f);
+					navMeshProgram.setUniformValue("color", QVector3D(0.0, 0.0, 0.0));
+
+					for (const auto& submesh : mesh.submeshes)
+						glDrawElements(GL_LINE_LOOP, submesh.indicesCount, GL_UNSIGNED_SHORT, 0);*/
 
 				glBindVertexArray(0);
 			}

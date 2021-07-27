@@ -22,8 +22,12 @@ uniform vec3 lightColor5;
 uniform vec3 lightColor6;
 uniform vec3 lightColor7;
 
+uniform bool doLighting;
+
 void main()
 {
+
+if (doLighting){
 
     vec3 norm = normalize(Normal);
 
@@ -57,5 +61,11 @@ void main()
     
 
     FragColor = texture(ourTexture, texCoord) * vec4(diffuse + diffuse2 + diffuse3 + diffuse4 + diffuse5 + diffuse6 + diffuse7, 1.0);
+
+    }
+    else {
+    FragColor = texture(ourTexture, texCoord);
+
+    }
 
 }

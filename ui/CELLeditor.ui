@@ -95,6 +95,7 @@
    </attribute>
    <addaction name="actionSetNavmeshMode"/>
    <addaction name="actionEnableLights"/>
+   <addaction name="actionDrawMeshes"/>
   </widget>
   <action name="actionSetNavmeshMode">
    <property name="checkable">
@@ -103,6 +104,9 @@
    <property name="text">
     <string>Navmesh mode</string>
    </property>
+   <property name="shortcut">
+    <string>N</string>
+   </property>
   </action>
   <action name="actionEnableLights">
    <property name="checkable">
@@ -110,6 +114,20 @@
    </property>
    <property name="text">
     <string>Enable lights</string>
+   </property>
+   <property name="shortcut">
+    <string>L</string>
+   </property>
+  </action>
+  <action name="actionDrawMeshes">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Draw meshes</string>
+   </property>
+   <property name="shortcut">
+    <string>M</string>
    </property>
   </action>
  </widget>

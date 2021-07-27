@@ -41,5 +41,15 @@ namespace ESM {
 				}
 			}
 		}
+
+		ESM::Record* findByFormID(const uint32_t formID) {
+			auto it = recordMap.find(formID);
+			if (it != recordMap.end()) {
+				ESM::Record* record = it->second;
+				return record;
+			}
+
+			return nullptr;
+		}
 	};
 }

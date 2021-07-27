@@ -114,6 +114,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="esm\Util.cpp" />
     <ClCompile Include="model\NiTypes.cpp" />
     <ClCompile Include="src\CK.cpp">
       <DynamicSource Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">input</DynamicSource>
@@ -146,6 +147,7 @@
     <ClInclude Include="esm\records\STAT.h" />
     <ClInclude Include="esm\records\TES4.h" />
     <ClInclude Include="esm\records\TREE.h" />
+    <ClInclude Include="esm\Util.h" />
     <ClInclude Include="src\Config.h" />
     <QtMoc Include="src\editor\STATeditor.h" />
     <QtMoc Include="src\editor\CELLeditor.h" />
@@ -154,6 +156,8 @@
     <ClInclude Include="model\BSShaderTextureSet.h" />
     <QtMoc Include="src\editor\REFReditor.h" />
     <QtMoc Include="src\editor\LIGHeditor.h" />
+    <QtMoc Include="src\editor\AbstractRecordDialog.h" />
+    <ClInclude Include="src\editor\AbstractRecordEditor.h" />
     <ClInclude Include="src\editor\EditorResolver.h" />
     <QtMoc Include="src\FileDialog.h" />
     <QtMoc Include="src\FileProgressDialog.h" />

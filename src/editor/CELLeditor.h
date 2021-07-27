@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <esm\records\CELL.h>
+#include <esm\Util.h>
 #include "..\editor\REFReditor.h"
 #include <esm\File.h>
 #include "..\render\CellRenderer.h"
@@ -25,18 +26,15 @@ class CELLeditor : public QMainWindow {
 	void onTableWidgetItemDoubleClicked(QTableWidgetItem* item) {
 		uint32_t formID = item->data(Qt::UserRole).toUInt();
 
-		auto it = dataFile.recordMap.find(formID);
-		if (it != dataFile.recordMap.end()) {
-			ESM::Record* record = it->second;
+		ESM::Record* record = dataFile.findByFormID(formID);
 
-			auto editor = new REFReditor(static_cast<ESM::REFR*>(record), dataFile.recordMap);
+		auto editor = new REFReditor(record->castTo<ESM::REFR>(), dataFile);
 
-			QWidget::connect(editor, &REFReditor::changed, this, [this]() {
-				this->renderer->update();
-				});
+		QWidget::connect(editor, &REFReditor::changed, this, [this]() {
+			this->renderer->update();
+			});
 
-			dockREFReditor->setWidget(editor);
-		}
+		dockREFReditor->setWidget(editor);
 	}
 
 public:
@@ -58,36 +56,32 @@ public:
 			renderer->update();
 			});
 
-		std::vector<ESM::Group>* cellChildrenTop = nullptr;
-		cellChildrenTop = (cell->DATA & ESM::CellFlags::Interior) ?
-			&dataFile.groups[57].subgroups[cell->getBlock()].subgroups[cell->getSubBlock()].subgroups
-			: &dataFile.groups[58].subgroups[0].subgroups[0].subgroups;//.subgroups[2].subgroups;
-
-		const auto cellChildren = std::find_if(
-			cellChildrenTop->begin(),
-			cellChildrenTop->end(),
-			[&](const auto& g) {
-				uint32_t groupParentFormID = *(uint32_t*)(&g.label[0]);
-				return g.type == ESM::GroupType::CellChildren && groupParentFormID == cell->formID;
+		ui.actionEnableLights->setChecked(true);
+		QWidget::connect(ui.actionEnableLights, &QAction::triggered, this, [=]() {
+			renderer->doLighting = ui.actionEnableLights->isChecked();
+			renderer->update();
 			});
 
-		const auto cellTemporaryChildren = std::find_if(
-			cellChildren->subgroups.begin(),
-			cellChildren->subgroups.end(),
-			[](const auto& g) {
-				return g.type == ESM::GroupType::CellTemporaryChildren;
+		ui.actionDrawMeshes->setChecked(true);
+		QWidget::connect(ui.actionDrawMeshes, &QAction::triggered, this, [=]() {
+			renderer->doMeshes = ui.actionDrawMeshes->isChecked();
+			renderer->update();
 			});
+
+		std::vector<ESM::Group>* cellChildrenTop = ESM::findCellChildrenTopLevel(cell, dataFile);
+
+		ESM::Group* cellChildren = ESM::findCellChildren(cell, cellChildrenTop);
+
+		ESM::Group* cellTemporaryChildren = ESM::findCellTemporaryChildren(cell, cellChildren);
 
 		for (ESM::Record* r : cellTemporaryChildren->records) {
 			switch (r->type) {
 			case ESM::RecordType::REFR:
 			{
-				auto refr = static_cast<ESM::REFR*>(r);
+				auto refr = r->castTo<ESM::REFR>();
+				ESM::Record* base = ESM::getBaseFromREFR(refr, dataFile);
 
-				auto it = dataFile.recordMap.find(refr->NAME);
-				if (it != dataFile.recordMap.end()) {
-					ESM::Record* base = it->second;
-
+				if (base) {
 					auto item1 = new QTableWidgetItem(QString::fromStdString(base->EDID));
 					item1->setData(Qt::UserRole, refr->formID);
 
@@ -102,12 +96,13 @@ public:
 					ui.refTable->setItem(ui.refTable->rowCount() - 1, 1, item2);
 					ui.refTable->setItem(ui.refTable->rowCount() - 1, 2, item3);
 				}
+				
 			}
 			break;
 			}
 		}
 
-		renderer = new CellRenderer(cellTemporaryChildren->records, dataFile.recordMap, this);
+		renderer = new CellRenderer(cellTemporaryChildren->records, dataFile, this);
 
 		setCentralWidget(renderer);
 	}

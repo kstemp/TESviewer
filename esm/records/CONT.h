@@ -10,7 +10,7 @@ namespace ESM {
 	struct CONT : Record {
 		std::string MODL;
 
-		CONT() : Record(RecordType::CONT) {}
+		CONT() : Record("CONT", RecordType::CONT) {}
 
 		virtual void parseField(BinaryStreamReader& bsr, const std::string& fieldName, const uint16_t fieldSize) override {
 			if (fieldName == "MODL")

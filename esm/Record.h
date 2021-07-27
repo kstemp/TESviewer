@@ -20,6 +20,7 @@ namespace ESM {
 	};
 
 	struct Record {
+		std::string typ = "";
 		RecordTypeVal type = 0;
 		uint32_t dataSize = 0;
 		uint32_t flags = 0;
@@ -32,10 +33,21 @@ namespace ESM {
 
 		OBND obnd;
 
-		Record(RecordTypeVal type) : type(type) {}
+		Record(std::string typ, RecordTypeVal type) : typ(typ), type(type) {}
 
 		const bool hasMoreFields(const BinaryStreamReader& bsr) const {
 			return bsr.tellg() - _dataPos < dataSize;
+		}
+
+		// TODO is base of and so on
+		template<typename T>
+		T* castTo() {
+			return static_cast<T*>(this);
+		}
+
+		template<typename T>
+		const T* castTo() const {
+			return static_cast<const T*>(this);
 		}
 
 		virtual void parseHeader(BinaryStreamReader& bsr) {
@@ -59,6 +71,10 @@ namespace ESM {
 
 				parseField(bsr, fieldName, fieldSize);
 			}
+		}
+
+		virtual void save(BinaryStreamReader& bsr) {
+			bsr.
 		}
 
 		virtual void parseField(BinaryStreamReader& bsr, const std::string& fieldName, const uint16_t fieldSize) = 0;

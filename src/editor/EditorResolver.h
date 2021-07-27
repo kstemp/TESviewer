@@ -5,4 +5,4 @@
 
 #include <QWidget>
 
-QWidget* createEditor(ESM::Record* record, ESM::RecordMap& recordMap);
+QWidget* createEditor(ESM::Record* record, ESM::File& dataFile);

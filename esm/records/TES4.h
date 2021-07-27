@@ -12,7 +12,7 @@ namespace ESM {
 		std::string CNAM = "";
 		std::string SNAM = "";
 
-		TES4() : Record(RecordType::TES4) {}
+		TES4() : Record("TES4", RecordType::TES4) {}
 
 		virtual void parseField(BinaryStreamReader& bsr, const std::string& fieldName, const uint16_t fieldSize) override {
 			if (fieldName == "MAST")

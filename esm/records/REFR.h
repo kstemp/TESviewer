@@ -16,7 +16,7 @@ namespace ESM {
 			Vector3 rotation;
 		} DATA;
 
-		REFR() : Record(RecordType::REFR) {}
+		REFR() : Record("REFR", RecordType::REFR) {}
 
 		virtual void parseField(BinaryStreamReader& bsr, const std::string& fieldName, const uint16_t fieldSize) override {
 			if (fieldName == "NAME")

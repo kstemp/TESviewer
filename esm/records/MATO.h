@@ -10,7 +10,7 @@ namespace ESM {
 	struct MATO : Record {
 		std::string MODL;
 
-		MATO() : Record(RecordType::MATO) {}
+		MATO() : Record("MATO", RecordType::MATO) {}
 
 		virtual void parseField(BinaryStreamReader& bsr, const std::string& fieldName, const uint16_t fieldSize) override {
 			if (fieldName == "MODL")

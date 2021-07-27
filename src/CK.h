@@ -29,6 +29,8 @@ private:
 private slots:
 
 	void fileOpen();
+	void fileSave();
+	void fileSaveAs();
 
 	void onTreeViewItemClicked(QTreeWidgetItem* item, int column);
 };

@@ -15,6 +15,7 @@
 #include  "util.h"
 
 #include <esm\records\CELL.h>
+#include <esm\Util.h>
 #include "editor\CELLeditor.h"
 #include "editor\EditorResolver.h"
 #include "FileDialog.h"
@@ -24,6 +25,8 @@ CK::CK(QWidget* parent)
 	ui.setupUi(this);
 
 	QWidget::connect(ui.actionLoadData, &QAction::triggered, this, &CK::fileOpen);
+	QWidget::connect(ui.actionSave, &QAction::triggered, this, &CK::fileSave);
+	QWidget::connect(ui.actionSaveAs, &QAction::triggered, this, &CK::fileSaveAs);
 
 	auto wrapper = new QWidget();
 	wrapper->setLayout(ui.layoutRecords);
@@ -51,6 +54,19 @@ void CK::fileOpen() {
 
 		populateRecordList();
 	}
+
+	QString activeFile = fileDialog.getActiveFile();
+
+	if (activeFile.isEmpty())
+		activeFile = "untitled.esp";
+
+	setWindowTitle(activeFile + " - TESeditor");
+}
+
+void CK::fileSave() {
+}
+
+void CK::fileSaveAs() {
 }
 
 QTreeWidgetItem* CK::getItemFromRecord(const ESM::Record* record, const int fileIndex) {
@@ -58,14 +74,11 @@ QTreeWidgetItem* CK::getItemFromRecord(const ESM::Record* record, const int file
 
 	std::string EDID = "";
 	if (record->type == ESM::RecordType::REFR) {
-		const ESM::REFR* refr = static_cast<const ESM::REFR*>(record);
+		const ESM::REFR* refr = record->castTo<ESM::REFR>();
+		const ESM::Record* base = ESM::getBaseFromREFR(refr, dataFiles[fileIndex]);
 
-		const auto it = dataFiles[fileIndex].recordMap.find(refr->NAME);
-		if (it != dataFiles[fileIndex].recordMap.end()) {
-			const ESM::Record* base = it->second;
-
+		if (base)
 			EDID = "[" + base->EDID + "]";
-		}
 	}
 	else {
 		EDID = record->EDID;
@@ -88,12 +101,10 @@ QTreeWidgetItem* CK::loopChildGroups(const ESM::Group& group, const int fileInde
 	auto item = new QTreeWidgetItem((QTreeWidget*)nullptr, { itemTitle });
 
 	if (group.type == ESM::GroupType::CellChildren) {
-		const auto it = dataFiles[fileIndex].recordMap.find(*(uint32_t*)(&group.label));
-		if (it != dataFiles[fileIndex].recordMap.end()) {
-			ESM::Record* parentCell = it->second;
+		ESM::Record* parentCell = dataFiles[fileIndex].findByFormID(*(uint32_t*)(&group.label));
 
+		if (parentCell)
 			item->setText(1, QString::fromStdString("[" + parentCell->EDID + "]"));
-		}
 	}
 
 	// all top-level records
@@ -132,21 +143,20 @@ void CK::onTreeViewItemClicked(QTreeWidgetItem* item, int column) {
 
 	ESM::File& dataFile = dataFiles[fileIndex];
 
-	auto it = dataFile.recordMap.find(formID);
-	if (it != dataFile.recordMap.end()) {
-		ESM::Record* record = it->second;
+	ESM::Record* record = dataFile.findByFormID(formID);
 
+	if (record) {
 		QWidget* editor = nullptr;
 		if (record->type == ESM::RecordType::CELL) {
 			QProgressDialog progress(QString::fromStdString("Loading cell " + record->EDID), "Abort", 0, 100, this);
 			progress.setWindowModality(Qt::WindowModal);
 
-			editor = new CELLeditor(static_cast<ESM::CELL*>(record), dataFile, nullptr);
+			editor = new CELLeditor(record->castTo<ESM::CELL>(), dataFile, nullptr);
 
 			progress.setValue(100);
 		}
 		else
-			editor = createEditor(record, dataFile.recordMap);
+			editor = createEditor(record, dataFile);
 
 		if (editor)
 			ui.tabEditors->addTab(editor, editor->windowTitle());
