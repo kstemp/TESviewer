@@ -4,7 +4,7 @@
 
 ![alt width ="800" height = "640"](video.gif)
 
-Loads .ESM data files (used in the Elder Scrolls and Fallout franchises) and renders interior cells with OpenGL.
+An open-source "alternative" (not really) to the CreationKit, a program used to create mods for the Elder Scrolls/Fallout games by Bethesda Game Studios. Made as a hobby project to teach myself OpenGL, and out of curiosity about the elusive .NIF file format.
 
 Supported features:
 
