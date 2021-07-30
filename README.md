@@ -8,15 +8,15 @@ Loads .ESM data files (used in the Elder Scrolls and Fallout franchises) and ren
 
 Supported features:
 
-[] loading/parsing a .ESM (ES Master) and .ESP (ES Plugin) files
-[] creating new .ESP plugins, editing existing plugins *and* masters
-[] **displaying .NIF models** associated with markers, statics, furniture, lights etc. 
-[] manipulating records (STAT, REFR etc.) with custom-designed forms, saving changes
-[] **rendering interior cells**, and exterior cells with landscape
-[] lighting cells, dislaying CreationKit-provided models for light fixtures
-[] mouse editing of cells/object references
-[] heightmap editing
-[] **rendering and manipulating NavMesh** (Navigation Mesh) including dragging vertices, edges, deleting and creating triangles
+- [ ] loading/parsing a .ESM (ES Master) and .ESP (ES Plugin) files
+- [ ] creating new .ESP plugins, editing existing plugins *and* masters
+- [ ] **displaying .NIF models** associated with markers, statics, furniture, lights etc. 
+- [ ] manipulating records (STAT, REFR etc.) with custom-designed forms, saving changes
+- [ ] **rendering interior cells**, and exterior cells with landscape
+- [ ] lighting cells, dislaying CreationKit-provided models for light fixtures
+- [ ] mouse editing of cells/object references
+- [ ] heightmap editing
+- [ ] **rendering and manipulating NavMesh** (Navigation Mesh) including dragging vertices, edges, deleting and creating triangles
 
 <img src="screenshot.jpg" alt="Main window" width="700"/>
 
