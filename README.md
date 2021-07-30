@@ -11,6 +11,8 @@ Supported features:
 - [ ] loading/parsing a .ESM (ES Master) and .ESP (ES Plugin) files
 - [ ] creating new .ESP plugins, editing existing plugins *and* masters
 - [ ] **displaying .NIF models** associated with markers, statics, furniture, lights etc. 
+- [ ] loading meshes directly from the BSA archives
+- [ ] handling alternate textures
 - [ ] manipulating records (STAT, REFR etc.) with custom-designed forms, saving changes
 - [ ] **rendering interior cells**, and exterior cells with landscape
 - [ ] lighting cells, dislaying CreationKit-provided models for light fixtures
@@ -26,6 +28,6 @@ Supports a (proper 🤷‍♀️) subset of the NIF (NetImmerse) model specifica
 - parsing NiAlphaProperty,
 - parsing NiAVObject.
 
-In future, a better option than explicit inheritance could be to parse nif.xml specification like NifSkope does. U
+In future, perhaps a better option than explicit inheritance could be to parse nif.xml specification like NifSkope does, and manipulate nodes through some abstract NiNode interface with a std::map of fields. Similarly, ESM records could be represented by some abstract ESM::Record object, but I'm not sure how to handle repeating fields and non-aligned structs. I'm waaaay too lazy to create an interface like the one TES5Edit has, with AbstractUnionDeciders and whatnot. 
 
-ses OpenGL buffers (instead of the immediate mode, like NifSkope) to efficiently render cells and landscape.
+Uses OpenGL buffers (instead of the immediate mode, like NifSkope) to efficiently render cells and landscape.
