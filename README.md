@@ -10,17 +10,21 @@ Loads .ESM data files (used in the Elder Scrolls and Fallout franchises) and ren
 
 Supported features:
 
-- rendering interior cells.
-- manipulating REFR (reference) record data such as position and rotation with real-time updates.
-- displaying a form for STAT (static) record with preview of the NIF model.
+[] loading/parsing a .ESM (ES Master) and .ESP (ES Plugin) files
+[] creating new .ESP plugins, editing existing plugins *and* masters
+[] **displaying .NIF models** associated with markers, statics, furniture, lights etc. 
+[] manipulating records (STAT, REFR etc.) with custom-designed forms, saving changes
+[] **rendering interior cells**, and exterior cells with landscape
+[] mouse editing of cells/object references
+[] heightmap editing
+[] **rendering and manipulating NavMesh** (Navigation Mesh) including dragging vertices, edges, deleting and creating triangles
 
-Supports a subset of the NIF (NetImmerse) model specification:
-
+Supports a (proper 🤷‍♀️) subset of the NIF (NetImmerse) model specification:
 - parsing BSVertexDataSSE: vertex/UV/normal coordinates,
 - parsing BSLighting(Shader)Property: loading appropriate DDS textures,
 - parsing NiAlphaProperty,
 - parsing NiAVObject.
 
-In future, a better option than explicit inheritance would be to parse nif.xml specification like NifSkope does.
+In future, a better option than explicit inheritance could be to parse nif.xml specification like NifSkope does. U
 
-Uses OpenGL buffers instead of the immediate mode.
+ses OpenGL buffers (instead of the immediate mode, like NifSkope) to efficiently render cells and landscape.
