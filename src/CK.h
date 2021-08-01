@@ -26,6 +26,8 @@ private:
 
 	QList<ESM::File> dataFiles;
 
+	QString activeFile = "";
+
 private slots:
 
 	void fileOpen();

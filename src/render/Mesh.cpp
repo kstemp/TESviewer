@@ -46,6 +46,7 @@ void ModelViewer::drawMeshes(bool isNavmesh) {
 				glBindTexture(GL_TEXTURE_2D, submesh.texture);
 
 				program.setUniformValue("model", mesh.getModelMatrixForSubmesh(submesh));
+				program.setUniformValue("model2", mesh.getModelMatrixForSubmesh(submesh));
 
 				glDrawElementsBaseVertex(GL_TRIANGLES, submesh.indicesCount, GL_UNSIGNED_SHORT, (void*)(submesh.indicesCountUpTo * sizeof(ushort)), submesh.vertexCountUpTo);
 			}
@@ -133,7 +134,7 @@ void ModelViewer::addMesh(const NiFile& model, const Vector3& globalTranslation,
 	glEnableVertexAttribArray(1);
 
 	// vertex normal x, y, z coordinates
-	glVertexAttribPointer(2, 3, GL_BYTE, GL_TRUE, sizeof(BSVertexDataSSE), (void*)(offsetof(BSVertexDataSSE, normal)));
+	glVertexAttribPointer(2, 3, GL_BYTE, GL_FALSE, sizeof(BSVertexDataSSE), (void*)(offsetof(BSVertexDataSSE, normal)));
 	glEnableVertexAttribArray(2);
 
 	glBindVertexArray(0);

@@ -90,7 +90,7 @@ void ModelViewer::paintGL() {
 	program.setUniformValue("lightPos6", lightPos[5]);
 	program.setUniformValue("lightPos7", lightPos[6]);
 
-	program.setUniformValue("viewPos", camera.position());
+	//	program.setUniformValue("viewPos", camera.position());
 
 	if (doMeshes) {
 		drawMeshes(false);

@@ -21,14 +21,16 @@ namespace ESM {
 
 		std::vector<Group> groups;
 
-		File(const QString& fileName) : fileName(fileName) {}
+		File(const QString& fileName) : fileName(fileName) {
+			header = new ESM::TES4();
+		}
 
 		void parse(const std::string& fileName, const bool headerOnly = false) {
 			auto bsr = BinaryStreamReader(fileName);
 
 			bsr.expect("TES4");
 
-			header = new ESM::TES4();
+			//header = new ESM::TES4();
 
 			header->parseHeader(bsr);
 			header->parse(bsr);
@@ -40,6 +42,14 @@ namespace ESM {
 					groups.back().parse(bsr, recordMap);
 				}
 			}
+		}
+
+		void save() {
+			auto bsw = BinaryStreamWriter(fileName.toStdString());
+
+			header->save(bsw);
+
+			bsw.os.close();
 		}
 
 		ESM::Record* findByFormID(const uint32_t formID) {

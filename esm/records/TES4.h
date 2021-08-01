@@ -14,6 +14,13 @@ namespace ESM {
 
 		TES4() : Record("TES4", RecordType::TES4) {}
 
+		virtual void saveFields(BinaryStreamWriter& bsw) override {
+			for (const std::string& master : MAST)
+				bsw.writeField("MAST", master);
+
+			//bsw.writeField("XCLC", XCLC);
+		}
+
 		virtual void parseField(BinaryStreamReader& bsr, const std::string& fieldName, const uint16_t fieldSize) override {
 			if (fieldName == "MAST")
 				MAST.push_back(bsr.readString(fieldSize));

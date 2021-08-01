@@ -30,6 +30,8 @@ struct Mesh {
 	const Vector3& globalTranslation;
 	const Vector3& globalRotation;
 
+	QMatrix4x4 model;
+
 	Mesh(const Vector3& globalTranslation = Vector3(), const Vector3& globalRotation = Vector3()) : globalTranslation(globalTranslation), globalRotation(globalRotation) {
 	}
 

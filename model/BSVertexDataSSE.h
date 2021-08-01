@@ -7,10 +7,10 @@
 #include "..\src\util.h"
 
 struct BSVertexDataSSE {
-
 	Vector3 vertex;
 	uint16_t uvx;
 	uint16_t uvy;
+	//Vector3 normal;
 	ByteVector3 normal;
 	//float bitangentX;
 	/*
@@ -22,17 +22,16 @@ struct BSVertexDataSSE {
 	std::array<byte, 4> boneIndices;
 	float eyeData;
 	*/
-	
-	void parse(BinaryStreamReader& bsr, BSVertexDesc arg) {
 
+	void parse(BinaryStreamReader& bsr, BSVertexDesc arg) {
 		if (arg & 0x1)
 			vertex.parse(bsr);
 
 		if ((arg & 0x11) == 0x11)
 			bsr.skip(4);
-			//bsr.readIntoVar(bitangentX);
+		//bsr.readIntoVar(bitangentX);
 
-		// UNUSED if ((arg & 0x11) == 0x1)
+	// UNUSED if ((arg & 0x11) == 0x1)
 
 		if (arg & 0x2)
 			bsr >> uvx >> uvy;
@@ -66,7 +65,5 @@ struct BSVertexDataSSE {
 
 		if (arg & 0x100)
 			bsr.skip(4);
-
 	}
-
-}; 
+};

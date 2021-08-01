@@ -49,24 +49,50 @@ void CK::fileOpen() {
 
 		for (const QString& fileName : filesToLoad) {
 			dataFiles.push_back(ESM::File(fileName));
-			dataFiles.back().parse(SKYRIM_DATA_DIR + fileName.toStdString());
+			dataFiles.back().parse(SKYRIM_DATA_DIR + fileName.toStdString(), true);
 		}
 
 		populateRecordList();
 	}
 
-	QString activeFile = fileDialog.getActiveFile();
+	activeFile = fileDialog.getActiveFile();
 
-	if (activeFile.isEmpty())
-		activeFile = "untitled.esp";
+	//if (activeFile.isEmpty())
+	//	activeFile = "untitled.esp";
 
-	setWindowTitle(activeFile + " - TESeditor");
+	setWindowTitle(activeFile.isEmpty() ? "[unnamed plugin]" : activeFile + " - TESeditor");
 }
 
 void CK::fileSave() {
+	if (activeFile.isEmpty()) {
+		fileSaveAs();
+		//activeFile = "untitled.esp";
+	}
+	else {
+		// TODO const esm::file
+	//	for (/*TODO CONST*/ESM::File& f : dataFiles)
+		//	if (f.fileName == activeFile)
+		dataFiles[1].save();
+
+		//const ESM::File& file = std::find(dataFiles.begin(), dataFiles.end(), [&](const ESM::File& dataFile) {
+			//})
+
+			//ESM::File file(activeFile);
+
+			//file.save();
+	}
 }
 
 void CK::fileSaveAs() {
+	QFileDialog dialog;
+	QString fileName = dialog.getSaveFileName(this, "Select name for the plugin file", QString::fromStdString(SKYRIM_DATA_DIR), "*.esp");
+
+	if (fileName.isEmpty())
+		return;
+
+	activeFile = fileName;
+
+	fileSave();
 }
 
 QTreeWidgetItem* CK::getItemFromRecord(const ESM::Record* record, const int fileIndex) {

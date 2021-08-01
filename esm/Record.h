@@ -73,11 +73,34 @@ namespace ESM {
 			}
 		}
 
-		virtual void save(BinaryStreamReader& bsr) {
-			bsr.
+		virtual void save(BinaryStreamWriter& bsw) {
+			bsw << typ;
+			_dataSizePos = bsw.os.tellp();
+			bsw << dataSize;
+			bsw << flags;
+			bsw << formID;
+			bsw << vc[0] << vc[1] << vc[2] << vc[3];
+			bsw << version;
+			bsw << unknown;
+
+			_dataPos = bsw.os.tellp();
+
+			saveFields(bsw);
+
+			std::streampos posAfter = bsw.os.tellp();
+			uint32_t dataSize = bsw.os.tellp() - _dataPos;
+
+			bsw.os.seekp(_dataSizePos);
+
+			bsw << dataSize;
+
+			bsw.os.seekp(posAfter);
 		}
 
 		virtual void parseField(BinaryStreamReader& bsr, const std::string& fieldName, const uint16_t fieldSize) = 0;
+		virtual void saveFields(BinaryStreamWriter& bsw) {
+			// JUST DO NOTHING
+		}
 
 		virtual std::optional<std::string> model() const {
 			return {};
@@ -86,5 +109,6 @@ namespace ESM {
 		virtual std::string type_pretty() const = 0;
 
 		std::streampos _dataPos;
+		std::streampos _dataSizePos;
 	};
 }

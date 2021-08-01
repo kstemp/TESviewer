@@ -8,6 +8,7 @@ out vec3 Normal;
 out vec3 FragPos;
 
 uniform mat4 model;
+uniform mat4 model2;
 uniform mat4 view;
 uniform mat4 projection;
 
@@ -17,8 +18,6 @@ void main()
     texCoord = vec2(aTexCoord.x , aTexCoord.y);
     FragPos = vec3(model * vec4(aPos, 1.0));
 
-    Normal =  aNormal;
-    // use this one instead if we do scaling in the model matrix
-  //  Normal = mat3(transpose(inverse(model))) * aNormal;
+    Normal =  vec3(view * model2 * vec4(aNormal,0.0));
 
 }

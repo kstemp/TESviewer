@@ -20,6 +20,12 @@ namespace ESM {
 			uint32_t flags;
 		} XCLC;
 
+		virtual void saveFields(BinaryStreamWriter& bsw) override {
+			bsw.writeField("DATA", DATA);
+			bsw.writeField("EDID", EDID);
+			//bsw.writeField("XCLC", XCLC);
+		}
+
 		CELL() : Record("CELL", RecordType::CELL) {}
 
 		virtual void parseField(BinaryStreamReader& bsr, const std::string& fieldName, const uint16_t fieldSize) override {

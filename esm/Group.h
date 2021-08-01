@@ -104,7 +104,7 @@ namespace ESM {
 						recordMap[newRecord->formID] = newRecord;
 					}
 					else {
-						bsr.skip(bsr.readVar<uint32_t>() + 16);;
+						bsr.skip(bsr.readVar<uint32_t>() + (uint32_t)16);;
 					}
 				}
 			}

@@ -145,12 +145,21 @@ public:
 			QString fileName = fileInfo.fileName();
 
 			ESM::File dataFile(fileName);
-			dataFile.parse(file.fileName().toStdString(), true);
 
-			auto& m = masters[fileName];
+			try {
+				dataFile.parse(file.fileName().toStdString(), true);
 
-			for (const std::string s : dataFile.header->MAST)
-				m.push_back(QString::fromStdString(s + "\0"));
+				auto& m = masters[fileName];
+
+				for (const std::string s : dataFile.header->MAST)
+					m.push_back(QString::fromStdString(s + "\0"));
+			}
+			catch (const std::runtime_error& e) {
+				// TODO cleanup the header pointer
+				//dataFile.recordMap.
+				QMessageBox msgbox;
+				msgbox.critical(0, "Error parsing file header", QString::fromStdString("Error parsing " + fileName.toStdString() + ": " + e.what()));
+			}
 		}
 
 		for (auto it = masters.begin(); it != masters.end(); ++it) {

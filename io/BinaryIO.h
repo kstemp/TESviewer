@@ -49,9 +49,12 @@ struct BinaryStreamReader {
 	}
 
 	void expect(const std::string& expected) {
-		const std::string actual = readString(4);
+		if (fileSize - pos < expected.length())
+			throw std::runtime_error("\"" + expected + "\" expected at position " + std::to_string((size_t)pos - expected.length()) + ", but end-of-file reached");
+
+		const std::string actual = readString(expected.length());
 		if (actual != expected)
-			throw;
+			throw std::runtime_error("\"" + expected + "\" expected at position " + std::to_string((size_t)pos - expected.length()) + ", but got \"" + actual + "\".");
 	}
 
 	template<typename T>
@@ -69,4 +72,38 @@ struct BinaryStreamReader {
 	std::streampos fileSize;
 
 	std::vector<char> buffer;
+};
+
+struct BinaryStreamWriter {
+	BinaryStreamWriter(const std::string& fileName) {
+		os.open(fileName, std::ios::binary);
+	}
+
+	template<typename T>
+	BinaryStreamWriter& operator << (T t) {
+		os.write(reinterpret_cast<const char*>(&t), sizeof(T));
+		return *this;
+	}
+
+	BinaryStreamWriter& operator << (const std::string t) {
+		os.write(t.c_str(), t.size());
+		return *this;
+	}
+
+	template<typename T>
+	void writeField(const std::string& name, T val) {
+		this->operator<<(name);
+		uint16_t siz = sizeof(val);
+		this->operator<<(siz);
+		this->operator<<(val);
+	}
+
+	void writeField(const std::string& name, const std::string& val) {
+		this->operator<<(name);
+		uint16_t siz = val.length();
+		this->operator<<(siz);
+		this->operator<<(val);
+	}
+
+	std::ofstream os;
 };
