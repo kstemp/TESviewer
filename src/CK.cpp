@@ -47,40 +47,27 @@ void CK::fileOpen() {
 
 		const QSet<QString>& filesToLoad = fileDialog.getFilesToLoad();
 
+		size_t i = 0;
 		for (const QString& fileName : filesToLoad) {
 			dataFiles.push_back(ESM::File(fileName));
-			dataFiles.back().parse(SKYRIM_DATA_DIR + fileName.toStdString(), true);
+			dataFiles.back().parse(SKYRIM_DATA_DIR + fileName.toStdString());
+
+			if (fileDialog.getActiveFile() == fileName)
+				activeFileIndex = i;
+
+			i++;
 		}
 
 		populateRecordList();
+		setWindowTitle((activeFileIndex >= 0 ? "[unnamed plugin]" : dataFiles[activeFileIndex].fileName) + " - TESeditor");
 	}
-
-	activeFile = fileDialog.getActiveFile();
-
-	//if (activeFile.isEmpty())
-	//	activeFile = "untitled.esp";
-
-	setWindowTitle(activeFile.isEmpty() ? "[unnamed plugin]" : activeFile + " - TESeditor");
 }
 
 void CK::fileSave() {
-	if (activeFile.isEmpty()) {
+	if (activeFileIndex >= 0)
+		dataFiles[activeFileIndex].save();
+	else
 		fileSaveAs();
-		//activeFile = "untitled.esp";
-	}
-	else {
-		// TODO const esm::file
-	//	for (/*TODO CONST*/ESM::File& f : dataFiles)
-		//	if (f.fileName == activeFile)
-		dataFiles[1].save();
-
-		//const ESM::File& file = std::find(dataFiles.begin(), dataFiles.end(), [&](const ESM::File& dataFile) {
-			//})
-
-			//ESM::File file(activeFile);
-
-			//file.save();
-	}
 }
 
 void CK::fileSaveAs() {
@@ -90,7 +77,8 @@ void CK::fileSaveAs() {
 	if (fileName.isEmpty())
 		return;
 
-	activeFile = fileName;
+	dataFiles.push_back(ESM::File(fileName));
+	activeFileIndex = dataFiles.size() - 1;
 
 	fileSave();
 }

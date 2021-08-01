@@ -26,7 +26,7 @@
          <item>
           <widget class="QPushButton" name="pushButton_2">
            <property name="text">
-            <string>Select all</string>
+            <string>Select all [Ctrl+A]</string>
            </property>
           </widget>
          </item>
@@ -63,23 +63,11 @@
        <item>
         <widget class="QPushButton" name="btnSetActive">
          <property name="text">
-          <string>Set as active file</string>
+          <string>Set as active file [F5]</string>
          </property>
         </widget>
        </item>
       </layout>
-     </item>
-     <item>
-      <widget class="QGroupBox" name="groupBox_2">
-       <property name="title">
-        <string>[DEBUG] Files to be loaded:</string>
-       </property>
-       <layout class="QVBoxLayout" name="verticalLayout_8">
-        <item>
-         <widget class="QListWidget" name="lstLoaded"/>
-        </item>
-       </layout>
-      </widget>
      </item>
      <item>
       <widget class="QGroupBox" name="groupBox">
@@ -168,6 +156,18 @@
            </layout>
           </item>
          </layout>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="QGroupBox" name="groupBox_2">
+       <property name="title">
+        <string>The following files will be loaded:</string>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_8">
+        <item>
+         <widget class="QListWidget" name="lstLoaded"/>
         </item>
        </layout>
       </widget>
