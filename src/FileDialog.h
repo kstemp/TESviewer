@@ -136,7 +136,7 @@ public:
 		QWidget::connect(ui.btnOpen, &QPushButton::clicked, this, &FileDialog::openFiles);
 		QWidget::connect(ui.btnCancel, &QPushButton::clicked, this, &FileDialog::cancel);
 
-		QDirIterator it(QString::fromStdString(SKYRIM_DATA_DIR), { "*.esm", "*.esp" });
+		QDirIterator it(QString::fromStdString(Config::SKYRIM_DATA_DIR), { "*.esm", "*.esp" });
 
 		while (it.hasNext()) {
 			QFile file(it.next());

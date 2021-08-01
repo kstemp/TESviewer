@@ -62,9 +62,5 @@ namespace ESM {
 			else
 				return 0;
 		}
-
-		std::string type_pretty() const override {
-			return "Cell";
-		}
 	};
 }

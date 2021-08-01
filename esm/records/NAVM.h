@@ -57,9 +57,5 @@ namespace ESM {
 			else
 				bsr.skip(fieldSize);
 		}
-
-		std::string type_pretty() const override {
-			return "Navmesh";
-		}
 	};
 }

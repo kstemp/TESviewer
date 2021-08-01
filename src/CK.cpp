@@ -50,7 +50,8 @@ void CK::fileOpen() {
 		size_t i = 0;
 		for (const QString& fileName : filesToLoad) {
 			dataFiles.push_back(ESM::File(fileName));
-			dataFiles.back().parse(SKYRIM_DATA_DIR + fileName.toStdString());
+			dataFiles.back().parse(Config::SKYRIM_DATA_DIR + fileName.toStdString(), false);
+			QString ac = fileDialog.getActiveFile();
 
 			if (fileDialog.getActiveFile() == fileName)
 				activeFileIndex = i;
@@ -59,7 +60,7 @@ void CK::fileOpen() {
 		}
 
 		populateRecordList();
-		setWindowTitle((activeFileIndex >= 0 ? "[unnamed plugin]" : dataFiles[activeFileIndex].fileName) + " - TESeditor");
+		setWindowTitle((activeFileIndex >= 0 ? dataFiles[activeFileIndex].fileName : "[unnamed plugin]") + " - TESeditor");
 	}
 }
 
@@ -72,7 +73,7 @@ void CK::fileSave() {
 
 void CK::fileSaveAs() {
 	QFileDialog dialog;
-	QString fileName = dialog.getSaveFileName(this, "Select name for the plugin file", QString::fromStdString(SKYRIM_DATA_DIR), "*.esp");
+	QString fileName = dialog.getSaveFileName(this, "Select name for the plugin file", QString::fromStdString(Config::SKYRIM_DATA_DIR), "*.esp");
 
 	if (fileName.isEmpty())
 		return;
@@ -102,7 +103,7 @@ QTreeWidgetItem* CK::getItemFromRecord(const ESM::Record* record, const int file
 
 	item->setText(0, QString::fromStdString(NumToHexStr(record->formID)));
 	item->setText(1, QString::fromStdString(EDID));
-	item->setText(2, QString::fromStdString(record->type_pretty()));
+	item->setText(2, QString::fromStdString(ESM::getRecordFullName(record->typ)));
 	item->setData(0, Qt::UserRole, QVariant::fromValue(data));
 	item->setData(1, Qt::UserRole, QVariant::fromValue(data));
 	item->setData(2, Qt::UserRole, QVariant::fromValue(data));

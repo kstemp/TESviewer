@@ -50,7 +50,8 @@ namespace ESM {
 			header->save(bsw);
 
 			for (auto [key, record] : recordMap) {
-				record->save(bsw);
+				if (record->modified)
+					record->save(bsw);
 			}
 
 			bsw.os.close();

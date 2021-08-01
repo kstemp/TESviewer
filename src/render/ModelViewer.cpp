@@ -21,7 +21,7 @@ void ModelViewer::addModel(const std::string& modelFileName, const Vector3& glob
 	if (modelFileName.length() <= 4)
 		return;
 
-	NiFile model(SKYRIM_MESHES_DIR + modelFileName);
+	NiFile model(Config::SKYRIM_MESHES_DIR + modelFileName);
 	model.parse();
 
 	addMesh(model, globalTranslation, globalRotation);
@@ -42,12 +42,12 @@ void ModelViewer::initializeGL() {
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	program.addShaderFromSourceFile(QOpenGLShader::Vertex, VERTEX_SHADER_PATH);
-	program.addShaderFromSourceFile(QOpenGLShader::Fragment, FRAGMENT_SHADER_PATH);
+	program.addShaderFromSourceFile(QOpenGLShader::Vertex, Config::VERTEX_SHADER_PATH);
+	program.addShaderFromSourceFile(QOpenGLShader::Fragment, Config::FRAGMENT_SHADER_PATH);
 	program.link();
 
-	navMeshProgram.addShaderFromSourceFile(QOpenGLShader::Vertex, "navmesh.vs");
-	navMeshProgram.addShaderFromSourceFile(QOpenGLShader::Fragment, "navmesh.fs");
+	navMeshProgram.addShaderFromSourceFile(QOpenGLShader::Vertex, Config::NAVM_VERTEX_SHADER_PATH);
+	navMeshProgram.addShaderFromSourceFile(QOpenGLShader::Fragment, Config::NAVM_FRAGMENT_SHADER_PATH);
 	navMeshProgram.link();
 }
 

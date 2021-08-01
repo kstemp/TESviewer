@@ -64,6 +64,36 @@ namespace ESM {
 			return nullptr;
 	}
 
+	inline std::string getRecordFullName(const std::string& name) {
+		if (name == "CELL")
+			return "Cell";
+		else if (name == "TES4")
+			return "TES Header";
+		else if (name == "WRLD")
+			return "Worldspace";
+		else if (name == "STAT")
+			return "Static";
+		else if (name == "FURN")
+			return "Furniture";
+		else if (name == "CONT")
+			return "Container";
+		else if (name == "DOOR")
+			return "Door";
+		else if (name == "LIGH")
+			return "Light";
+		else if (name == "MISC")
+			return "Miscellanous Object";
+		else if (name == "ALCH")
+			return "Potion";
+		else if (name == "FLOR")
+			return "Flora";
+		else if (name == "MATO")
+			return "Material Object";
+		else if (name == "TREE")
+			return "Tree";
+		return name;
+	}
+
 	struct Group {
 		uint32_t size;
 		char label[4];
@@ -112,47 +142,22 @@ namespace ESM {
 
 		std::string caption() const {
 			switch (type) {
-			case ESM::GroupType::Top: {
-				const std::string t(label);
+			case ESM::GroupType::Top:
+				return getRecordFullName(label);
+				break;
 
-				if (t == "CELL")
-					return "Cell";
-				else if (t == "WRLD")
-					return "Worldspace";
-				else if (t == "STAT")
-					return "Static";
-				else if (t == "FURN")
-					return "Furniture";
-				else if (t == "CONT")
-					return "Container";
-				else if (t == "DOOR")
-					return "Door";
-				else if (t == "LIGH")
-					return "Light";
-				else if (t == "MISC")
-					return "Miscellanous Object";
-				else if (t == "ALCH")
-					return "Potion";
-				else if (t == "FLOR")
-					return "Flora";
-				else if (t == "MATO")
-					return "Material Object";
-				else if (t == "TREE")
-					return "Tree";
-				return t;
-			}
-
-									break;
 			case  ESM::GroupType::WorldChildren:
 				return "World Children";
 				break;
-			case ESM::GroupType::InteriorCellBlock:
 
+			case ESM::GroupType::InteriorCellBlock:
 				return "Block " + std::to_string(*(int32_t*)(&label[0]));
 				break;
+
 			case ESM::GroupType::InteriorCellSubBlock:
 				return "Sub-Block " + std::to_string(*(int32_t*)(&label[0]));
 				break;
+
 			case ESM::GroupType::ExteriorCellBlock:
 				return "Block";
 				break;

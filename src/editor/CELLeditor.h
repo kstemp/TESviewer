@@ -5,6 +5,7 @@
 #include <esm\Util.h>
 #include "..\editor\REFReditor.h"
 #include <esm\File.h>
+#include <esm\Group.h>
 #include "..\render\CellRenderer.h"
 
 #include <qtablewidget.h>
@@ -88,7 +89,7 @@ public:
 					auto item2 = new QTableWidgetItem(QString::fromStdString(NumToHexStr(refr->formID)));
 					item2->setData(Qt::UserRole, refr->formID);
 
-					auto item3 = new QTableWidgetItem(QString::fromStdString(base->type_pretty()));
+					auto item3 = new QTableWidgetItem(QString::fromStdString(ESM::getRecordFullName(base->typ)));
 					item3->setData(Qt::UserRole, refr->formID);
 
 					ui.refTable->insertRow(ui.refTable->rowCount());
@@ -96,7 +97,6 @@ public:
 					ui.refTable->setItem(ui.refTable->rowCount() - 1, 1, item2);
 					ui.refTable->setItem(ui.refTable->rowCount() - 1, 2, item3);
 				}
-				
 			}
 			break;
 			}

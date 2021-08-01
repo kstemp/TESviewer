@@ -29,6 +29,8 @@ namespace ESM {
 		uint16_t version = 0;
 		uint16_t unknown = 0;
 
+		bool modified = false;
+
 		std::string EDID = "";
 
 		OBND obnd;
@@ -105,8 +107,6 @@ namespace ESM {
 		virtual std::optional<std::string> model() const {
 			return {};
 		}
-
-		virtual std::string type_pretty() const = 0;
 
 		std::streampos _dataPos;
 		std::streampos _dataSizePos;

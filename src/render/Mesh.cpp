@@ -102,7 +102,7 @@ void ModelViewer::addMesh(const NiFile& model, const Vector3& globalTranslation,
 				if (auto shaderProp = dynamic_cast<BSLightingShaderProperty*>(model.objects[trishape->shaderPropertyRef].get())) {
 					if (auto txtset = dynamic_cast<BSShaderTextureSet*>(model.objects[shaderProp->BSShaderTextureSetRef].get())) {
 						try {
-							unsigned int texture = loadDDSTexture(context()->functions(), SKYRIM_DATA_DIR + txtset->textures[0]);
+							unsigned int texture = loadDDSTexture(context()->functions(), Config::SKYRIM_DATA_DIR + txtset->textures[0]);
 							mesh.submeshes[submeshIndex].texture = texture;
 						}
 						catch (std::exception e) {

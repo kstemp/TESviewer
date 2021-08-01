@@ -30,6 +30,15 @@ class STATeditor : public AbstractRecordDialog, public AbstractRecordEditor<ESM:
 
 	Ui::STATeditor ui;
 
+public slots:
+
+	void EDIDChanged(const QString& text) {
+		if (!text.isEmpty()) {
+			record->EDID = text.toStdString();
+			record->modified = true;
+		}
+	}
+
 public:
 
 	STATeditor(ESM::STAT* stat, ESM::File& dataFile, QWidget* parent = Q_NULLPTR)
@@ -81,5 +90,7 @@ public:
 		ui.x2->setText(QString::number(stat->obnd.x2));
 		ui.y2->setText(QString::number(stat->obnd.y2));
 		ui.z2->setText(QString::number(stat->obnd.z2));
+
+		QWidget::connect(ui.edit_EDID, &QLineEdit::textChanged, this, &STATeditor::EDIDChanged);
 	}
 };
