@@ -13,11 +13,11 @@ Supported features:
 - [ ] Loading meshes directly from the BSA archives.
 - [ ] Handling alternate textures.
 - [ ] Manipulating records (STAT, REFR etc.) with custom-designed forms, saving changes.
-- [ ] **Rendering interior cells**, and exterior cells with landscape.
+- [ ] Rendering interior cells, and exterior cells with landscape.
 - [ ] Lighting cells, displaying CreationKit-provided models for light fixtures. Shadow mapping, light casters, modelling point light with exponential fall-off.
 - [ ] Mouse editing of cells/object references, including drag-and-drop placement of objects, rotating/moving references around and around separate axes, multiple object selection.
 - [ ] Heightmap editing, painting landscape textures.
-- [ ] **Rendering and manipulating NavMesh** (Navigation Mesh) including dragging vertices, edges, deleting and creating triangles.
+- [ ] Rendering and manipulating NavMesh (Navigation Mesh) including dragging vertices, edges, deleting and creating triangles.
 - [ ] Editing Papyrus scripts with code completion, runing the compiler and showing compilation error messages (linking to the appropriate line in the code).
 
 <img src="screenshot.jpg" alt="Main window" width="700"/>
