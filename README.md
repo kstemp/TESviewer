@@ -8,17 +8,17 @@ An open-source "alternative" (not really) to the CreationKit, a program used to 
 
 Supported features:
 
-- [ ] loading/parsing a .ESM (ES Master) and .ESP (ES Plugin) files
-- [ ] creating new .ESP plugins, editing existing plugins *and* masters
-- [ ] **displaying .NIF models** associated with markers, statics, furniture, lights etc. 
-- [ ] loading meshes directly from the BSA archives
-- [ ] handling alternate textures
-- [ ] manipulating records (STAT, REFR etc.) with custom-designed forms, saving changes
-- [ ] **rendering interior cells**, and exterior cells with landscape
-- [ ] lighting cells, dislaying CreationKit-provided models for light fixtures
-- [ ] mouse editing of cells/object references
-- [ ] heightmap editing
-- [ ] **rendering and manipulating NavMesh** (Navigation Mesh) including dragging vertices, edges, deleting and creating triangles
+- [ ] Loading/parsing a .ESM (ES Master) and .ESP (ES Plugin) files.
+- [ ] Creating new .ESP plugins, editing existing plugins *and* masters.
+- [ ] Loading meshes directly from the BSA archives.
+- [ ] Handling alternate textures.
+- [ ] Manipulating records (STAT, REFR etc.) with custom-designed forms, saving changes.
+- [ ] **Rendering interior cells**, and exterior cells with landscape.
+- [ ] Lighting cells, dislaying CreationKit-provided models for light fixtures.
+- [ ] Mouse editing of cells/object references.
+- [ ] Heightmap editing.
+- [ ] **Rendering and manipulating NavMesh** (Navigation Mesh) including dragging vertices, edges, deleting and creating triangles.
+- [ ] Editing Papyrus scripts with code completion, runing the compiler and showing compilation error messages (linking to the appropriate line in the code).
 
 <img src="screenshot.jpg" alt="Main window" width="700"/>
 
