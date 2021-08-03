@@ -16,6 +16,10 @@ namespace ESM {
 
 		LAND() : Record("LAND", RecordType::LAND) {}
 
+		virtual void saveFields(BinaryStreamWriter& bsw) override {
+			//bsw.writeField("XCLC", XCLC);
+		}
+
 		virtual void parseField(BinaryStreamReader& bsr, const std::string& fieldName, const uint16_t fieldSize) override {
 			if (fieldName == "VHGT") {
 				assert(fieldSize == VHGT_SIZE);

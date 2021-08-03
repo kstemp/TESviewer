@@ -24,5 +24,10 @@ namespace ESM {
 		std::optional<std::string> model() const override {
 			return MODL;
 		}
+
+		virtual void saveFields(BinaryStreamWriter& bsw) override {
+			bsw.writeField("EDID", EDID);
+			//bsw.writeField("XCLC", XCLC);
+		}
 	};
 }

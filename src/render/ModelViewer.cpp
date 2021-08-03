@@ -5,6 +5,7 @@
 #include <QWheelEvent>
 #include <qstatusbar.h>
 #include <qtoolbar.h>
+#include <QMessageBox>
 
 ModelViewer::ModelViewer(QWidget* parent)
 	: QOpenGLWidget(parent) {
@@ -42,8 +43,20 @@ void ModelViewer::initializeGL() {
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	program.addShaderFromSourceFile(QOpenGLShader::Vertex, Config::VERTEX_SHADER_PATH);
-	program.addShaderFromSourceFile(QOpenGLShader::Fragment, Config::FRAGMENT_SHADER_PATH);
+	if (!program.addShaderFromSourceFile(QOpenGLShader::Vertex, Config::VERTEX_SHADER_PATH)) {
+		QMessageBox msgBox;
+		msgBox.setText("QOpenGLShaderProgram::addShaderFromSourceFile() failed (" + Config::VERTEX_SHADER_PATH + "). The rendered may not work correctly.");
+		msgBox.setInformativeText(program.log());
+		msgBox.setIcon(QMessageBox::Icon::Critical);
+		msgBox.exec();
+	}
+	if (!program.addShaderFromSourceFile(QOpenGLShader::Fragment, Config::FRAGMENT_SHADER_PATH)) {
+		QMessageBox msgBox;
+		msgBox.setText("QOpenGLShaderProgram::addShaderFromSourceFile() failed (" + Config::FRAGMENT_SHADER_PATH + "). The rendered may not work correctly.");
+		msgBox.setInformativeText(program.log());
+		msgBox.setIcon(QMessageBox::Icon::Critical);
+		msgBox.exec();
+	}
 	program.link();
 
 	navMeshProgram.addShaderFromSourceFile(QOpenGLShader::Vertex, Config::NAVM_VERTEX_SHADER_PATH);
@@ -90,7 +103,7 @@ void ModelViewer::paintGL() {
 	program.setUniformValue("lightPos6", lightPos[5]);
 	program.setUniformValue("lightPos7", lightPos[6]);
 
-	//	program.setUniformValue("viewPos", camera.position());
+	program.setUniformValue("viewPos", camera.position());
 
 	if (doMeshes) {
 		drawMeshes(false);

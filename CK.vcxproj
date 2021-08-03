@@ -181,12 +181,6 @@
     <ClInclude Include="model\NiTypes.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="fshader.fs" />
-    <None Include="navmesh.fs" />
-    <None Include="navmesh.vs" />
-    <None Include="vshader.vs" />
-  </ItemGroup>
-  <ItemGroup>
     <QtUic Include="ui\CELLeditor.ui" />
     <QtUic Include="ui\FileDialog.ui" />
     <QtUic Include="ui\FileProgressDialog.ui" />
@@ -195,6 +189,17 @@
     <QtUic Include="ui\REFReditor.ui" />
     <QtUic Include="ui\Settings.ui" />
     <QtUic Include="ui\STATeditor.ui" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include=".gitignore" />
+    <None Include=".gitmodules" />
+    <None Include="esm\README.md" />
+    <None Include="LICENSE" />
+    <None Include="README.md" />
+    <None Include="shaders\fshader.fs" />
+    <None Include="shaders\navmesh.fs" />
+    <None Include="shaders\navmesh.vs" />
+    <None Include="shaders\vshader.vs" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

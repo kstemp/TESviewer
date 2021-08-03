@@ -46,7 +46,7 @@ void ModelViewer::drawMeshes(bool isNavmesh) {
 				glBindTexture(GL_TEXTURE_2D, submesh.texture);
 
 				program.setUniformValue("model", mesh.getModelMatrixForSubmesh(submesh));
-				program.setUniformValue("model2", mesh.getModelMatrixForSubmesh(submesh));
+				program.setUniformValue("model2", mesh.getModel2MatrixForSubmesh(submesh));
 
 				glDrawElementsBaseVertex(GL_TRIANGLES, submesh.indicesCount, GL_UNSIGNED_SHORT, (void*)(submesh.indicesCountUpTo * sizeof(ushort)), submesh.vertexCountUpTo);
 			}

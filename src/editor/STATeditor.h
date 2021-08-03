@@ -34,8 +34,8 @@ public slots:
 
 	void EDIDChanged(const QString& text) {
 		if (!text.isEmpty()) {
-			record->EDID = text.toStdString();
-			record->modified = true;
+			record.EDID = text.toStdString();
+			record.modified = true;
 		}
 	}
 
@@ -45,25 +45,25 @@ public:
 		: AbstractRecordEditor(stat, dataFile), AbstractRecordDialog(parent) {
 		ui.setupUi(this);
 
-		if (!stat->MODL.empty()) {
-			modelViewer = new MyMV(stat->MODL, stat->obnd, ui.gb_preview);
-			modelViewer->setGeometry(19, 29, 341 + 2 * 19, 341 + 2 * 19);
+		if (!record.MODL.empty()) {
+			//	modelViewer = new MyMV(stat->MODL, stat->obnd, ui.gb_preview);
+			//	modelViewer->setGeometry(19, 29, 341 + 2 * 19, 341 + 2 * 19);
 
-			ui.edit_MODL->setText(QString::fromStdString(stat->MODL));
+			ui.edit_MODL->setText(QString::fromStdString(record.MODL));
 		}
 
-		ui.sb_maxAngle->setValue(stat->maxAngle);
+		ui.sb_maxAngle->setValue(record.maxAngle);
 
-		ui.edit_EDID->setText(QString::fromStdString(stat->EDID));
+		ui.edit_EDID->setText(QString::fromStdString(record.EDID));
 
-		ui.cb_treeLOD->setChecked(stat->flags & ESM::STATFlags::hasTreeLOD);
-		ui.cb_onLocalMap->setChecked(!(stat->flags & ESM::STATFlags::notOnLocalMap));
-		ui.cb_distantLOD->setChecked(stat->flags & ESM::STATFlags::hasDistantLOD);
-		//ui.cb_highDefLOD->setChecked(stat->flags & ESM::STATFlags::highDefLOD);
-		ui.cb_currents->setChecked(stat->flags & ESM::STATFlags::currents);
-		ui.cb_marker->setChecked(stat->flags & ESM::STATFlags::marker);
-		ui.cb_obstacle->setChecked(stat->flags & ESM::STATFlags::obstacle);
-		ui.cb_worldMap->setChecked(stat->flags & ESM::STATFlags::worldMap);
+		ui.cb_treeLOD->setChecked(record.flags & ESM::STATFlags::hasTreeLOD);
+		ui.cb_onLocalMap->setChecked(!(record.flags & ESM::STATFlags::notOnLocalMap));
+		ui.cb_distantLOD->setChecked(record.flags & ESM::STATFlags::hasDistantLOD);
+		//ui.cb_highDefLOD->setChecked(record.flags & ESM::STATFlags::highDefLOD);
+		ui.cb_currents->setChecked(record.flags & ESM::STATFlags::currents);
+		ui.cb_marker->setChecked(record.flags & ESM::STATFlags::marker);
+		ui.cb_obstacle->setChecked(record.flags & ESM::STATFlags::obstacle);
+		ui.cb_worldMap->setChecked(record.flags & ESM::STATFlags::worldMap);
 
 		ui.cb_materialEDID->addItem("NONE");
 
@@ -71,25 +71,25 @@ public:
 			if (record->type == ESM::RecordType::MATO)
 				ui.cb_materialEDID->addItem(QString::fromStdString(record->EDID), formID);
 
-		size_t index = ui.cb_materialEDID->findData(stat->MATOformID);
+		size_t index = ui.cb_materialEDID->findData(record.MATOformID);
 
 		ui.cb_materialEDID->setCurrentIndex(index != -1 ? index : 0);
 
-		if (stat->flags & ESM::STATFlags::navMesh_boundingBox)
+		if (record.flags & ESM::STATFlags::navMesh_boundingBox)
 			ui.rdb_boundingBox->setChecked(true);
-		else if (stat->flags & ESM::STATFlags::navMesh_filter)
+		else if (record.flags & ESM::STATFlags::navMesh_filter)
 			ui.rdb_filter->setChecked(true);
-		else if (stat->flags & ESM::STATFlags::navMesh_ground)
+		else if (record.flags & ESM::STATFlags::navMesh_ground)
 			ui.rdb_ground->setChecked(true);
 		else
 			ui.rdb_collision->setChecked(true);
 
-		ui.x1->setText(QString::number(stat->obnd.x1));
-		ui.y1->setText(QString::number(stat->obnd.y1));
-		ui.z1->setText(QString::number(stat->obnd.z1));
-		ui.x2->setText(QString::number(stat->obnd.x2));
-		ui.y2->setText(QString::number(stat->obnd.y2));
-		ui.z2->setText(QString::number(stat->obnd.z2));
+		ui.x1->setText(QString::number(record.obnd.x1));
+		ui.y1->setText(QString::number(record.obnd.y1));
+		ui.z1->setText(QString::number(record.obnd.z1));
+		ui.x2->setText(QString::number(record.obnd.x2));
+		ui.y2->setText(QString::number(record.obnd.y2));
+		ui.z2->setText(QString::number(record.obnd.z2));
 
 		QWidget::connect(ui.edit_EDID, &QLineEdit::textChanged, this, &STATeditor::EDIDChanged);
 	}

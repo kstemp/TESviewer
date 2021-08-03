@@ -51,37 +51,37 @@ public:
 
 		QWidget::connect(ui.sb_posX, &QSpinBox::valueChanged, this,
 			[this](const int val) {
-				this->record->DATA.position.x = val;
+				this->record.DATA.position.x = val;
 				emit changed();
 			});
 
 		QWidget::connect(ui.sb_posY, &QSpinBox::valueChanged, this,
 			[this](const int val) {
-				this->record->DATA.position.y = val;
+				this->record.DATA.position.y = val;
 				emit changed();
 			});
 
 		QWidget::connect(ui.sb_posZ, &QSpinBox::valueChanged, this,
 			[this](const int val) {
-				this->record->DATA.position.z = val;
+				this->record.DATA.position.z = val;
 				emit changed();
 			});
 
 		QWidget::connect(ui.sb_rotX, &QSpinBox::valueChanged, this,
 			[this](const int val) {
-				this->record->DATA.rotation.x = val / 57.2957795;
+				this->record.DATA.rotation.x = val / 57.2957795;
 				emit changed();
 			});
 
 		QWidget::connect(ui.sb_rotY, &QSpinBox::valueChanged, this,
 			[this](const int val) {
-				this->record->DATA.rotation.y = val / 57.2957795;
+				this->record.DATA.rotation.y = val / 57.2957795;
 				emit changed();
 			});
 
 		QWidget::connect(ui.sb_rotZ, &QSpinBox::valueChanged, this,
 			[this](const int val) {
-				this->record->DATA.rotation.z = val / 57.2957795;
+				this->record.DATA.rotation.z = val / 57.2957795;
 				emit changed();
 			});
 

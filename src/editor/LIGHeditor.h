@@ -12,17 +12,25 @@ class LIGHeditor : public AbstractRecordDialog, public AbstractRecordEditor<ESM:
 
 		Ui::LIGHeditor ui;
 
+public slots:
+
+	void EDIDChanged(const QString& text) {
+		record.EDID = text.toStdString();
+	}
+
 public:
 
 	LIGHeditor(ESM::LIGH* ligh, ESM::File& dataFile, QWidget* parent = Q_NULLPTR)
 		: AbstractRecordEditor(ligh, dataFile), AbstractRecordDialog(parent) {
 		ui.setupUi(this);
 
-		ui.editEDID->setText(QString::fromStdString(ligh->EDID));
+		ui.editEDID->setText(QString::fromStdString(record.EDID));
 
-		ui.sbFOV->setValue(ligh->data.FOV);
-		ui.sbFalloff->setValue(ligh->data.falloff);
-		ui.sbRadius->setValue(ligh->data.radius);
-		ui.sbNearClip->setValue(ligh->data.nearClip);
+		ui.sbFOV->setValue(record.data.FOV);
+		ui.sbFalloff->setValue(record.data.falloff);
+		ui.sbRadius->setValue(record.data.radius);
+		ui.sbNearClip->setValue(record.data.nearClip);
+
+		QWidget::connect(ui.editEDID, &QLineEdit::textChanged, this, &LIGHeditor::EDIDChanged);
 	};
 };

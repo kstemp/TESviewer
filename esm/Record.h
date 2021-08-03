@@ -100,9 +100,7 @@ namespace ESM {
 		}
 
 		virtual void parseField(BinaryStreamReader& bsr, const std::string& fieldName, const uint16_t fieldSize) = 0;
-		virtual void saveFields(BinaryStreamWriter& bsw) {
-			// JUST DO NOTHING
-		}
+		virtual void saveFields(BinaryStreamWriter& bsw) = 0;
 
 		virtual std::optional<std::string> model() const {
 			return {};

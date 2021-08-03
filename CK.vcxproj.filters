@@ -217,16 +217,6 @@
     </QtMoc>
   </ItemGroup>
   <ItemGroup>
-    <None Include="fshader.fs">
-      <Filter>shaders</Filter>
-    </None>
-    <None Include="vshader.vs">
-      <Filter>shaders</Filter>
-    </None>
-    <None Include="navmesh.fs" />
-    <None Include="navmesh.vs" />
-  </ItemGroup>
-  <ItemGroup>
     <QtUic Include="ui\STATeditor.ui" />
     <QtUic Include="ui\REFReditor.ui" />
     <QtUic Include="ui\LIGHeditor.ui" />
@@ -235,5 +225,16 @@
     <QtUic Include="ui\CELLeditor.ui" />
     <QtUic Include="ui\FileProgressDialog.ui" />
     <QtUic Include="ui\Settings.ui" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="shaders\fshader.fs" />
+    <None Include="shaders\navmesh.fs" />
+    <None Include="shaders\navmesh.vs" />
+    <None Include="shaders\vshader.vs" />
+    <None Include="README.md" />
+    <None Include="LICENSE" />
+    <None Include=".gitmodules" />
+    <None Include=".gitignore" />
+    <None Include="esm\README.md" />
   </ItemGroup>
 </Project>

@@ -52,4 +52,23 @@ struct Mesh {
 
 		return model;
 	}
+
+	QMatrix4x4 getModel2MatrixForSubmesh(const SubMesh& submesh) const {
+		QMatrix4x4 model;
+
+		float angleX = 57.2957795 * globalRotation.x;
+		float angleY = 57.2957795 * globalRotation.y;
+		float angleZ = 57.2957795 * globalRotation.z;
+
+		model.setToIdentity();
+
+		//model.translate(globalTranslation.toQVector3D());
+		model.translate(-submesh.translation);
+		model.rotate(angleX, QVector3D(1, 0, 0));
+		model.rotate(angleY, QVector3D(0, 1, 0));
+		model.rotate(angleZ, QVector3D(0, 0, 1));
+		model.translate(submesh.translation);
+
+		return model;
+	}
 };

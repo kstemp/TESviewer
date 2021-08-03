@@ -33,6 +33,10 @@ namespace ESM {
 			std::vector<Triangle> triangles;
 		} NVNM;
 
+		virtual void saveFields(BinaryStreamWriter& bsw) override {
+			//bsw.writeField("XCLC", XCLC);
+		}
+
 		virtual void parseField(BinaryStreamReader& bsr, const std::string& fieldName, const uint16_t fieldSize) override {
 			std::streampos pos__ = bsr.pos;
 			if (fieldName == "NVNM") {
