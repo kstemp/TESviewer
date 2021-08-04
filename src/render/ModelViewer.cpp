@@ -17,7 +17,7 @@ ModelViewer::~ModelViewer() {
 	deleteMeshes();
 }
 
-void ModelViewer::addModel(const std::string& modelFileName, const Vector3& globalTranslation, const Vector3& globalRotation, ESM::OBND obnd) {
+void ModelViewer::addModel(const std::string& modelFileName, const Vector3& globalTranslation, const Vector3& globalRotation) {
 	// TODO temporary
 	if (modelFileName.length() <= 4)
 		return;

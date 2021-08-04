@@ -4,6 +4,8 @@
 #include <string>
 #include <model\NiTypes.h>
 
+/*
+
 namespace ESM {
 	namespace RecordType {
 		constexpr RecordTypeVal NAVM = 82;
@@ -63,3 +65,4 @@ namespace ESM {
 		}
 	};
 }
+(/)

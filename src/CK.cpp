@@ -88,22 +88,24 @@ QTreeWidgetItem* CK::getItemFromRecord(const ESM::Record* record, const int file
 	auto item = new QTreeWidgetItem((QTreeWidget*)nullptr/*, {  }*/);
 
 	std::string EDID = "";
-	if (record->type == ESM::RecordType::REFR) {
-		const ESM::REFR* refr = record->castTo<ESM::REFR>();
+	if (record->type == "REFR") {
+		const ESM::Record* refr = record;
 		const ESM::Record* base = ESM::getBaseFromREFR(refr, dataFiles[fileIndex]);
 
 		if (base)
-			EDID = "[" + base->EDID + "]";
+			EDID = "[" + (*base)["EDID"].string() + "]";
 	}
 	else {
-		EDID = record->EDID;
+		for (auto f : record->fields)
+			if (f.name == "EDID")
+				EDID = f.string();
 	}
 
 	QList<uint32_t> data = { (unsigned int)fileIndex, record->formID };
 
 	item->setText(0, QString::fromStdString(NumToHexStr(record->formID)));
 	item->setText(1, QString::fromStdString(EDID));
-	item->setText(2, QString::fromStdString(ESM::getRecordFullName(record->typ)));
+	item->setText(2, QString::fromStdString(ESM::getRecordFullName(record->type)));
 	item->setData(0, Qt::UserRole, QVariant::fromValue(data));
 	item->setData(1, Qt::UserRole, QVariant::fromValue(data));
 	item->setData(2, Qt::UserRole, QVariant::fromValue(data));
@@ -119,7 +121,9 @@ QTreeWidgetItem* CK::loopChildGroups(const ESM::Group& group, const int fileInde
 		ESM::Record* parentCell = dataFiles[fileIndex].findByFormID(*(uint32_t*)(&group.label));
 
 		if (parentCell)
-			item->setText(1, QString::fromStdString("[" + parentCell->EDID + "]"));
+			for (auto f : parentCell->fields)
+				if (f.name == "EDID")
+					item->setText(1, QString::fromStdString("[" + f.string() + "]"));
 	}
 
 	// all top-level records
@@ -162,11 +166,11 @@ void CK::onTreeViewItemClicked(QTreeWidgetItem* item, int column) {
 
 	if (record) {
 		QWidget* editor = nullptr;
-		if (record->type == ESM::RecordType::CELL) {
-			QProgressDialog progress(QString::fromStdString("Loading cell " + record->EDID), "Abort", 0, 100, this);
+		if (record->type == "CELL") {
+			QProgressDialog progress(QString::fromStdString("Loading cell " + (*record)["EDID"].string()), "Abort", 0, 100, this);
 			progress.setWindowModality(Qt::WindowModal);
 
-			editor = new CELLeditor(record->castTo<ESM::CELL>(), dataFile, nullptr);
+			editor = new CELLeditor(record, dataFile, nullptr);
 
 			progress.setValue(100);
 		}

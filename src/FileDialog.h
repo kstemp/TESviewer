@@ -151,8 +151,9 @@ public:
 
 				auto& m = masters[fileName];
 
-				for (const std::string s : dataFile.header->MAST)
-					m.push_back(QString::fromStdString(s + "\0"));
+				for (const ESM::Field& field : dataFile.header.fields)
+					if (field.name == "MAST")
+						m.push_back(QString::fromStdString(field.string() + "\0"));
 			}
 			catch (const std::runtime_error& e) {
 				// TODO cleanup the header pointer

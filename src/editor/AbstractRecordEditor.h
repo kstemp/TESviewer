@@ -1,17 +1,17 @@
 #pragma once
 
+#include <esm\Record.h>
 #include <esm\File.h>
 
-template<typename T>
 class AbstractRecordEditor {
 protected:
-	T record;
+	ESM::Record* record;
 
 	ESM::File& dataFile;
 
 public:
 
-	AbstractRecordEditor(T* record, ESM::File& dataFile)
-		:record(*record), dataFile(dataFile) {
+	AbstractRecordEditor(ESM::Record* record, ESM::File& dataFile)
+		:record(record), dataFile(dataFile) {
 	};
 };

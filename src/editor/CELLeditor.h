@@ -15,7 +15,7 @@
 class CELLeditor : public QMainWindow {
 	Q_OBJECT
 
-		ESM::CELL* cell;
+		ESM::Record* cell;
 	ESM::File& dataFile;
 
 	Ui::CELLeditor ui;
@@ -29,7 +29,7 @@ class CELLeditor : public QMainWindow {
 
 		ESM::Record* record = dataFile.findByFormID(formID);
 
-		auto editor = new REFReditor(record->castTo<ESM::REFR>(), dataFile);
+		auto editor = new REFReditor(record, dataFile);
 
 		QWidget::connect(editor, &REFReditor::changed, this, [this]() {
 			this->renderer->update();
@@ -40,11 +40,11 @@ class CELLeditor : public QMainWindow {
 
 public:
 
-	CELLeditor(ESM::CELL* cell, ESM::File& dataFile, QWidget* parent = Q_NULLPTR, std::function<void(int)> onProgress = [](const int) {})
+	CELLeditor(ESM::Record* cell, ESM::File& dataFile, QWidget* parent = Q_NULLPTR, std::function<void(int)> onProgress = [](const int) {})
 		: QMainWindow(parent), cell(cell), dataFile(dataFile) {
 		ui.setupUi(this);
 
-		setWindowTitle(QString::fromStdString("Cell: " + cell->EDID));
+		setWindowTitle(QString::fromStdString("Cell: " + (*cell)["EDID"].string()));
 
 		dockREFReditor = new QDockWidget("Reference", this);
 		dockREFReditor->setAllowedAreas(Qt::RightDockWidgetArea);
@@ -76,20 +76,19 @@ public:
 		ESM::Group* cellTemporaryChildren = ESM::findCellTemporaryChildren(cell, cellChildren);
 
 		for (ESM::Record* r : cellTemporaryChildren->records) {
-			switch (r->type) {
-			case ESM::RecordType::REFR:
-			{
-				auto refr = r->castTo<ESM::REFR>();
+			if (r->type == "REFR") {
+				ESM::Record* refr = r;
+
 				ESM::Record* base = ESM::getBaseFromREFR(refr, dataFile);
 
 				if (base) {
-					auto item1 = new QTableWidgetItem(QString::fromStdString(base->EDID));
+					auto item1 = new QTableWidgetItem(QString::fromStdString((*base)["EDID"].string()));
 					item1->setData(Qt::UserRole, refr->formID);
 
 					auto item2 = new QTableWidgetItem(QString::fromStdString(NumToHexStr(refr->formID)));
 					item2->setData(Qt::UserRole, refr->formID);
 
-					auto item3 = new QTableWidgetItem(QString::fromStdString(ESM::getRecordFullName(base->typ)));
+					auto item3 = new QTableWidgetItem(QString::fromStdString(ESM::getRecordFullName(base->type)));
 					item3->setData(Qt::UserRole, refr->formID);
 
 					ui.refTable->insertRow(ui.refTable->rowCount());
@@ -97,8 +96,6 @@ public:
 					ui.refTable->setItem(ui.refTable->rowCount() - 1, 1, item2);
 					ui.refTable->setItem(ui.refTable->rowCount() - 1, 2, item3);
 				}
-			}
-			break;
 			}
 		}
 

@@ -2,28 +2,28 @@
 
 #include "AbstractRecordEditor.h"
 #include "AbstractRecordDialog.h"
-#include <esm\records\MATO.h>
-#include <esm\records\STAT.h>
 #include "..\render\ModelViewer.h"
 #include "..\Config.h"
+#include <esm\File.h>
+#include <esm\records\STAT.h>
 #include <ui_STATeditor.h>
 
 class MyMV : public ModelViewer {
 	std::string m = "";
-	ESM::OBND obnd;
+
 protected:
 	void initializeGL() override {
 		ModelViewer::initializeGL();
 
-		addModel(m, Vector3(0, 0, 0), Vector3(0, 0, 0), obnd);
+		addModel(m, Vector3(0, 0, 0), Vector3(0, 0, 0));
 	}
 
 public:
 
-	MyMV(std::string model, ESM::OBND obnd, QWidget* parent) : m(model), ModelViewer(parent) {}
+	MyMV(std::string model, QWidget* parent) : m(model), ModelViewer(parent) {}
 };
 
-class STATeditor : public AbstractRecordDialog, public AbstractRecordEditor<ESM::STAT> {
+class STATeditor : public AbstractRecordDialog, public AbstractRecordEditor {
 	Q_OBJECT
 
 		MyMV* modelViewer = nullptr;
@@ -34,62 +34,55 @@ public slots:
 
 	void EDIDChanged(const QString& text) {
 		if (!text.isEmpty()) {
-			record.EDID = text.toStdString();
-			record.modified = true;
+			//	(*record)["EDID"].get < std::string>() = text.toStdString();
+			//	record.modified = true;
 		}
 	}
 
 public:
 
-	STATeditor(ESM::STAT* stat, ESM::File& dataFile, QWidget* parent = Q_NULLPTR)
+	STATeditor(ESM::Record* stat, ESM::File& dataFile, QWidget* parent = Q_NULLPTR)
 		: AbstractRecordEditor(stat, dataFile), AbstractRecordDialog(parent) {
 		ui.setupUi(this);
 
-		if (!record.MODL.empty()) {
+		//if (!record.MODL.empty()) {
 			//	modelViewer = new MyMV(stat->MODL, stat->obnd, ui.gb_preview);
 			//	modelViewer->setGeometry(19, 29, 341 + 2 * 19, 341 + 2 * 19);
 
-			ui.edit_MODL->setText(QString::fromStdString(record.MODL));
-		}
+		ui.edit_MODL->setText(QString::fromStdString((*record)["MODL"].string()));
+		//}
 
-		ui.sb_maxAngle->setValue(record.maxAngle);
+		ui.sb_maxAngle->setValue(std::get<float>((*record)["DNAM"].struct_["maxAngle"]));
 
-		ui.edit_EDID->setText(QString::fromStdString(record.EDID));
+		ui.edit_EDID->setText(QString::fromStdString((*record)["EDID"].string()));
 
-		ui.cb_treeLOD->setChecked(record.flags & ESM::STATFlags::hasTreeLOD);
-		ui.cb_onLocalMap->setChecked(!(record.flags & ESM::STATFlags::notOnLocalMap));
-		ui.cb_distantLOD->setChecked(record.flags & ESM::STATFlags::hasDistantLOD);
+		ui.cb_treeLOD->setChecked(record->flags & ESM::STATFlags::hasTreeLOD);
+		ui.cb_onLocalMap->setChecked(!(record->flags & ESM::STATFlags::notOnLocalMap));
+		ui.cb_distantLOD->setChecked(record->flags & ESM::STATFlags::hasDistantLOD);
 		//ui.cb_highDefLOD->setChecked(record.flags & ESM::STATFlags::highDefLOD);
-		ui.cb_currents->setChecked(record.flags & ESM::STATFlags::currents);
-		ui.cb_marker->setChecked(record.flags & ESM::STATFlags::marker);
-		ui.cb_obstacle->setChecked(record.flags & ESM::STATFlags::obstacle);
-		ui.cb_worldMap->setChecked(record.flags & ESM::STATFlags::worldMap);
+		ui.cb_currents->setChecked(record->flags & ESM::STATFlags::currents);
+		ui.cb_marker->setChecked(record->flags & ESM::STATFlags::marker);
+		ui.cb_obstacle->setChecked(record->flags & ESM::STATFlags::obstacle);
+		ui.cb_worldMap->setChecked(record->flags & ESM::STATFlags::worldMap);
 
 		ui.cb_materialEDID->addItem("NONE");
 
 		for (const auto& [formID, record] : dataFile.recordMap)
-			if (record->type == ESM::RecordType::MATO)
-				ui.cb_materialEDID->addItem(QString::fromStdString(record->EDID), formID);
+			if (record->type == "MATO")
+				ui.cb_materialEDID->addItem(QString::fromStdString((*record)["EDID"].string()), formID);
 
-		size_t index = ui.cb_materialEDID->findData(record.MATOformID);
+		size_t index = ui.cb_materialEDID->findData(std::get<uint32_t>((*record)["DNAM"].struct_["formID"]));
 
 		ui.cb_materialEDID->setCurrentIndex(index != -1 ? index : 0);
 
-		if (record.flags & ESM::STATFlags::navMesh_boundingBox)
+		if (record->flags & ESM::STATFlags::navMesh_boundingBox)
 			ui.rdb_boundingBox->setChecked(true);
-		else if (record.flags & ESM::STATFlags::navMesh_filter)
+		else if (record->flags & ESM::STATFlags::navMesh_filter)
 			ui.rdb_filter->setChecked(true);
-		else if (record.flags & ESM::STATFlags::navMesh_ground)
+		else if (record->flags & ESM::STATFlags::navMesh_ground)
 			ui.rdb_ground->setChecked(true);
 		else
 			ui.rdb_collision->setChecked(true);
-
-		ui.x1->setText(QString::number(record.obnd.x1));
-		ui.y1->setText(QString::number(record.obnd.y1));
-		ui.z1->setText(QString::number(record.obnd.z1));
-		ui.x2->setText(QString::number(record.obnd.x2));
-		ui.y2->setText(QString::number(record.obnd.y2));
-		ui.z2->setText(QString::number(record.obnd.z2));
 
 		QWidget::connect(ui.edit_EDID, &QLineEdit::textChanged, this, &STATeditor::EDIDChanged);
 	}

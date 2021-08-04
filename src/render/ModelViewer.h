@@ -67,5 +67,5 @@ public:
 	ModelViewer(QWidget* parent = Q_NULLPTR);
 	~ModelViewer();
 
-	void addModel(const std::string& modelFileName, const Vector3& globalTranslation = Vector3(), const Vector3& globalRotation = Vector3(), ESM::OBND obnd = ESM::OBND());
+	void addModel(const std::string& modelFileName, const Vector3& globalTranslation = Vector3(), const Vector3& globalRotation = Vector3());
 };

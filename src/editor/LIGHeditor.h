@@ -2,12 +2,12 @@
 
 #include "AbstractRecordEditor.h"
 #include "AbstractRecordDialog.h"
-#include <esm\records\LIGH.h>
+#include <esm\File.h>
 #include "..\Config.h"
 #include "..\util.h"
 #include <ui_LIGHeditor.h>
 
-class LIGHeditor : public AbstractRecordDialog, public AbstractRecordEditor<ESM::LIGH> {
+class LIGHeditor : public AbstractRecordDialog, public AbstractRecordEditor {
 	Q_OBJECT
 
 		Ui::LIGHeditor ui;
@@ -15,21 +15,21 @@ class LIGHeditor : public AbstractRecordDialog, public AbstractRecordEditor<ESM:
 public slots:
 
 	void EDIDChanged(const QString& text) {
-		record.EDID = text.toStdString();
+		//record.EDID = text.toStdString();
 	}
 
 public:
 
-	LIGHeditor(ESM::LIGH* ligh, ESM::File& dataFile, QWidget* parent = Q_NULLPTR)
+	LIGHeditor(ESM::Record* ligh, ESM::File& dataFile, QWidget* parent = Q_NULLPTR)
 		: AbstractRecordEditor(ligh, dataFile), AbstractRecordDialog(parent) {
 		ui.setupUi(this);
 
-		ui.editEDID->setText(QString::fromStdString(record.EDID));
+		ui.editEDID->setText(QString::fromStdString((*record)["EDID"].string()));
 
-		ui.sbFOV->setValue(record.data.FOV);
-		ui.sbFalloff->setValue(record.data.falloff);
-		ui.sbRadius->setValue(record.data.radius);
-		ui.sbNearClip->setValue(record.data.nearClip);
+		ui.sbFOV->setValue(std::get<float>((*record)["DATA"].struct_["FOV"]));
+		ui.sbFalloff->setValue(std::get<float>((*record)["DATA"].struct_["falloff"]));
+		ui.sbRadius->setValue(std::get<float>((*record)["DATA"].struct_["radius"]));
+		ui.sbNearClip->setValue(std::get<float>((*record)["DATA"].struct_["nearClip"]));
 
 		QWidget::connect(ui.editEDID, &QLineEdit::textChanged, this, &LIGHeditor::EDIDChanged);
 	};

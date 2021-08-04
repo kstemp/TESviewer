@@ -1,27 +1,17 @@
 #pragma once
 
+#include "Field.h"
+
 #include <optional>
 #include <io\BinaryIO.h>
 
 namespace ESM {
-	typedef uint32_t RecordTypeVal;
-
 	enum RecordFlags {
 		Compressed = 0x00040000
 	};
 
-	struct OBND {
-		int16_t x1 = 0;
-		int16_t y1 = 0;
-		int16_t z1 = 0;
-		int16_t x2 = 0;
-		int16_t y2 = 0;
-		int16_t z2 = 0;
-	};
-
 	struct Record {
-		std::string typ = "";
-		RecordTypeVal type = 0;
+		std::string type;
 		uint32_t dataSize = 0;
 		uint32_t flags = 0;
 		uint32_t formID = 0;
@@ -31,25 +21,12 @@ namespace ESM {
 
 		bool modified = false;
 
-		std::string EDID = "";
+		std::vector<Field> fields;
 
-		OBND obnd;
-
-		Record(std::string typ, RecordTypeVal type) : typ(typ), type(type) {}
+		Record(const std::string& type) : type(type) {}
 
 		const bool hasMoreFields(const BinaryStreamReader& bsr) const {
 			return bsr.tellg() - _dataPos < dataSize;
-		}
-
-		// TODO is base of and so on
-		template<typename T>
-		T* castTo() {
-			return static_cast<T*>(this);
-		}
-
-		template<typename T>
-		const T* castTo() const {
-			return static_cast<const T*>(this);
 		}
 
 		virtual void parseHeader(BinaryStreamReader& bsr) {
@@ -71,12 +48,59 @@ namespace ESM {
 				std::string fieldName = bsr.readString(4);
 				uint16_t fieldSize = bsr.readVar<uint16_t>();
 
-				parseField(bsr, fieldName, fieldSize);
+				Field field(fieldName, fieldSize);
+
+				if (fieldSize != 0)
+				{
+					if (type == "REFR" && fieldName == "DATA") {
+						float x, y, z;
+						bsr >> x >> y >> z;
+						float rx, ry, rz;
+						bsr >> rx >> ry >> rz;
+
+						field.struct_("position", "x") = x;
+						field.struct_("position", "y") = y;
+						field.struct_("position", "z") = z;
+						field.struct_("rotation", "x") = rx;
+						field.struct_("rotation", "y") = ry;
+						field.struct_("rotation", "z") = rz;
+					}
+					else {
+						bsr.readIntoVectorBuf(field.buffer, fieldSize);
+					}
+				}
+				else {
+					// If the preceding field has the type XXXX, then dataSize will be 0
+					// and the size of the data is in fact the 32 bit quantity stored in the XXXX field.
+					// This feature is commonly used to store large navmesh fields in Skyrim.esm.
+					if (fields.back().name == "XXXX") {
+						uint32_t dataS = fields.back().get<uint32_t>();
+						bsr.readIntoVectorBuf(field.buffer, dataS);
+					}
+				}
+
+				fields.push_back(field);// TODO avoid copying!
 			}
 		}
 
+		Field& operator [](const std::string& name) {
+			auto it = std::find_if(fields.begin(), fields.end(), [&](const ESM::Field& field) {
+				return field.name == name;
+				});
+			// TODO....
+			return *it;
+		}
+
+		const Field& operator [](const std::string& name) const {
+			const auto it = std::find_if(fields.begin(), fields.end(), [&](const ESM::Field& field) {
+				return field.name == name;
+				});
+			// TODO....
+			return *it;
+		}
+
 		virtual void save(BinaryStreamWriter& bsw) {
-			bsw << typ;
+			bsw << type;
 			_dataSizePos = bsw.os.tellp();
 			bsw << dataSize;
 			bsw << flags;
@@ -87,7 +111,7 @@ namespace ESM {
 
 			_dataPos = bsw.os.tellp();
 
-			saveFields(bsw);
+			//saveFields(bsw);
 
 			std::streampos posAfter = bsw.os.tellp();
 			uint32_t dataSize = bsw.os.tellp() - _dataPos;
@@ -97,13 +121,6 @@ namespace ESM {
 			bsw << dataSize;
 
 			bsw.os.seekp(posAfter);
-		}
-
-		virtual void parseField(BinaryStreamReader& bsr, const std::string& fieldName, const uint16_t fieldSize) = 0;
-		virtual void saveFields(BinaryStreamWriter& bsw) = 0;
-
-		virtual std::optional<std::string> model() const {
-			return {};
 		}
 
 		std::streampos _dataPos;

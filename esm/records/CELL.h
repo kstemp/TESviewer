@@ -3,14 +3,12 @@
 #include "..\Record.h"
 
 namespace ESM {
-	namespace RecordType {
-		constexpr RecordTypeVal CELL = 18;
-	}
-
 	enum CellFlags {
 		Interior = 0x0001
 	};
+}
 
+/*
 	struct CELL : Record {
 		uint16_t DATA;
 
@@ -63,4 +61,4 @@ namespace ESM {
 				return 0;
 		}
 	};
-}
+}*/

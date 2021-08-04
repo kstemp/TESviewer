@@ -2,6 +2,8 @@
 
 #include "..\Record.h"
 
+/*
+
 namespace ESM {
 	namespace RecordType {
 		constexpr RecordTypeVal LIGH = 66;
@@ -59,4 +61,4 @@ namespace ESM {
 			//bsw.writeField("XCLC", XCLC);
 		}
 	};
-}
+}*/

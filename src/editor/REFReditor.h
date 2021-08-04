@@ -9,10 +9,9 @@
 #include "..\Config.h"
 
 #include "EditorResolver.h"
-#include <esm\records\REFR.h>
 #include <esm\Util.h>
 
-class REFReditor : public AbstractRecordDialog, public AbstractRecordEditor<ESM::REFR> {
+class REFReditor : public AbstractRecordDialog, public AbstractRecordEditor {
 	Q_OBJECT
 
 		Ui::REFReditor ui;
@@ -30,58 +29,64 @@ public slots:
 
 public:
 
-	REFReditor(ESM::REFR* refr, ESM::File& dataFile, QWidget* parent = Q_NULLPTR)
+	REFReditor(ESM::Record* refr, ESM::File& dataFile, QWidget* parent = Q_NULLPTR)
 		: AbstractRecordEditor(refr, dataFile), AbstractRecordDialog(parent) {
 		ui.setupUi(this);
 
 		base = ESM::getBaseFromREFR(refr, dataFile);
 
-		QString title = QString::fromStdString(base->EDID + "[" + NumToHexStr(base->formID) + "]");
+		QString title = QString::fromStdString((*base)["EDID"].string() + "[" + NumToHexStr(base->formID) + "]");
 
 		ui.le_base->setText(title);
 		setWindowTitle("Reference to: " + title);
 
-		ui.sb_posX->setValue(refr->DATA.position.x);
-		ui.sb_posY->setValue(refr->DATA.position.y);
-		ui.sb_posZ->setValue(refr->DATA.position.z);
+		ui.sb_posX->setValue(std::get<float>((*refr)["DATA"].struct_("position", "x")));
+		ui.sb_posY->setValue(std::get<float>((*refr)["DATA"].struct_("position", "y")));
+		ui.sb_posZ->setValue(std::get<float>((*refr)["DATA"].struct_("position", "z")));
 
-		ui.sb_rotX->setValue(refr->DATA.rotation.x * 57.2957795);
-		ui.sb_rotY->setValue(refr->DATA.rotation.y * 57.2957795);
-		ui.sb_rotZ->setValue(refr->DATA.rotation.z * 57.2957795);
+		ui.sb_rotX->setValue(std::get<float>((*refr)["DATA"].struct_("rotation", "x")) * 57.2957795);
+		ui.sb_rotY->setValue(std::get<float>((*refr)["DATA"].struct_("rotation", "y")) * 57.2957795);
+		ui.sb_rotZ->setValue(std::get<float>((*refr)["DATA"].struct_("rotation", "z")) * 57.2957795);
 
 		QWidget::connect(ui.sb_posX, &QSpinBox::valueChanged, this,
 			[this](const int val) {
-				this->record.DATA.position.x = val;
+				float i = val;
+				(*this->record)["DATA"].struct_("position", "x") = { i };
 				emit changed();
 			});
 
 		QWidget::connect(ui.sb_posY, &QSpinBox::valueChanged, this,
 			[this](const int val) {
-				this->record.DATA.position.y = val;
+				float i = val;
+				(*this->record)["DATA"].struct_("position", "y") = { i };
 				emit changed();
 			});
 
 		QWidget::connect(ui.sb_posZ, &QSpinBox::valueChanged, this,
 			[this](const int val) {
-				this->record.DATA.position.z = val;
+				float i = val;
+				(*this->record)["DATA"].struct_("position", "z") = { i };
 				emit changed();
 			});
 
 		QWidget::connect(ui.sb_rotX, &QSpinBox::valueChanged, this,
 			[this](const int val) {
-				this->record.DATA.rotation.x = val / 57.2957795;
+				float i = val;
+				(*this->record)["DATA"].struct_("rotation", "x") = { i / 57.2957795f };
 				emit changed();
 			});
 
 		QWidget::connect(ui.sb_rotY, &QSpinBox::valueChanged, this,
 			[this](const int val) {
-				this->record.DATA.rotation.y = val / 57.2957795;
+				float i = val;
+				(*this->record)["DATA"].struct_("rotation", "y") = { i / 57.2957795f };
 				emit changed();
 			});
 
 		QWidget::connect(ui.sb_rotZ, &QSpinBox::valueChanged, this,
 			[this](const int val) {
-				this->record.DATA.rotation.z = val / 57.2957795;
+				float i = val;
+				(*this->record)["DATA"].struct_("rotation", "z") = { i / 57.2957795f };
 				emit changed();
 			});
 

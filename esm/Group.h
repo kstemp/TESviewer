@@ -1,23 +1,10 @@
 #pragma once
 
-#include "..\src\util.h"
+#include <array>
 
 #include <io\BinaryIO.h>
-
+#include "..\src\util.h"
 #include "Record.h"
-#include "records\STAT.h"
-#include "records\REFR.h"
-#include "records\MISC.h"
-#include "records\CELL.h"
-#include "records\ALCH.h"
-#include "records\FURN.h"
-#include "records\CONT.h"
-#include "records\FLOR.h"
-#include "records\TREE.h"
-#include "records\LAND.h"
-#include "records\MATO.h"
-#include "records\LIGH.h"
-#include "records\NAVM.h"
 
 namespace ESM {
 	enum GroupType {
@@ -32,37 +19,6 @@ namespace ESM {
 		CellPersistentChildren = 8,
 		CellTemporaryChildren = 9
 	};
-
-	inline Record* createRecordByName(const std::string& name) {
-		if (name == "STAT")
-			return new STAT();
-		else if (name == "REFR")
-			return new REFR();
-		else if (name == "MISC")
-			return new MISC();
-		else if (name == "CELL")
-			return new CELL();
-		else if (name == "ALCH")
-			return new ALCH();
-		else if (name == "FURN")
-			return new FURN();
-		else if (name == "CONT")
-			return new CONT();
-		else if (name == "FLOR")
-			return new FLOR();
-		else if (name == "TREE")
-			return new TREE();
-		else if (name == "LAND")
-			return new LAND();
-		else if (name == "MATO")
-			return new MATO();
-		else if (name == "LIGH")
-			return new LIGH();
-		else if (name == "NAVM")
-			return new NAVM();
-		else
-			return nullptr;
-	}
 
 	inline std::string getRecordFullName(const std::string& name) {
 		if (name == "CELL")
@@ -125,7 +81,7 @@ namespace ESM {
 					subgroups.back().parse(bsr, recordMap);
 				}
 				else {
-					Record* newRecord = createRecordByName(hdr);
+					Record* newRecord = new Record(hdr);
 
 					if (newRecord) {
 						_parseRecord(newRecord, bsr);
