@@ -82,19 +82,19 @@ public:
 				ESM::Record* base = ESM::getBaseFromREFR(refr, dataFile);
 
 				if (base) {
-					auto item1 = new QTableWidgetItem(QString::fromStdString((*base)["EDID"].string()));
-					item1->setData(Qt::UserRole, refr->formID);
+					/*	auto item1 = new QTableWidgetItem(QString::fromStdString((*base)["EDID"].string()));
+						item1->setData(Qt::UserRole, refr->formID);
 
-					auto item2 = new QTableWidgetItem(QString::fromStdString(NumToHexStr(refr->formID)));
-					item2->setData(Qt::UserRole, refr->formID);
+						auto item2 = new QTableWidgetItem(QString::fromStdString(NumToHexStr(refr->formID)));
+						item2->setData(Qt::UserRole, refr->formID);
 
-					auto item3 = new QTableWidgetItem(QString::fromStdString(ESM::getRecordFullName(base->type)));
-					item3->setData(Qt::UserRole, refr->formID);
+						auto item3 = new QTableWidgetItem(QString::fromStdString(ESM::getRecordFullName(base->type)));
+						item3->setData(Qt::UserRole, refr->formID);
 
-					ui.refTable->insertRow(ui.refTable->rowCount());
-					ui.refTable->setItem(ui.refTable->rowCount() - 1, 0, item1);
-					ui.refTable->setItem(ui.refTable->rowCount() - 1, 1, item2);
-					ui.refTable->setItem(ui.refTable->rowCount() - 1, 2, item3);
+						ui.refTable->insertRow(ui.refTable->rowCount());
+						ui.refTable->setItem(ui.refTable->rowCount() - 1, 0, item1);
+						ui.refTable->setItem(ui.refTable->rowCount() - 1, 1, item2);
+						ui.refTable->setItem(ui.refTable->rowCount() - 1, 2, item3);*/
 				}
 			}
 		}

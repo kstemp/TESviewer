@@ -28,8 +28,6 @@ namespace ESM {
 
 			bsr.expect("TES4");
 
-			//header = new ESM::TES4();
-
 			header.parseHeader(bsr);
 			header.parse(bsr);
 

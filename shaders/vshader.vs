@@ -18,8 +18,8 @@ void main()
     texCoord = vec2(aTexCoord.x , aTexCoord.y);
     FragPos = vec3(model * vec4(aPos, 1.0));
 
-    Normal =  vec3(projection * transpose(inverse(view * model2)) * vec4(aNormal, 0.0));
+ //   Normal =  vec3(projection * transpose(inverse(view * model2)) * vec4(aNormal, 0.0));
 
-  //  Normal = aNormal;
+    Normal = aNormal;
 
 }

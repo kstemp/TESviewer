@@ -81,27 +81,27 @@ void ModelViewer::paintGL() {
 
 	program.setUniformValue("view", camera.view());
 
-	program.setUniformValue("doLighting", doLighting);
+	program.setUniformValue("doLighting", /*doLighting*/ false);
 
-	program.setUniformValue("lightColor", lightColors[0]);
+	/*program.setUniformValue("lightColor", lightColors[0]);
 	program.setUniformValue("lightColor2", lightColors[1]);
 	program.setUniformValue("lightColor3", lightColors[2]);
 	program.setUniformValue("lightColor4", lightColors[3]);
 	program.setUniformValue("lightColor5", lightColors[4]);
 	program.setUniformValue("lightColor6", lightColors[5]);
-	program.setUniformValue("lightColor7", lightColors[6]);
+	program.setUniformValue("lightColor7", lightColors[6]); */
 
 	QMatrix4x4 model;
 	model.setToIdentity();
 	program.setUniformValue("model", model);
 
-	program.setUniformValue("lightPos", lightPos[0]);
+	/*program.setUniformValue("lightPos", lightPos[0]);
 	program.setUniformValue("lightPos2", lightPos[1]);
 	program.setUniformValue("lightPos3", lightPos[2]);
 	program.setUniformValue("lightPos4", lightPos[3]);
 	program.setUniformValue("lightPos5", lightPos[4]);
 	program.setUniformValue("lightPos6", lightPos[5]);
-	program.setUniformValue("lightPos7", lightPos[6]);
+	program.setUniformValue("lightPos7", lightPos[6]);*/
 
 	program.setUniformValue("viewPos", camera.position());
 

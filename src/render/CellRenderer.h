@@ -51,29 +51,33 @@ public:
 				ESM::Record* base = ESM::getBaseFromREFR(refr, dataFile);
 
 				if (base) {
-					std::string model = (*base)["MODL"].string();
+					for (auto f : base->fields) {
+						if (f.name == "MODL") {
+							std::string model = f.string();
 
-					float x = std::get<float>((*refr)["DATA"].struct_("position", "x"));
-					float y = std::get<float>((*refr)["DATA"].struct_("position", "y"));
-					float z = std::get<float>((*refr)["DATA"].struct_("position", "z"));
-					float rx = std::get<float>((*refr)["DATA"].struct_("rotation", "x"));
-					float ry = std::get<float>((*refr)["DATA"].struct_("rotation", "y"));
-					float rz = std::get<float>((*refr)["DATA"].struct_("rotation", "z"));
+							float x = std::get<float>((*refr)["DATA"].struct_("position", "x"));
+							float y = std::get<float>((*refr)["DATA"].struct_("position", "y"));
+							float z = std::get<float>((*refr)["DATA"].struct_("position", "z"));
+							float rx = std::get<float>((*refr)["DATA"].struct_("rotation", "x"));
+							float ry = std::get<float>((*refr)["DATA"].struct_("rotation", "y"));
+							float rz = std::get<float>((*refr)["DATA"].struct_("rotation", "z"));
 
-					addModel(model, Vector3(x, y, z), Vector3(rx, ry, rz));
+							addModel(model, Vector3(x, y, z), Vector3(rx, ry, rz));
 
-					if (base->type == "LIGH") {
-						ESM::Record* ligh = base;
+							/*if (base->type == "LIGH") {
+								ESM::Record* ligh = base;
 
-						float r = std::get<float>((*ligh)["DATA"].struct_["r"]);
-						float g = std::get<float>((*ligh)["DATA"].struct_["g"]);
-						float b = std::get<float>((*ligh)["DATA"].struct_["b"]);
+								float r = std::get<float>((*ligh)["DATA"].struct_["r"]);
+								float g = std::get<float>((*ligh)["DATA"].struct_["g"]);
+								float b = std::get<float>((*ligh)["DATA"].struct_["b"]);
 
-						/*float px = std::get<float>((*refr)["DATA"].struct_("position", "x"));
-						float py = std::get<float>((*refr)["DATA"].struct_("position", "y"));
-						float pz = std::get<float>((*refr)["DATA"].struct_("position", "z"));
+								/*float px = std::get<float>((*refr)["DATA"].struct_("position", "x"));
+								float py = std::get<float>((*refr)["DATA"].struct_("position", "y"));
+								float pz = std::get<float>((*refr)["DATA"].struct_("position", "z"));
 
-						addLight(QVector3D(r / 255.0f, g / 255.0f, b / 255.0f), refr->DATA.position.toQVector3D());(*/
+								addLight(QVector3D(r / 255.0f, g / 255.0f, b / 255.0f), refr->DATA.position.toQVector3D());(
+							}*/
+						}
 					}
 				}
 			}
