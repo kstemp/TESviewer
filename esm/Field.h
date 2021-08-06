@@ -34,5 +34,21 @@ namespace ESM {
 		const std::string string() const {
 			return std::string(buffer.begin(), buffer.end());
 		}
+
+		const Value& operator ()(const std::string& key, const std::string& key2) const {
+			return struct_.operator()(key, key2);
+		}
+
+		Value& operator ()(const std::string& key, const std::string& key2) {
+			return struct_.operator()(key, key2);
+		}
+
+		const Value& operator [](const std::string& key) const {
+			return struct_.operator[](key);
+		}
+
+		Value& operator [](const std::string& key) {
+			return struct_.operator[](key);
+		}
 	};
 }

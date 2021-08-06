@@ -24,6 +24,12 @@ namespace ESM {
 			return std::get<Value>(it->second);
 		}
 
+		Value& operator [](const std::string& key) {
+			StructValue& it = valueMap[key];
+
+			return std::get<Value>(it);
+		}
+
 		const Value& operator ()(const std::string& key, const std::string& key2) const {
 			const auto it = valueMap.find(key);
 
@@ -35,12 +41,6 @@ namespace ESM {
 			const auto it2 = mp.find(key2);
 
 			return std::get<Value>(*it2);
-		}
-
-		Value& operator [](const std::string& key) {
-			StructValue& it = valueMap[key];
-
-			return std::get<Value>(it);
 		}
 
 		Value& operator ()(const std::string& key, const std::string& key2) {

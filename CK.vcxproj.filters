@@ -179,12 +179,6 @@
     <QtMoc Include="src\FileDialog.h">
       <Filter>util</Filter>
     </QtMoc>
-    <QtMoc Include="src\FileProgressDialog.h">
-      <Filter>util</Filter>
-    </QtMoc>
-    <QtMoc Include="src\LoaderThread.h">
-      <Filter>util</Filter>
-    </QtMoc>
     <QtMoc Include="src\editor\LIGHeditor.h">
       <Filter>util</Filter>
     </QtMoc>
@@ -199,7 +193,6 @@
     <QtUic Include="ui\FileDialog.ui" />
     <QtUic Include="ui\MainWindow.ui" />
     <QtUic Include="ui\CELLeditor.ui" />
-    <QtUic Include="ui\FileProgressDialog.ui" />
     <QtUic Include="ui\Settings.ui" />
   </ItemGroup>
   <ItemGroup>

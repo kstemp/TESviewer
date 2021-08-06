@@ -6,9 +6,6 @@
 #include <QTabWidget>
 #include <qprogressdialog.h>
 #include <QtConcurrent/QtConcurrent>
-#include "LoaderThread.h"
-
-#include "FileProgressDialog.h"
 
 #include "Config.h"
 
@@ -43,8 +40,6 @@ void CK::fileOpen() {
 	const int result = fileDialog.exec();
 
 	if (result == QDialog::Accepted) {
-		FileProgressDialog progressDialog;
-
 		const QSet<QString>& filesToLoad = fileDialog.getFilesToLoad();
 
 		size_t i = 0;

@@ -54,16 +54,15 @@ namespace ESM {
 				{
 					if (type == "REFR" && fieldName == "DATA") {
 						float x, y, z;
-						bsr >> x >> y >> z;
 						float rx, ry, rz;
+						bsr >> x >> y >> z;
 						bsr >> rx >> ry >> rz;
-
-						field.struct_("position", "x") = x;
-						field.struct_("position", "y") = y;
-						field.struct_("position", "z") = z;
-						field.struct_("rotation", "x") = rx;
-						field.struct_("rotation", "y") = ry;
-						field.struct_("rotation", "z") = rz;
+						field("position", "x") = x;
+						field("position", "y") = y;
+						field("position", "z") = z;
+						field("rotation", "x") = rx;
+						field("rotation", "y") = ry;
+						field("rotation", "z") = rz;
 					}
 					else {
 						bsr.readIntoVectorBuf(field.buffer, fieldSize);

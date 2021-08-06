@@ -152,8 +152,6 @@
     <ClInclude Include="src\editor\AbstractRecordEditor.h" />
     <ClInclude Include="src\editor\EditorResolver.h" />
     <QtMoc Include="src\FileDialog.h" />
-    <QtMoc Include="src\FileProgressDialog.h" />
-    <QtMoc Include="src\LoaderThread.h" />
     <ClInclude Include="src\render\Camera.h" />
     <ClInclude Include="src\render\CellRenderer.h" />
     <ClInclude Include="src\render\Mesh.h" />
@@ -175,7 +173,6 @@
   <ItemGroup>
     <QtUic Include="ui\CELLeditor.ui" />
     <QtUic Include="ui\FileDialog.ui" />
-    <QtUic Include="ui\FileProgressDialog.ui" />
     <QtUic Include="ui\LIGHeditor.ui" />
     <QtUic Include="ui\MainWindow.ui" />
     <QtUic Include="ui\REFReditor.ui" />

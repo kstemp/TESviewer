@@ -26,10 +26,10 @@ public:
 
 		ui.editEDID->setText(QString::fromStdString((*record)["EDID"].string()));
 
-		ui.sbFOV->setValue(std::get<float>((*record)["DATA"].struct_["FOV"]));
-		ui.sbFalloff->setValue(std::get<float>((*record)["DATA"].struct_["falloff"]));
-		ui.sbRadius->setValue(std::get<float>((*record)["DATA"].struct_["radius"]));
-		ui.sbNearClip->setValue(std::get<float>((*record)["DATA"].struct_["nearClip"]));
+		ui.sbFOV->setValue(std::get<float>((*record)["DATA"]["FOV"]));
+		ui.sbFalloff->setValue(std::get<float>((*record)["DATA"]["falloff"]));
+		ui.sbRadius->setValue(std::get<float>((*record)["DATA"]["radius"]));
+		ui.sbNearClip->setValue(std::get<float>((*record)["DATA"]["nearClip"]));
 
 		QWidget::connect(ui.editEDID, &QLineEdit::textChanged, this, &LIGHeditor::EDIDChanged);
 	};

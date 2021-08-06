@@ -52,7 +52,7 @@ public:
 		ui.edit_MODL->setText(QString::fromStdString((*record)["MODL"].string()));
 		//}
 
-		ui.sb_maxAngle->setValue(std::get<float>((*record)["DNAM"].struct_["maxAngle"]));
+		ui.sb_maxAngle->setValue(std::get<float>((*record)["DNAM"]["maxAngle"]));
 
 		ui.edit_EDID->setText(QString::fromStdString((*record)["EDID"].string()));
 
@@ -71,7 +71,7 @@ public:
 			if (record->type == "MATO")
 				ui.cb_materialEDID->addItem(QString::fromStdString((*record)["EDID"].string()), formID);
 
-		size_t index = ui.cb_materialEDID->findData(std::get<uint32_t>((*record)["DNAM"].struct_["formID"]));
+		size_t index = ui.cb_materialEDID->findData(std::get<uint32_t>((*record)["DNAM"]["formID"]));
 
 		ui.cb_materialEDID->setCurrentIndex(index != -1 ? index : 0);
 
