@@ -64,6 +64,7 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="esm\Util.cpp" />
+    <ClCompile Include="src\FileDialog.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="model\Header.h">
@@ -183,6 +184,12 @@
       <Filter>util</Filter>
     </QtMoc>
     <QtMoc Include="src\editor\AbstractRecordDialog.h">
+      <Filter>util</Filter>
+    </QtMoc>
+    <QtMoc Include="src\editor\RecordEditor.h">
+      <Filter>util</Filter>
+    </QtMoc>
+    <QtMoc Include="src\model\RecordModel.h">
       <Filter>util</Filter>
     </QtMoc>
   </ItemGroup>

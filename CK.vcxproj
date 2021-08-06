@@ -123,6 +123,7 @@
       <QtMocFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(Filename).moc</QtMocFileName>
     </ClCompile>
     <ClCompile Include="src\editor\EditorResolver.cpp" />
+    <ClCompile Include="src\FileDialog.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\render\Mesh.cpp" />
     <ClCompile Include="src\render\ModelViewer.cpp" />
@@ -152,6 +153,8 @@
     <ClInclude Include="src\editor\AbstractRecordEditor.h" />
     <ClInclude Include="src\editor\EditorResolver.h" />
     <QtMoc Include="src\FileDialog.h" />
+    <QtMoc Include="src\editor\RecordEditor.h" />
+    <QtMoc Include="src\model\RecordModel.h" />
     <ClInclude Include="src\render\Camera.h" />
     <ClInclude Include="src\render\CellRenderer.h" />
     <ClInclude Include="src\render\Mesh.h" />

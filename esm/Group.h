@@ -132,6 +132,10 @@ namespace ESM {
 			case ESM::GroupType::CellTemporaryChildren:
 				return "Temporary";
 				break;
+
+			default:
+				return "Group"; // TODO should not happen?
+				break;
 			}
 		}
 
