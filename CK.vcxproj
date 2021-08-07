@@ -155,6 +155,7 @@
     <QtMoc Include="src\FileDialog.h" />
     <QtMoc Include="src\editor\RecordEditor.h" />
     <QtMoc Include="src\model\RecordModel.h" />
+    <QtMoc Include="src\model\CellChildrenModel.h" />
     <ClInclude Include="src\render\Camera.h" />
     <ClInclude Include="src\render\CellRenderer.h" />
     <ClInclude Include="src\render\Mesh.h" />

@@ -7,13 +7,13 @@
 class RecordModel : public QAbstractTableModel {
 	Q_OBJECT
 
-		ESM::Record* record;
+		ESM::Record& record;
 
 public:
-	RecordModel(ESM::Record* record, QObject* parent = nullptr) : record(record), QAbstractTableModel(parent) {}
+	RecordModel(ESM::Record* record, QObject* parent = nullptr) : record(*record), QAbstractTableModel(parent) {}
 
 	int rowCount(const QModelIndex& parent = QModelIndex()) const override {
-		return record->fields.size();
+		return record.fields.size();
 	}
 
 	int columnCount(const QModelIndex& parent = QModelIndex()) const override {
@@ -26,30 +26,30 @@ public:
 			int column = index.column();
 			int row = index.row();
 
-			if (row < 0 || row >= record->fields.size())
+			if (row < 0 || row >= record.fields.size())
 				return QVariant();
 
-			if (record->type == "GMST") {
+			if (record.type == "GMST") {
 				if (column == 0)
-					return QString::fromStdString(record->fields[row].name);
+					return QString::fromStdString(record.fields[row].name);
 				else if (column == 1) {
 					if (row == 0)
-						return QString::fromStdString((*record)["EDID"].string());
+						return QString::fromStdString(record["EDID"].string());
 					else {
-						switch ((*record)["EDID"].string()[0]) {
+						switch (record["EDID"].string()[0]) {
 						case 'b':
-							return (*record)["DATA"].get<bool>();
+							return record["DATA"].Bool();
 							break;
 
 						case 'i':
-							return (*record)["DATA"].get<uint32_t>();
+							return record["DATA"].uint32();
 							break;
 						case 'f':
-							return (*record)["DATA"].get<float>();
+							return record["DATA"].Float();
 							break;
 
 						case 's':
-							return (*record)["DATA"].get<uint32_t>();
+							return record["DATA"].uint32();
 							break;
 
 						default:

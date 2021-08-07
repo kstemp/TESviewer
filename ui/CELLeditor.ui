@@ -48,34 +48,19 @@
         </layout>
        </item>
        <item>
-        <widget class="QTableWidget" name="refTable">
+        <widget class="QTableView" name="refTable">
          <property name="editTriggers">
           <set>QAbstractItemView::NoEditTriggers</set>
          </property>
          <property name="selectionBehavior">
           <enum>QAbstractItemView::SelectRows</enum>
          </property>
-         <property name="columnCount">
-          <number>3</number>
+         <property name="sortingEnabled">
+          <bool>true</bool>
          </property>
-         <attribute name="horizontalHeaderStretchLastSection">
+         <attribute name="verticalHeaderStretchLastSection">
           <bool>true</bool>
          </attribute>
-         <column>
-          <property name="text">
-           <string>Editor ID</string>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>Form ID</string>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>Type</string>
-          </property>
-         </column>
         </widget>
        </item>
       </layout>

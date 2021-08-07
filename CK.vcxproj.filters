@@ -192,6 +192,9 @@
     <QtMoc Include="src\model\RecordModel.h">
       <Filter>util</Filter>
     </QtMoc>
+    <QtMoc Include="src\model\CellChildrenModel.h">
+      <Filter>util</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="ui\STATeditor.ui" />

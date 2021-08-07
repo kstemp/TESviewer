@@ -47,6 +47,8 @@ namespace ESM {
 			return "Material Object";
 		else if (name == "TREE")
 			return "Tree";
+		else if (name == "NAVM")
+			return "Navigation Mesh";
 		return name;
 	}
 

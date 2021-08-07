@@ -27,6 +27,18 @@ namespace ESM {
 			return *(T*)(&buffer[0]);
 		}
 
+		float Float() {
+			return get<float>();
+		}
+
+		uint32_t uint32() {
+			return get<uint32_t>();
+		}
+
+		bool Bool() {
+			return get<bool>();
+		}
+
 		std::string string() {
 			return std::string(buffer.begin(), buffer.end());
 		}
