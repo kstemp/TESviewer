@@ -4,8 +4,10 @@
 #include "Group.h"
 #include "Record.h"
 
+#include <qstring.h>
+
 namespace ESM {
-	ESM::Record* getBaseFromREFR(const ESM::Record* refr, const ESM::File& file);
+	ESM::Record* getBaseFromREFR(const ESM::Record* refr, ESM::File& file);
 
 	std::vector<ESM::Group>* findCellChildrenTopLevel(const ESM::Record* cell, ESM::File& file);
 
@@ -16,4 +18,8 @@ namespace ESM {
 	int getCellBlock(const ESM::Record* cell);
 
 	int getCellSubBlock(const ESM::Record* cell);
+
+	QString getRecordFullName(const std::string& name);
+
+	QString getGroupCaption(const ESM::Group& group);
 }

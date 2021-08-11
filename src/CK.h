@@ -8,6 +8,7 @@
 
 #include <ui_MainWindow.h>
 
+#include "model\RecordTreeModel.h"
 #include <esm\File.h>
 
 class CK : public QMainWindow {
@@ -27,6 +28,8 @@ private:
 	QList<ESM::File> dataFiles;
 
 	int activeFileIndex = -1;
+
+	RecordTreeModel* model;
 
 private slots:
 

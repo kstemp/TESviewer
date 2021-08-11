@@ -17,7 +17,7 @@ public:
 	}
 
 	int columnCount(const QModelIndex& parent = QModelIndex()) const override {
-		// name and value!
+		// field name and value
 		return 2;
 	}
 

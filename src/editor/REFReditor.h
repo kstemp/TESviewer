@@ -35,18 +35,18 @@ public:
 
 		base = ESM::getBaseFromREFR(refr, dataFile);
 
-		QString title = QString::fromStdString((*base)["EDID"].string() + "[" + NumToHexStr(base->formID) + "]");
+		QString title = QString::fromStdString(base->fieldOr<std::string>("EDID", "")) + "[" + NumToHexStr(base->formID) + "]";
 
 		ui.le_base->setText(title);
 		setWindowTitle("Reference to: " + title);
 
-		ui.sb_posX->setValue(std::get<float>((*refr)["DATA"]("position", "x")));
-		ui.sb_posY->setValue(std::get<float>((*refr)["DATA"]("position", "y")));
-		ui.sb_posZ->setValue(std::get<float>((*refr)["DATA"]("position", "z")));
+		ui.sb_posX->setValue((*refr)["DATA"]("position", "x").Float());
+		ui.sb_posY->setValue((*refr)["DATA"]("position", "y").Float());
+		ui.sb_posZ->setValue((*refr)["DATA"]("position", "z").Float());
 
-		ui.sb_rotX->setValue(std::get<float>((*refr)["DATA"]("rotation", "x")) * 57.2957795);
-		ui.sb_rotY->setValue(std::get<float>((*refr)["DATA"]("rotation", "y")) * 57.2957795);
-		ui.sb_rotZ->setValue(std::get<float>((*refr)["DATA"]("rotation", "z")) * 57.2957795);
+		ui.sb_rotX->setValue((*refr)["DATA"]("rotation", "x").Float() * 57.2957795);
+		ui.sb_rotY->setValue((*refr)["DATA"]("rotation", "y").Float() * 57.2957795);
+		ui.sb_rotZ->setValue((*refr)["DATA"]("rotation", "z").Float() * 57.2957795);
 
 		QWidget::connect(ui.sb_posX, &QSpinBox::valueChanged, this,
 			[this](const int val) {
@@ -83,7 +83,7 @@ public:
 				emit changed();
 			});
 
-		QWidget::connect(ui.sb_rotZ, &QSpinBox::valueChanged, this,
+		QWidget::connHeader.hect(ui.sb_rotZ, &QSpinBox::valueChanged, this,
 			[this](const int val) {
 				float i = val;
 				(*this->record)["DATA"]("rotation", "z") = { i / 57.2957795f };

@@ -3,14 +3,32 @@
 #include <variant>
 #include <unordered_map>
 
-using Value = std::variant<uint16_t, uint32_t, float>;
+/*
+struct Value {
+	std::vector<char> buf;
+
+	template<typename T>
+	const T get() const {
+		// TODO check size etc.
+		return *(T*)(&buf[0]);
+	}
+
+	float Float() const {
+		return get<float>();
+	}
+
+	uint32_t uint32() {
+		return get<uint32_t>();
+	}
+};
 
 using ValueMap = std::unordered_map<std::string, Value>;
 
 using StructValue = std::variant<Value, ValueMap>;
 
-using StructValueMap = std::unordered_map<std::string, StructValue>;
+using StructValueMap = std::unordered_map<std::string, StructValue>;(*/
 
+/*
 namespace ESM {
 	struct Struct {
 		StructValueMap valueMap;
@@ -60,4 +78,4 @@ namespace ESM {
 			return it2;
 		}
 	};
-}
+}(*/

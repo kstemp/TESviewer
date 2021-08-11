@@ -49,10 +49,10 @@ public:
 			//	modelViewer = new MyMV(stat->MODL, stat->obnd, ui.gb_preview);
 			//	modelViewer->setGeometry(19, 29, 341 + 2 * 19, 341 + 2 * 19);
 
-		ui.edit_MODL->setText(QString::fromStdString((*record)["MODL"].string()));
+		ui.edit_MODL->setText(QString::fromStdString(record->fieldOr<std::string>("MODL")));
 		//}
 
-		ui.sb_maxAngle->setValue(std::get<float>((*record)["DNAM"]["maxAngle"]));
+		ui.sb_maxAngle->setValue((*record)["DNAM"]["maxAngle"].Float());
 
 		ui.edit_EDID->setText(QString::fromStdString((*record)["EDID"].string()));
 
@@ -71,7 +71,7 @@ public:
 			if (record->type == "MATO")
 				ui.cb_materialEDID->addItem(QString::fromStdString((*record)["EDID"].string()), formID);
 
-		size_t index = ui.cb_materialEDID->findData(std::get<uint32_t>((*record)["DNAM"]["formID"]));
+		size_t index = ui.cb_materialEDID->findData((*record)["DNAM"]["formID"].uint32());
 
 		ui.cb_materialEDID->setCurrentIndex(index != -1 ? index : 0);
 

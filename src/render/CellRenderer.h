@@ -55,12 +55,12 @@ public:
 						if (f.name == "MODL") {
 							std::string model = f.string();
 
-							float x = std::get<float>((*refr)["DATA"]("position", "x"));
-							float y = std::get<float>((*refr)["DATA"]("position", "y"));
-							float z = std::get<float>((*refr)["DATA"]("position", "z"));
-							float rx = std::get<float>((*refr)["DATA"]("rotation", "x"));
-							float ry = std::get<float>((*refr)["DATA"]("rotation", "y"));
-							float rz = std::get<float>((*refr)["DATA"]("rotation", "z"));
+							float x = (*refr)["DATA"]("position", "x").Float();
+							float y = (*refr)["DATA"]("position", "y").Float();
+							float z = (*refr)["DATA"]("position", "z").Float();
+							float rx = (*refr)["DATA"]("rotation", "x").Float();
+							float ry = (*refr)["DATA"]("rotation", "y").Float();
+							float rz = (*refr)["DATA"]("rotation", "z").Float();
 
 							addModel(model, Vector3(x, y, z), Vector3(rx, ry, rz));
 

@@ -48,10 +48,10 @@ public:
 						return QString::fromStdString((*base)["EDID"].string());
 						break;
 					case 1:
-						return QString::fromStdString(NumToHexStr(r->formID));
+						return NumToHexStr(r->formID);
 						break;
 					case 2:
-						return QString::fromStdString(ESM::getRecordFullName(base->type));
+						return ESM::getRecordFullName(base->type);
 						break;
 					}
 				}
@@ -66,15 +66,15 @@ public:
 						if (f.name == "EDID")
 							return QString::fromStdString(f.string());
 
-					return "[no EDID]"
+					return "[no EDID]";
 				}
 
 				break;
 				case 1:
-					return QString::fromStdString(NumToHexStr(r->formID));
+					return NumToHexStr(r->formID);
 					break;
 				case 2:
-					return QString::fromStdString(ESM::getRecordFullName(r->type));
+					return ESM::getRecordFullName(r->type);
 					break;
 				}
 			}

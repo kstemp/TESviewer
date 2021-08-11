@@ -32,6 +32,9 @@ CK::CK(QWidget* parent)
 	ui.dockRecords->setLayout(ui.layoutRecords);
 
 	connect(ui.treeRecords, &QTreeWidget::itemDoubleClicked, this, &CK::onTreeViewItemClicked);
+
+	//model = new RecordTreeModel(dataFiles);
+	//ui.treeRecords->setModel(model);
 }
 
 void CK::fileOpen() {
@@ -84,23 +87,20 @@ QTreeWidgetItem* CK::getItemFromRecord(const ESM::Record* record, const int file
 
 	std::string EDID = "";
 	if (record->type == "REFR") {
-		const ESM::Record* refr = record;
-		const ESM::Record* base = ESM::getBaseFromREFR(refr, dataFiles[fileIndex]);
+		const ESM::Record* base = ESM::getBaseFromREFR(record, dataFiles[fileIndex]);
 
 		if (base)
-			EDID = "[" + (*base)["EDID"].string() + "]";
+			EDID = "[" + base->fieldOr<std::string>("EDID", "") + "]";
 	}
 	else {
-		for (auto f : record->fields)
-			if (f.name == "EDID")
-				EDID = f.string();
+		EDID = record->fieldOr<std::string>("EDID", "");
 	}
 
 	QList<uint32_t> data = { (unsigned int)fileIndex, record->formID };
 
-	item->setText(0, QString::fromStdString(NumToHexStr(record->formID)));
+	item->setText(0, NumToHexStr(record->formID));
 	item->setText(1, QString::fromStdString(EDID));
-	item->setText(2, QString::fromStdString(ESM::getRecordFullName(record->type)));
+	item->setText(2, ESM::getRecordFullName(record->type));
 	item->setData(0, Qt::UserRole, QVariant::fromValue(data));
 	item->setData(1, Qt::UserRole, QVariant::fromValue(data));
 	item->setData(2, Qt::UserRole, QVariant::fromValue(data));
@@ -109,17 +109,12 @@ QTreeWidgetItem* CK::getItemFromRecord(const ESM::Record* record, const int file
 };
 
 QTreeWidgetItem* CK::loopChildGroups(const ESM::Group& group, const int fileIndex, const QString& title) {
-	QString itemTitle = title.isEmpty() ? QString::fromStdString(group.caption()) : title;
+	QString itemTitle = title.isEmpty() ? ESM::getGroupCaption(group) : title;
 	auto item = new QTreeWidgetItem((QTreeWidget*)nullptr, { itemTitle });
 
-	if (group.type == ESM::GroupType::CellChildren) {
-		ESM::Record* parentCell = dataFiles[fileIndex].findByFormID(*(uint32_t*)(&group.label));
-
-		if (parentCell)
-			for (auto f : parentCell->fields)
-				if (f.name == "EDID")
-					item->setText(1, QString::fromStdString("[" + f.string() + "]"));
-	}
+	if (group.type == ESM::GroupType::CellChildren)
+		if (ESM::Record* parentCell = dataFiles[fileIndex].findByFormID(*(uint32_t*)(&group.label)))
+			item->setText(1, QString::fromStdString("[" + parentCell->fieldOr<std::string>("EDID", "") + "]"));
 
 	// all top-level records
 	for (const auto& record : group.records)
@@ -132,6 +127,7 @@ QTreeWidgetItem* CK::loopChildGroups(const ESM::Group& group, const int fileInde
 };
 
 void CK::populateRecordList() {
+	//ui.treeRecords->update();
 	ui.treeRecords->clear();
 
 	for (int i = 0; i < dataFiles.size(); ++i) {
@@ -140,7 +136,7 @@ void CK::populateRecordList() {
 		auto item = new QTreeWidgetItem((QTreeWidget*)nullptr, { dataFile.fileName });
 
 		for (const auto& group : dataFile.groups)
-			item->addChild(loopChildGroups(group, i, QString::fromStdString(group.caption())));
+			item->addChild(loopChildGroups(group, i, ESM::getGroupCaption(group)));
 
 		ui.treeRecords->addTopLevelItem(item);
 	}

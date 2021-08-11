@@ -44,7 +44,6 @@
     <QtRcc Include="CK.qrc">
       <Filter>Resource Files</Filter>
     </QtRcc>
-    <QtRcc Include="lib\QDarkStyleSheet\qdarkstyle\dark\style.qrc" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="model\NiTypes.cpp">
@@ -163,6 +162,12 @@
     <ClInclude Include="esm\Struct.h">
       <Filter>util</Filter>
     </ClInclude>
+    <ClInclude Include="src\model\GMST.h">
+      <Filter>util</Filter>
+    </ClInclude>
+    <ClInclude Include="esm\Value.h">
+      <Filter>util</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="src\CK.h">
@@ -195,6 +200,12 @@
     <QtMoc Include="src\model\CellChildrenModel.h">
       <Filter>util</Filter>
     </QtMoc>
+    <QtMoc Include="src\model\RecordTreeModel.h">
+      <Filter>util</Filter>
+    </QtMoc>
+    <QtMoc Include="src\editor\QUSTeditor.h">
+      <Filter>util</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="ui\STATeditor.ui" />
@@ -204,6 +215,8 @@
     <QtUic Include="ui\MainWindow.ui" />
     <QtUic Include="ui\CELLeditor.ui" />
     <QtUic Include="ui\Settings.ui" />
+    <QtUic Include="ui\ScriptEditor.ui" />
+    <QtUic Include="ui\QUSTeditor.ui" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\fshader.fs" />

@@ -53,16 +53,12 @@ namespace ESM {
 				if (fieldSize != 0)
 				{
 					if (type == "REFR" && fieldName == "DATA") {
-						float x, y, z;
-						float rx, ry, rz;
-						bsr >> x >> y >> z;
-						bsr >> rx >> ry >> rz;
-						field("position", "x") = x;
-						field("position", "y") = y;
-						field("position", "z") = z;
-						field("rotation", "x") = rx;
-						field("rotation", "y") = ry;
-						field("rotation", "z") = rz;
+						bsr.readIntoVectorBuf(field("position", "x").buf, sizeof(float));
+						bsr.readIntoVectorBuf(field("position", "y").buf, sizeof(float));
+						bsr.readIntoVectorBuf(field("position", "z").buf, sizeof(float));
+						bsr.readIntoVectorBuf(field("rotation", "x").buf, sizeof(float));
+						bsr.readIntoVectorBuf(field("rotation", "y").buf, sizeof(float));
+						bsr.readIntoVectorBuf(field("rotation", "z").buf, sizeof(float));
 					}
 					else {
 						bsr.readIntoVectorBuf(field.buffer, fieldSize);
@@ -82,19 +78,35 @@ namespace ESM {
 			}
 		}
 
-		Field& operator [](const std::string& name) {
+		template <typename T>
+		const T fieldOr(const std::string& name, const T defaultVal = T(0)) const {
 			auto it = std::find_if(fields.begin(), fields.end(), [&](const ESM::Field& field) {
 				return field.name == name;
 				});
-			// TODO....
-			return *it;
+
+			if (it == fields.end())
+				return defaultVal;
+			else
+				return it->get<T>();
 		}
 
-		const Field& operator [](const std::string& name) const {
+		template <>
+		const std::string fieldOr(const std::string& name, const std::string defaultVal) const {
+			auto it = std::find_if(fields.begin(), fields.end(), [&](const ESM::Field& field) {
+				return field.name == name;
+				});
+
+			if (it == fields.end())
+				return defaultVal;
+			else
+				return it->string();
+		}
+
+		Field& operator [](const std::string& name) {
 			const auto it = std::find_if(fields.begin(), fields.end(), [&](const ESM::Field& field) {
 				return field.name == name;
 				});
-			// TODO....
+
 			return *it;
 		}
 

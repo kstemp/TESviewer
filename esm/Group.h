@@ -20,38 +20,6 @@ namespace ESM {
 		CellTemporaryChildren = 9
 	};
 
-	inline std::string getRecordFullName(const std::string& name) {
-		if (name == "CELL")
-			return "Cell";
-		else if (name == "TES4")
-			return "TES Header";
-		else if (name == "WRLD")
-			return "Worldspace";
-		else if (name == "STAT")
-			return "Static";
-		else if (name == "FURN")
-			return "Furniture";
-		else if (name == "CONT")
-			return "Container";
-		else if (name == "DOOR")
-			return "Door";
-		else if (name == "LIGH")
-			return "Light";
-		else if (name == "MISC")
-			return "Miscellanous Object";
-		else if (name == "ALCH")
-			return "Potion";
-		else if (name == "FLOR")
-			return "Flora";
-		else if (name == "MATO")
-			return "Material Object";
-		else if (name == "TREE")
-			return "Tree";
-		else if (name == "NAVM")
-			return "Navigation Mesh";
-		return name;
-	}
-
 	struct Group {
 		uint32_t size;
 		char label[4];
@@ -95,49 +63,6 @@ namespace ESM {
 						bsr.skip(bsr.readVar<uint32_t>() + 16);;
 					}
 				}
-			}
-		}
-
-		std::string caption() const {
-			switch (type) {
-			case ESM::GroupType::Top:
-				return getRecordFullName(label);
-				break;
-
-			case  ESM::GroupType::WorldChildren:
-				return "World Children";
-				break;
-
-			case ESM::GroupType::InteriorCellBlock:
-				return "Block " + std::to_string(*(int32_t*)(&label[0]));
-				break;
-
-			case ESM::GroupType::InteriorCellSubBlock:
-				return "Sub-Block " + std::to_string(*(int32_t*)(&label[0]));
-				break;
-
-			case ESM::GroupType::ExteriorCellBlock:
-				return "Block";
-				break;
-			case ESM::GroupType::ExteriorCellSubBlock:
-				return "Sub-Block";
-				break;
-			case ESM::GroupType::CellChildren:
-				return "Cell children";
-				break;
-			case ESM::GroupType::TopicChildren:
-				return "Topic children";
-				break;
-			case ESM::GroupType::CellPersistentChildren:
-				return "Persistent";
-				break;
-			case ESM::GroupType::CellTemporaryChildren:
-				return "Temporary";
-				break;
-
-			default:
-				return "Group"; // TODO should not happen?
-				break;
 			}
 		}
 

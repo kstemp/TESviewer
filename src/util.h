@@ -9,10 +9,10 @@
 #include <esm\Record.h>
 
 template<typename T>
-std::string NumToHexStr(const T& num) {
+QString NumToHexStr(const T& num) {
 	std::stringstream sstream;
 	sstream << std::hex << std::setfill('0') << std::setw(8) << std::uppercase << num << std::dec;
-	return sstream.str();
+	return QString::fromStdString(sstream.str());
 }
 
 inline bool decompressVectorBuf(

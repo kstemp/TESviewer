@@ -128,7 +128,6 @@
     <ClCompile Include="src\render\Mesh.cpp" />
     <ClCompile Include="src\render\ModelViewer.cpp" />
     <QtRcc Include="CK.qrc" />
-    <QtRcc Include="lib\QDarkStyleSheet\qdarkstyle\dark\style.qrc" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="esm\Field.h" />
@@ -141,6 +140,7 @@
     <ClInclude Include="esm\records\STAT.h" />
     <ClInclude Include="esm\Struct.h" />
     <ClInclude Include="esm\Util.h" />
+    <ClInclude Include="esm\Value.h" />
     <ClInclude Include="src\Config.h" />
     <QtMoc Include="src\editor\STATeditor.h" />
     <QtMoc Include="src\editor\CELLeditor.h" />
@@ -156,6 +156,9 @@
     <QtMoc Include="src\editor\RecordEditor.h" />
     <QtMoc Include="src\model\RecordModel.h" />
     <QtMoc Include="src\model\CellChildrenModel.h" />
+    <QtMoc Include="src\model\RecordTreeModel.h" />
+    <QtMoc Include="src\editor\QUSTeditor.h" />
+    <ClInclude Include="src\model\GMST.h" />
     <ClInclude Include="src\render\Camera.h" />
     <ClInclude Include="src\render\CellRenderer.h" />
     <ClInclude Include="src\render\Mesh.h" />
@@ -179,7 +182,9 @@
     <QtUic Include="ui\FileDialog.ui" />
     <QtUic Include="ui\LIGHeditor.ui" />
     <QtUic Include="ui\MainWindow.ui" />
+    <QtUic Include="ui\QUSTeditor.ui" />
     <QtUic Include="ui\REFReditor.ui" />
+    <QtUic Include="ui\ScriptEditor.ui" />
     <QtUic Include="ui\Settings.ui" />
     <QtUic Include="ui\STATeditor.ui" />
   </ItemGroup>
